@@ -37,3 +37,8 @@ obj/
 *.opendb
 WSATestCertificate.pfx
 WSATestCertificate.pfx.meta
+
+# ===================================== #
+# Rider generated                       #
+# ===================================== #
+.idea/
