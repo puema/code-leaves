@@ -111,7 +111,6 @@ public class MovingManager : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            Debug.Log(mouseY);
             transform.RotateAround(transform.position, transform.right, Time.deltaTime * ArrowSpeed);
         }
     }

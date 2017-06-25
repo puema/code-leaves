@@ -22,12 +22,21 @@ public class BuildTree : MonoBehaviour
 
         var trunk = AddBranches(root.transform, 1, 0, 1);
         var branches0 = AddBranches(trunk[0].transform.Find(Node), 3, 30, 0.8f);
-        var leaf00 = AddLeaf(branches0[1].transform.Find(Node));
-        var leaf01 = AddLeaf(branches0[2].transform.Find(Node));
+//      AddLeaf(branches0[1].transform.Find(Node));
+        AddLeaf(branches0[2].transform.Find(Node));
 
-        var branches1 = AddBranches(branches0[0].transform.Find(Node), 2, 20, 0.5f);
-        var leaf10 = AddLeaf(branches1[0].transform.Find(Node));
-        var leaf11 = AddLeaf(branches1[1].transform.Find(Node));
+        var branches10 = AddBranches(branches0[0].transform.Find(Node), 2, 20, 0.5f);
+        AddLeaf(branches10[0].transform.Find(Node));
+        AddLeaf(branches10[1].transform.Find(Node));
+
+        var branches11 = AddBranches(branches0[1].transform.Find(Node), 3, 20, 0.5f);
+        AddLeaf(branches11[1].transform.Find(Node));
+        AddLeaf(branches11[2].transform.Find(Node));
+        
+        var branches21 = AddBranches(branches11[0].transform.Find(Node), 2, 10, 0.3f);
+
+        AddLeaf(branches21[0].transform.Find(Node));
+        AddLeaf(branches21[1].transform.Find(Node));
     }
 
     private List<GameObject> AddBranches(Transform parent, int count, float rotation, float scale)
@@ -57,7 +66,7 @@ public class BuildTree : MonoBehaviour
         return branch;
     }
 
-    private GameObject AddEdge(Transform branch, int siblings, float rotation, float scale, int i, out float edgeLength)
+    private GameObject AddEdge(Transform branch, int siblings, float angle, float scale, int i, out float edgeLength)
     {
         var edge = Instantiate(Edge);
         edge.transform.parent = branch.transform;
@@ -65,7 +74,7 @@ public class BuildTree : MonoBehaviour
         edge.transform.localScale = scale * BaseAspectRatio;
         edgeLength = GetYSize(edge);
 
-        var xAngle = rotation;
+        var xAngle = angle;
         var yAngle = 360 / siblings * i;
         edge.transform.localEulerAngles = new Vector3(xAngle, yAngle, 0);
         return edge;
