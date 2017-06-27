@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildTree : MonoBehaviour
+public class TreeBuilder : MonoBehaviour
 {
     public GameObject Edge;
     public GameObject Leaf;
