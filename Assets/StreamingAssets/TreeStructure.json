@@ -1,32 +1,25 @@
 {
     "Data": { "Id": "0" },
-    "Children": [
+    "ChildNodes": [
         {
-            "$type": "InnerNode, Assembly-CSharp",
             "Data": { "Id": "00" },
-            "Children": [
-                { "$type": "Leaf, Assembly-CSharp", "Data": { "Id": "000", "Color": "#208000" } },
-                { "$type": "Leaf, Assembly-CSharp", "Data": { "Id": "001", "Color": "#208000" } }
-            ]
+            "ChildNodes": null,
+            "Leaves": [{ "Data": { "Id": "000", "Color": "208000" } }, { "Data": { "Id": "001", "Color": "208000" } }]
         },
         {
-            "$type": "InnerNode, Assembly-CSharp",
             "Data": { "Id": "01" },
-            "Children": [
-                { "$type": "Leaf, Assembly-CSharp", "Data": { "Id": "010" } },
-                { "$type": "Leaf, Assembly-CSharp", "Data": { "Id": "011" } },
+            "ChildNodes": [
                 {
-                    "$type": "InnerNode, Assembly-CSharp",
                     "Data": { "Id": "012" },
-                    "Children": [
-                        { "$type": "Leaf, Assembly-CSharp", "Data": { "Id": "0120" } },
-                        { "$type": "Leaf, Assembly-CSharp", "Data": { "Id": "0121" } }
-                    ]
-                }, { "$type": "Leaf, Assembly-CSharp", "Data": { "Id": "013" } }
+                    "ChildNodes": null,
+                    "Leaves": [{ "Data": { "Id": "0120", "Color": null } }, { "Data": { "Id": "0121", "Color": null } }]
+                }
+            ],
+            "Leaves": [
+                { "Data": { "Id": "010", "Color": null } }, { "Data": { "Id": "011", "Color": null } },
+                { "Data": { "Id": "013", "Color": null } }
             ]
-        }, 
-        { "$type": "Leaf, Assembly-CSharp", "Data": {} }, 
-        { "$type": "Leaf, Assembly-CSharp", "Data": {} },
-        { "$type": "Leaf, Assembly-CSharp", "Data": {} }
-    ]
+        }
+    ],
+    "Leaves": [{ "Data": { "Id": "02", "Color": null } }]
 }

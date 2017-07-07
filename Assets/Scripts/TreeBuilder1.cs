@@ -5,9 +5,9 @@ using JetBrains.Annotations;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
-using AbstractNode;
+using NonAbstractNode;
 
-public class TreeBuilder : MonoBehaviour
+public class TreeBuilder1 : MonoBehaviour
 {
     // ----==== Meshes as public variables ====---- //
     public GameObject Edge;
@@ -23,7 +23,7 @@ public class TreeBuilder : MonoBehaviour
     public bool UseMainTrunkAt3Fork;
 
     public bool SingleLeafMode = true;
-    
+
     public bool InitWithIds;
     // ----------------------- //
 
@@ -41,7 +41,6 @@ public class TreeBuilder : MonoBehaviour
     private const string LeafName = "Leaf";
     private const string LabelName = "Label";
     private const string TreeDataFilePath = "Assets/StreamingAssets/TreeStructure.json";
-    private const string TreeDataWithAbstractNodeFilePath = "Assets/StreamingAssets/TreeStructureTypes.json";
 
 
     private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
@@ -49,13 +48,13 @@ public class TreeBuilder : MonoBehaviour
         TypeNameHandling = TypeNameHandling.Auto
     };
 
-    private Node data = new InnerNode
+    private InnerNode data = new InnerNode
     {
         Data = new InnerNodeData
         {
             Id = "0"
         },
-        Children = new List<Node>
+        ChildNodes = new List<InnerNode>
         {
             new InnerNode
             {
@@ -63,7 +62,7 @@ public class TreeBuilder : MonoBehaviour
                 {
                     Id = "00"
                 },
-                Children = new List<Node>
+                Leaves = new List<Leaf>
                 {
                     new Leaf
                     {
@@ -89,29 +88,15 @@ public class TreeBuilder : MonoBehaviour
                 {
                     Id = "01"
                 },
-                Children = new List<Node>
+                ChildNodes = new List<InnerNode>
                 {
-                    new Leaf
-                    {
-                        Data = new LeafData
-                        {
-                            Id = "010"
-                        }
-                    },
-                    new Leaf
-                    {
-                        Data = new LeafData
-                        {
-                            Id = "011"
-                        }
-                    },
                     new InnerNode
                     {
                         Data = new InnerNodeData
                         {
                             Id = "012"
                         },
-                        Children = new List<Node>
+                        Leaves = new List<Leaf>
                         {
                             new Leaf
                             {
@@ -128,6 +113,23 @@ public class TreeBuilder : MonoBehaviour
                                 }
                             }
                         }
+                    }
+                },
+                Leaves = new List<Leaf>
+                {
+                    new Leaf
+                    {
+                        Data = new LeafData
+                        {
+                            Id = "010"
+                        }
+                    },
+                    new Leaf
+                    {
+                        Data = new LeafData
+                        {
+                            Id = "011"
+                        }
                     },
                     new Leaf
                     {
@@ -138,6 +140,9 @@ public class TreeBuilder : MonoBehaviour
                     }
                 }
             },
+        },
+        Leaves = new List<Leaf>
+        {
             new Leaf
             {
                 Data = new LeafData
@@ -151,8 +156,8 @@ public class TreeBuilder : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        SerializeData(this.data);
-//        var data = DesirializeData();
+//        SerializeData(data);
+        var data = DesirializeData();
 
         var root = new GameObject(TreeName);
         root.transform.position = Vector3.zero + Vector3.forward * 2;
@@ -165,7 +170,7 @@ public class TreeBuilder : MonoBehaviour
     /// </summary>
     /// <param name="node"></param>
     /// <param name="parent"></param>
-    private void GenerateTreeStructure(Node node, Transform parent)
+    private void GenerateTreeStructure(InnerNode node, Transform parent)
     {
         var trunk = AddBranchObject(parent);
         AddChildrenOfNode(node, trunk.transform.Find(NodeName), 30, 0.8f);
@@ -174,31 +179,39 @@ public class TreeBuilder : MonoBehaviour
     /// <summary>
     /// Adds the children of a node to the given parent transform 
     /// </summary>
-    /// <param name="node"></param>
+    /// <param name="innerNode"></param>
     /// <param name="parentObject"></param>
     /// <param name="rotation"></param>
     /// <param name="scale"></param>
-    private void AddChildrenOfNode(Node node, Transform parentObject, float rotation, float scale)
+    private void AddChildrenOfNode(InnerNode innerNode, Transform parentObject, float rotation, float scale)
     {
-        if (node.GetType() == typeof(InnerNode))
+        if (innerNode == null) return;
+
+        var childNodesCount = 0;
+        var leafesCount = 0;
+
+        if (innerNode.ChildNodes != null) childNodesCount = innerNode.ChildNodes.Count;
+        if (innerNode.Leaves != null) leafesCount = innerNode.Leaves.Count;
+        var childCount = childNodesCount + leafesCount;
+
+        var branchObjects = AddBranchObjects(parentObject, childCount, rotation, scale);
+        rotation = rotation.Equals(0) ? 30 : rotation - 10;
+        scale = scale * 0.8f;
+
+
+        for (var i = 0; i < leafesCount; i++)
         {
-            var innerNode = (InnerNode) node;
-            var branchObjects = AddBranchObjects(parentObject, innerNode.Children.Count, rotation, scale);
-            rotation = rotation.Equals(0) ? 30 : rotation - 10;
-            scale = scale * 0.8f;
-            for (var i = 0; i < innerNode.Children.Count; i++)
-            {
-                AddChildrenOfNode(innerNode.Children[i], branchObjects[i].transform.Find(NodeName), rotation, scale);
-            }
+            var leaf = innerNode.Leaves[i];
+            AddLeafObject(branchObjects[i].transform.Find(NodeName),
+                HexToNullableColor(leaf.Data.Color), leaf.Data.Id);
         }
-        else if (node.GetType() == typeof(Leaf))
+
+        if (innerNode.ChildNodes == null) return;
+
+        for (var i = 0; i < childNodesCount; i++)
         {
-            var leaf = (Leaf) node;
-            AddLeafObject(parentObject, HexToNullableColor(leaf.Data.Color), leaf.Data.Id);
-        }
-        else
-        {
-            Debug.LogError("Unknown type of node, aborting structure generation");
+            AddChildrenOfNode(innerNode.ChildNodes[i], branchObjects[leafesCount + i].transform.Find(NodeName),
+                rotation, scale);
         }
     }
 
@@ -289,7 +302,7 @@ public class TreeBuilder : MonoBehaviour
             text.GetComponent<RectTransform>().localPosition = new Vector3(0, 0.04f, 0.02f);
             text.GetComponent<Text>().text = id;
         }
-        
+
         return leaf;
     }
 
