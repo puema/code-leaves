@@ -24,6 +24,9 @@
                     ]
                 }, { "$type": "Leaf, Assembly-CSharp", "Data": { "Id": "013" } }
             ]
-        }, { "$type": "Leaf, Assembly-CSharp", "Data": { "Id": "02" } }
+        }, 
+        { "$type": "Leaf, Assembly-CSharp", "Data": {} }, 
+        { "$type": "Leaf, Assembly-CSharp", "Data": {} },
+        { "$type": "Leaf, Assembly-CSharp", "Data": {} }
     ]
 }

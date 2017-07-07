@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TreeBuilder : MonoBehaviour
 {
@@ -10,6 +12,17 @@ public class TreeBuilder : MonoBehaviour
     public GameObject Edge;
 
     public GameObject Leaf;
+
+    public GameObject Label;
+    // -------------------------------------------- //
+
+    // ----==== Flags ====---- //
+    public bool UseAllwaysMainTrunk;
+
+    public bool SingleLeafMode = true;
+    
+    public bool InitWithIds;
+    // ----------------------- //
 
     private const float XScale = 1;
     private const float YScale = 10;
@@ -21,8 +34,9 @@ public class TreeBuilder : MonoBehaviour
     private const string TreeName = "Tree";
     private const string BranchName = "Branch";
     private const string NodeName = "Node";
-    private const string LeafName = "Leaf";
     private const string EdgeName = "Edge";
+    private const string LeafName = "Leaf";
+    private const string LabelName = "Label";
     private const string TreeDataFilePath = "Assets/StreamingAssets/TreeStructure.json";
 
 
@@ -133,53 +147,15 @@ public class TreeBuilder : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        var data = GetDataStructureFromJson();
-//        var json = JsonConvert.SerializeObject(data, JsonSerializerSettings);
-//        File.WriteAllText(TreeDataFilePath, json);
+//        SerializeData(this.data);
+        var data = DesirializeData();
 
         var root = new GameObject(TreeName);
         root.transform.position = Vector3.zero + Vector3.forward * 2;
 
         GenerateTreeStructure(data, root.transform);
-//        GenerateTreeStructure(data, root.transform);
     }
 
-    private static void Dump(object o)
-    {
-        Debug.Log(JsonConvert.SerializeObject(o));
-    }
-
-    private InnerNode GetDataStructureFromJson()
-    {
-        if (!File.Exists(TreeDataFilePath))
-        {
-            Debug.LogError("Connot load tree data, for there is no such file.");
-            return null;
-        }
-        var json = File.ReadAllText(TreeDataFilePath);
-        return JsonConvert.DeserializeObject<InnerNode>(json, JsonSerializerSettings);
-    }
-
-    private void GenerateIterative(GameObject root)
-    {
-        var branches0 = AddBranchObjects(root.transform, 1, 0, 1);
-        var branches00 = AddBranchObjects(branches0[0].transform.Find(NodeName), 3, 30, 0.8f);
-        AddLeafObject(branches00[2].transform.Find(NodeName));
-
-        var branches000 = AddBranchObjects(branches00[0].transform.Find(NodeName), 2, 20, 0.5f);
-        AddLeafObject(branches000[0].transform.Find(NodeName));
-        AddLeafObject(branches000[1].transform.Find(NodeName));
-
-        var branches001 = AddBranchObjects(branches00[1].transform.Find(NodeName), 3, 20, 0.5f);
-        AddLeafObject(branches001[1].transform.Find(NodeName));
-        AddLeafObject(branches001[2].transform.Find(NodeName));
-
-        var branches0010 = AddBranchObjects(branches001[0].transform.Find(NodeName), 2, 10, 0.3f);
-
-        AddLeafObject(branches0010[0].transform.Find(NodeName));
-        AddLeafObject(branches0010[1].transform.Find(NodeName));
-    }
-    
     /// <summary>
     /// Generates the unity tree according to the given data structure of the node
     /// </summary>
@@ -214,7 +190,7 @@ public class TreeBuilder : MonoBehaviour
         else if (node.GetType() == typeof(Leaf))
         {
             var leaf = (Leaf) node;
-            AddLeafObject(parentObject, HexToNullableColor(leaf.Data.Color));
+            AddLeafObject(parentObject, HexToNullableColor(leaf.Data.Color), leaf.Data.Id);
         }
         else
         {
@@ -227,11 +203,16 @@ public class TreeBuilder : MonoBehaviour
     {
         var branches = new List<GameObject>();
 
+        if (count % 2 != 0)
+        {
+            branches.Add(AddBranchObject(parent, scale: scale));
+            count -= 1;
+        }
+
         for (var i = 0; i < count; i++)
         {
             // Add a new branch and subsequent edge and node
-            var branchObject = AddBranchObject(parent, count, i, rotation, scale);
-            branches.Add(branchObject);
+            branches.Add(AddBranchObject(parent, count, i, rotation, scale));
         }
 
         return branches;
@@ -249,6 +230,7 @@ public class TreeBuilder : MonoBehaviour
 
         // Add node at the end 
         AddEmptyNodeObject(branchObject.transform, edge.transform, edgeLength);
+
         return branchObject;
     }
 
@@ -277,16 +259,31 @@ public class TreeBuilder : MonoBehaviour
         return edge;
     }
 
-    private GameObject AddLeafObject(Transform parent, Color? color = null)
+    private GameObject AddLeafObject(Transform parent, Color? color = null, [CanBeNull] string id = null)
     {
         var leaf = Instantiate(Leaf);
-        leaf.name = LeafName;
         leaf.AddComponent<Billboard>();
+        leaf.name = LeafName;
         leaf.transform.parent = parent;
         leaf.transform.localPosition = Vector3.zero;
-        if (color == null) return leaf;
-        Debug.Log(color.Value);
-        leaf.GetComponent<MeshRenderer>().material.color = color.Value;
+
+        if (color != null)
+        {
+            leaf.GetComponent<MeshRenderer>().material.color = color.Value;
+        }
+
+        if (id != null && InitWithIds)
+        {
+            var label = Instantiate(Label);
+            label.name = LabelName;
+            label.transform.parent = leaf.transform;
+            label.transform.localPosition = Vector3.zero;
+            label.transform.localScale = Vector3.one;
+            var text = label.transform.GetChild(0);
+            text.GetComponent<RectTransform>().localPosition = new Vector3(0, 0.04f, 0.02f);
+            text.GetComponent<Text>().text = id;
+        }
+        
         return leaf;
     }
 
@@ -304,6 +301,25 @@ public class TreeBuilder : MonoBehaviour
         var z = (float) Math.Cos(phi) * xz;
 
         node.transform.localPosition = new Vector3(x, y, z);
+    }
+
+    // ----==== Helper functions ====---- //
+
+    private void SerializeData(object obj)
+    {
+        var json = JsonConvert.SerializeObject(obj, JsonSerializerSettings);
+        File.WriteAllText(TreeDataFilePath, json);
+    }
+
+    private InnerNode DesirializeData()
+    {
+        if (!File.Exists(TreeDataFilePath))
+        {
+            Debug.LogError("Connot load tree data, for there is no such file.");
+            return null;
+        }
+        var json = File.ReadAllText(TreeDataFilePath);
+        return JsonConvert.DeserializeObject<InnerNode>(json, JsonSerializerSettings);
     }
 
     private static float GetYSize(GameObject obj)
