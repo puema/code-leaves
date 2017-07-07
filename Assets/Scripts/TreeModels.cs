@@ -1,36 +1,49 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class Tree
+[Serializable]
+public abstract class Node
 {
-    private Node root;
 }
 
-public class Edge
+[Serializable]
+public class InnerNode : Node
 {
-    public Node Start;
-    public Node End;
-    public EdgeData Data;
+    public InnerNodeData Data;
+    public List<Node> Children;
 }
 
-public class Node
+[Serializable]
+public class Leaf : Node
 {
-    public Node parent;
-    public List<Edge> Edge;
-    public Node end;
-    public NodeData data;
+    public LeafData Data;
 }
 
-public struct NodeData
+// ----==== Without abstract to be better serializable ====---- //
+//[Serializable]
+//public class Node
+//{
+//    public InnerNodeData Data;
+//    public List<Node> Children;
+//    public List<Leaf> Leaves;
+//}
+
+//[Serializable]
+//public class Leaf
+//{
+//    public LeafData Data;
+//}
+
+[Serializable]
+public struct InnerNodeData
 {
-    
+    public string Id { get; set; }
 }
 
-public struct EdgeData
-{
-    
-}
-
+[Serializable]
 public struct LeafData
 {
-    
+    public string Id { get; set; }
+    public string Color { get; set; }
 }
