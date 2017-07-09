@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 using AbstractNode;
+using NUnit.Framework;
 
 public class TreeBuilder : MonoBehaviour
 {
@@ -19,11 +20,11 @@ public class TreeBuilder : MonoBehaviour
 
     // ----==== Flags ====---- //
     public bool UseAllwaysMainTrunk;
-    
+
     public bool UseMainTrunkAt3Fork;
 
     public bool SingleLeafMode = true;
-    
+
     public bool InitWithIds;
     // ----------------------- //
 
@@ -151,8 +152,8 @@ public class TreeBuilder : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        SerializeData(this.data);
-//        var data = DesirializeData();
+//        SerializeData(this.data);
+        var data = DesirializeData();
 
         var root = new GameObject(TreeName);
         root.transform.position = Vector3.zero + Vector3.forward * 2;
@@ -168,6 +169,7 @@ public class TreeBuilder : MonoBehaviour
     private void GenerateTreeStructure(Node node, Transform parent)
     {
         var trunk = AddBranchObject(parent);
+        node.AddMaxDepth(0);
         AddChildrenOfNode(node, trunk.transform.Find(NodeName), 30, 0.8f);
     }
 
@@ -194,7 +196,7 @@ public class TreeBuilder : MonoBehaviour
         else if (node.GetType() == typeof(Leaf))
         {
             var leaf = (Leaf) node;
-            AddLeafObject(parentObject, HexToNullableColor(leaf.Data.Color), leaf.Data.Id);
+            AddLeafObject(parentObject, HexToNullableColor(leaf.Data.Color), leaf.Depth);
         }
         else
         {
@@ -202,14 +204,15 @@ public class TreeBuilder : MonoBehaviour
         }
     }
 
-
     private List<GameObject> AddBranchObjects(Transform parent, int count, float rotation, float scale)
     {
         var branches = new List<GameObject>();
 
-        // Add main trunk first if siblings count is odd, 
-        // except there are exact three siblings and main trunk option is diabled for three sibling
-        if (count % 2 != 0 && !(count == 3 && !UseMainTrunkAt3Fork))
+        // Add main trunk first if
+        // 1. use allways main trunk is true
+        // 2. siblings count is odd
+        // 3. except there are exact three siblings and main trunk option is diabled for three sibling
+        if (UseAllwaysMainTrunk || count % 2 != 0 && !(count == 3 && !UseMainTrunkAt3Fork))
         {
             branches.Add(AddBranchObject(parent, scale: scale));
             count -= 1;
@@ -265,7 +268,7 @@ public class TreeBuilder : MonoBehaviour
         return edge;
     }
 
-    private GameObject AddLeafObject(Transform parent, Color? color = null, [CanBeNull] string id = null)
+    private GameObject AddLeafObject(Transform parent, Color? color = null, int? id = null)
     {
         var leaf = Instantiate(Leaf);
         leaf.AddComponent<Billboard>();
@@ -287,9 +290,9 @@ public class TreeBuilder : MonoBehaviour
             label.transform.localScale = Vector3.one;
             var text = label.transform.GetChild(0);
             text.GetComponent<RectTransform>().localPosition = new Vector3(0, 0.04f, 0.02f);
-            text.GetComponent<Text>().text = id;
+            text.GetComponent<Text>().text = id.Value.ToString();
         }
-        
+
         return leaf;
     }
 
