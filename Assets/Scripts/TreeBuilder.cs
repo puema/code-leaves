@@ -166,7 +166,7 @@ public class TreeBuilder : MonoBehaviour
     private void GenerateTreeStructure(Node node, Transform parent)
     {
         var trunk = AddBranchObject(parent);
-        node.AddMaxDepth(0);
+        node.AddMaxDepth();
         node.SortChildren();
         AddChildrenOfNode(node, trunk.transform.Find(NodeName), 30, 0.8f);
     }
