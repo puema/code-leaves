@@ -5,8 +5,8 @@
             "$type": "AbstractNode.InnerNode, Assembly-CSharp",
             "Data": { "Id": "00" },
             "Children": [
-                { "$type": "AbstractNode.Leaf, Assembly-CSharp", "Data": { "Id": "000", "Color": "208000" } },
-                { "$type": "AbstractNode.Leaf, Assembly-CSharp", "Data": { "Id": "001", "Color": "208000" } }
+                { "$type": "AbstractNode.Leaf, Assembly-CSharp", "Data": { "Id": "000", "Color": "#208000" } },
+                { "$type": "AbstractNode.Leaf, Assembly-CSharp", "Data": { "Id": "001", "Color": "#208000" } }
             ]
         },
         {

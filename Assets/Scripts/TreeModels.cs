@@ -1,36 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace AbstractNode
 {
     public abstract class Node
     {
         public int Depth { get; set; }
-        
+
         public int AddMaxDepth(int depth)
         {
             if (GetType() == typeof(Leaf) || ((InnerNode) this).Children == null)
             {
                 Depth = depth;
                 return 0;
-            }     
-            var innerNode = (InnerNode) this;
-        
-            depth++;
-        
-            var maxChildDepth = 0;
-            foreach (var child in innerNode.Children)
-            {
-                var childDepth = child.AddMaxDepth(depth);
-                maxChildDepth = Math.Max(maxChildDepth, childDepth);
             }
-            Depth = maxChildDepth;
-            return depth + maxChildDepth;
+            var innerNode = (InnerNode) this;
+
+            depth++;
+
+            var maxChildDepth = innerNode.Children.Select(child => child.AddMaxDepth(depth)).Concat(new[] {0}).Max();
+
+            depth += maxChildDepth;
+            Depth = depth;
+            return depth;
         }
 
         public void SortChildren()
         {
             if (GetType() == typeof(Leaf) || ((InnerNode) this).Children == null) return;
+            var innerNode = (InnerNode) this;
+
+            innerNode.Children = innerNode.Children.OrderByDescending(node => node.Depth).ToList();
         }
     }
 

@@ -41,9 +41,7 @@ public class TreeBuilder : MonoBehaviour
     private const string EdgeName = "Edge";
     private const string LeafName = "Leaf";
     private const string LabelName = "Label";
-    private const string TreeDataFilePath = "Assets/StreamingAssets/TreeStructure.json";
-    private const string TreeDataWithAbstractNodeFilePath = "Assets/StreamingAssets/TreeStructureTypes.json";
-
+    private const string TreeDataFilePath = "Assets/StreamingAssets/TreeStructureTypes.json";
 
     private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
     {
@@ -155,8 +153,7 @@ public class TreeBuilder : MonoBehaviour
 //        SerializeData(this.data);
         var data = DesirializeData();
 
-        var root = new GameObject(TreeName);
-        root.transform.position = Vector3.zero + Vector3.forward * 2;
+        var root = AddRootObject();
 
         GenerateTreeStructure(data, root.transform);
     }
@@ -170,6 +167,7 @@ public class TreeBuilder : MonoBehaviour
     {
         var trunk = AddBranchObject(parent);
         node.AddMaxDepth(0);
+        node.SortChildren();
         AddChildrenOfNode(node, trunk.transform.Find(NodeName), 30, 0.8f);
     }
 
@@ -185,6 +183,8 @@ public class TreeBuilder : MonoBehaviour
         if (node.GetType() == typeof(InnerNode))
         {
             var innerNode = (InnerNode) node;
+            if (innerNode.Children == null) return;
+            innerNode.SortChildren();
             var branchObjects = AddBranchObjects(parentObject, innerNode.Children.Count, rotation, scale);
             rotation = rotation.Equals(0) ? 30 : rotation - 10;
             scale = scale * 0.8f;
@@ -202,6 +202,18 @@ public class TreeBuilder : MonoBehaviour
         {
             Debug.LogError("Unknown type of node, aborting structure generation");
         }
+    }
+ 
+    /// <summary>
+    /// Adds the root game object for the tree
+    /// </summary>
+    /// <returns></returns>
+    private static GameObject AddRootObject()
+    {
+        var root = new GameObject(TreeName);
+        root.transform.position = Vector3.zero + Vector3.forward * 2;
+        root.transform.localEulerAngles = new Vector3(0, -90f, 0);
+        return root;
     }
 
     private List<GameObject> AddBranchObjects(Transform parent, int count, float rotation, float scale)
@@ -248,6 +260,7 @@ public class TreeBuilder : MonoBehaviour
         var branch = new GameObject(BranchName);
         branch.transform.parent = parent;
         branch.transform.localPosition = Vector3.zero;
+        branch.transform.localEulerAngles = Vector3.zero;
         return branch;
     }
 
@@ -300,9 +313,10 @@ public class TreeBuilder : MonoBehaviour
     {
         var node = new GameObject(NodeName);
         node.transform.parent = branch;
-
-        var theta = DegreeToRadian(edge.eulerAngles.x);
-        var phi = DegreeToRadian(edge.eulerAngles.y);
+        node.transform.localEulerAngles = Vector3.zero;
+        
+        var theta = DegreeToRadian(edge.localEulerAngles.x);
+        var phi = DegreeToRadian(edge.localEulerAngles.y);
 
         var y = (float) Math.Cos(theta) * edgeLength;
         var xz = (float) Math.Sin(theta) * edgeLength;
