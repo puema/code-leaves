@@ -43,6 +43,11 @@ public class TreeBuilder : MonoBehaviour
     private const string LabelName = "Label";
     private const string TreeDataFilePath = "Assets/StreamingAssets/TreeStructureTypes.json";
 
+    private static readonly double GoldenRatio = (1 + Math.Sqrt(5)) / 2;
+    private static readonly double GoldenAngle = RadianToDegree(2 * Math.PI - 2 * Math.PI / GoldenRatio);
+    private static readonly double CircleThroughGoldenAngle = 360 / GoldenAngle;
+    private static float _currentBranchRotation = 0;
+
     private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
     {
         TypeNameHandling = TypeNameHandling.Auto
@@ -166,7 +171,8 @@ public class TreeBuilder : MonoBehaviour
     private void GenerateTreeStructure(Node node, Transform parent)
     {
         var trunk = AddBranchObject(parent);
-        node.AddMaxDepth();
+        node.AddHeight();
+        node.AddChildCount();
         node.SortChildren();
         AddChildrenOfNode(node, trunk.transform.Find(NodeName), 30, 0.8f);
     }
@@ -186,8 +192,8 @@ public class TreeBuilder : MonoBehaviour
             if (innerNode.Children == null) return;
             innerNode.SortChildren();
             var branchObjects = AddBranchObjects(parentObject, innerNode.Children.Count, rotation, scale);
-            rotation = rotation.Equals(0) ? 30 : rotation - 10;
-            scale = scale * 0.8f;
+//            rotation = rotation.Equals(0) ? 30 : rotation - 10;
+            scale *= 0.8f;
             for (var i = 0; i < innerNode.Children.Count; i++)
             {
                 AddChildrenOfNode(innerNode.Children[i], branchObjects[i].transform.Find(NodeName), rotation, scale);
@@ -196,14 +202,14 @@ public class TreeBuilder : MonoBehaviour
         else if (node.GetType() == typeof(Leaf))
         {
             var leaf = (Leaf) node;
-            AddLeafObject(parentObject, HexToNullableColor(leaf.Data.Color), leaf.Depth);
+            AddLeafObject(parentObject, HexToNullableColor(leaf.Data.Color), leaf.Height);
         }
         else
         {
             Debug.LogError("Unknown type of node, aborting structure generation");
         }
     }
- 
+
     /// <summary>
     /// Adds the root game object for the tree
     /// </summary>
@@ -212,7 +218,6 @@ public class TreeBuilder : MonoBehaviour
     {
         var root = new GameObject(TreeName);
         root.transform.position = Vector3.zero + Vector3.forward * 2;
-        root.transform.localEulerAngles = new Vector3(0, -90f, 0);
         return root;
     }
 
@@ -220,15 +225,16 @@ public class TreeBuilder : MonoBehaviour
     {
         var branches = new List<GameObject>();
 
-        // Add main trunk first if
-        // 1. use allways main trunk is true
-        // 2. siblings count is odd
-        // 3. except there are exact three siblings and main trunk option is diabled for three sibling
-        if (UseAllwaysMainTrunk || count % 2 != 0 && !(count == 3 && !UseMainTrunkAt3Fork))
-        {
-            branches.Add(AddBranchObject(parent, scale: scale));
-            count -= 1;
-        }
+//         Add main trunk first if
+//         1. use allways main trunk is true
+//         2. siblings count is odd
+//         3. except there are exact three siblings and main trunk option is diabled for three sibling
+//        if (!(UseAllwaysMainTrunk || count % 2 != 0 && !(count == 3 && !UseMainTrunkAt3Fork)))
+//        {
+////            branches.Add(AddBranchObject(parent, scale: scale));
+//            i++;
+//            count++;
+//        }
 
         for (var i = 0; i < count; i++)
         {
@@ -264,7 +270,7 @@ public class TreeBuilder : MonoBehaviour
         return branch;
     }
 
-    private GameObject AddEdgeObject(Transform branch, int siblings, int siblingNumber, float angle, float scale,
+    private GameObject AddEdgeObject(Transform branch, int siblingsCount, int siblingIndex, float angle, float scale,
         out float edgeLength)
     {
         var edge = Instantiate(Edge);
@@ -275,8 +281,38 @@ public class TreeBuilder : MonoBehaviour
         // Store unrotated y size to the edge length, needed for the later calculation of the node coordinates
         edgeLength = GetYSize(edge);
 
-        var xAngle = angle;
-        var yAngle = 360 / siblings * siblingNumber;
+//        var xAngle = angle;
+//        var yAngle = 360 / siblingsCount * siblingIndex;
+
+        var mainTrunk = UseAllwaysMainTrunk || siblingsCount == 3 && UseMainTrunkAt3Fork || siblingsCount % 2 != 0;
+
+        float xzLength;
+
+        if (!mainTrunk)
+        {
+            siblingIndex++;
+        }
+
+        if (siblingIndex == 0)
+        {
+            xzLength = 0;
+        }
+        else
+        {
+            // Do not touch, ask not why, never, ever.
+            xzLength = edgeLength / ((siblingsCount - 2) / 3 + 2) *
+                       ((siblingIndex - 1) / 3 + 1);
+        }
+
+        var xAngle = (float) RadianToDegree(Math.Asin(xzLength / edgeLength));
+
+        if (!angle.Equals(0) && !siblingIndex.Equals(0))
+        {
+            _currentBranchRotation += (float) GoldenAngle;
+        }
+        var yAngle = _currentBranchRotation;
+
+
         edge.transform.localEulerAngles = new Vector3(xAngle, yAngle, 0);
         return edge;
     }
@@ -314,7 +350,7 @@ public class TreeBuilder : MonoBehaviour
         var node = new GameObject(NodeName);
         node.transform.parent = branch;
         node.transform.localEulerAngles = Vector3.zero;
-        
+
         var theta = DegreeToRadian(edge.localEulerAngles.x);
         var phi = DegreeToRadian(edge.localEulerAngles.y);
 
@@ -353,6 +389,11 @@ public class TreeBuilder : MonoBehaviour
     private static double DegreeToRadian(double angle)
     {
         return angle * Math.PI / 180.0;
+    }
+
+    private static double RadianToDegree(double angle)
+    {
+        return angle * 180.0 / Math.PI;
     }
 
     private static Color? HexToNullableColor(string hexcolor)

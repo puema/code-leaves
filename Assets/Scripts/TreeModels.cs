@@ -5,9 +5,12 @@ namespace AbstractNode
 {
     public abstract class Node
     {
-        public int Depth { get; set; }
+        public int Height { get; set; }
+        public int ChildCount { get; set; }
 
-        public abstract int AddMaxDepth(int depth = 0);
+        public abstract int AddHeight();
+
+        public abstract int AddChildCount();
 
         public abstract void SortChildren();
     }
@@ -17,25 +20,32 @@ namespace AbstractNode
         public InnerNodeData Data { get; set; }
         public List<Node> Children { get; set; }
 
-        public override int AddMaxDepth(int depth = 0)
+        public override int AddHeight()
         {
             if (Children == null) return 0;
-            
-            depth++;
 
             // Calculate max depth of each child, select the heighest and add to own depth
-            var maxChildDepth = Children.Select(child => child.AddMaxDepth(depth)).Concat(new[] {0}).Max();
-            depth += maxChildDepth;
-            
-            Depth = depth;
-           
-            return depth;
+            var maxChildrenHeight = Children.Select(child => child.AddHeight()).Concat(new[] {0}).Max() + 1;
+
+            Height = maxChildrenHeight;
+            return maxChildrenHeight;
         }
-        
+
+        public override int AddChildCount()
+        {
+            if (Children == null) return 0;
+
+            var childCount = Children.Select(child => child.AddChildCount() + 1).Sum();
+
+            ChildCount = childCount;
+            return childCount;
+        }
+
         public override void SortChildren()
         {
             if (Children == null) return;
-            Children = Children.OrderByDescending(node => node.Depth).ToList();
+            Children = Children.OrderByDescending(node => node.Height).ThenByDescending(node => node.ChildCount)
+                .ToList();
         }
     }
 
@@ -43,12 +53,17 @@ namespace AbstractNode
     {
         public LeafData Data { get; set; }
 
-        public override int AddMaxDepth(int depth = 0)
+        public override int AddHeight()
         {
-            Depth = depth;
+            Height = 0;
             return 0;
         }
-        
+
+        public override int AddChildCount()
+        {
+            return 0;
+        }
+
         public override void SortChildren()
         {
         }
