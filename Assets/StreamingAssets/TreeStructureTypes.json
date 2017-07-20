@@ -9,6 +9,7 @@
                         { "$type": "AbstractNode.Leaf, Assembly-CSharp", "Data": { "Id": "001", "Color": "#208000" } }
                     ]
                 },
+                { "$type": "AbstractNode.Leaf, Assembly-CSharp", "Data": { "Id": "001", "Color": "#208000" } },
                 { "$type": "AbstractNode.Leaf, Assembly-CSharp", "Data": { "Id": "001", "Color": "#208000" } }
             ]
         },
@@ -20,6 +21,8 @@
                 {
                     "$type": "AbstractNode.InnerNode, Assembly-CSharp",
                     "Children": [
+                        { "$type": "AbstractNode.Leaf, Assembly-CSharp"},
+                        { "$type": "AbstractNode.Leaf, Assembly-CSharp"},
                         { "$type": "AbstractNode.Leaf, Assembly-CSharp"},
                         { "$type": "AbstractNode.Leaf, Assembly-CSharp"},
                         { "$type": "AbstractNode.Leaf, Assembly-CSharp"},

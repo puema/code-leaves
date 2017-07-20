@@ -23,7 +23,7 @@ public class TreeBuilder : MonoBehaviour
 
     public bool UseMainTrunkAt3Fork;
 
-    public bool SingleLeafMode = true;
+    public bool GrowInDirectionOfBranches = true;
 
     public bool InitWithIds;
     // ----------------------- //
@@ -33,7 +33,6 @@ public class TreeBuilder : MonoBehaviour
     private const float ZScale = 1;
     private static readonly Vector3 BaseAspectRatio = new Vector3(XScale, YScale, ZScale);
     private const float DefaultScale = 1;
-    private const float DefaultRotation = 0;
 
     private const string TreeName = "Tree";
     private const string BranchName = "Branch";
@@ -51,105 +50,6 @@ public class TreeBuilder : MonoBehaviour
     private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
     {
         TypeNameHandling = TypeNameHandling.Auto
-    };
-
-    private Node data = new InnerNode
-    {
-        Data = new InnerNodeData
-        {
-            Id = "0"
-        },
-        Children = new List<Node>
-        {
-            new InnerNode
-            {
-                Data = new InnerNodeData
-                {
-                    Id = "00"
-                },
-                Children = new List<Node>
-                {
-                    new Leaf
-                    {
-                        Data = new LeafData
-                        {
-                            Color = "208000",
-                            Id = "000"
-                        }
-                    },
-                    new Leaf
-                    {
-                        Data = new LeafData
-                        {
-                            Color = "208000",
-                            Id = "001"
-                        }
-                    }
-                }
-            },
-            new InnerNode
-            {
-                Data = new InnerNodeData
-                {
-                    Id = "01"
-                },
-                Children = new List<Node>
-                {
-                    new Leaf
-                    {
-                        Data = new LeafData
-                        {
-                            Id = "010"
-                        }
-                    },
-                    new Leaf
-                    {
-                        Data = new LeafData
-                        {
-                            Id = "011"
-                        }
-                    },
-                    new InnerNode
-                    {
-                        Data = new InnerNodeData
-                        {
-                            Id = "012"
-                        },
-                        Children = new List<Node>
-                        {
-                            new Leaf
-                            {
-                                Data = new LeafData
-                                {
-                                    Id = "0120"
-                                }
-                            },
-                            new Leaf
-                            {
-                                Data = new LeafData
-                                {
-                                    Id = "0121"
-                                }
-                            }
-                        }
-                    },
-                    new Leaf
-                    {
-                        Data = new LeafData
-                        {
-                            Id = "013"
-                        }
-                    }
-                }
-            },
-            new Leaf
-            {
-                Data = new LeafData
-                {
-                    Id = "02"
-                }
-            }
-        }
     };
 
     // Use this for initialization
@@ -174,7 +74,7 @@ public class TreeBuilder : MonoBehaviour
         node.AddHeight();
         node.AddChildCount();
         node.SortChildren();
-        AddChildrenOfNode(node, trunk.transform.Find(NodeName), 30, 0.8f);
+        AddChildrenOfNode(node, trunk.transform.Find(NodeName));
     }
 
     /// <summary>
@@ -182,21 +82,19 @@ public class TreeBuilder : MonoBehaviour
     /// </summary>
     /// <param name="node"></param>
     /// <param name="parentObject"></param>
-    /// <param name="rotation"></param>
     /// <param name="scale"></param>
-    private void AddChildrenOfNode(Node node, Transform parentObject, float rotation, float scale)
+    private void AddChildrenOfNode(Node node, Transform parentObject, float scale = DefaultScale)
     {
         if (node.GetType() == typeof(InnerNode))
         {
             var innerNode = (InnerNode) node;
             if (innerNode.Children == null) return;
             innerNode.SortChildren();
-            var branchObjects = AddBranchObjects(parentObject, innerNode.Children.Count, rotation, scale);
-//            rotation = rotation.Equals(0) ? 30 : rotation - 10;
+            var branchObjects = AddBranchObjects(parentObject, innerNode.Children.Count, scale);
             scale *= 0.8f;
             for (var i = 0; i < innerNode.Children.Count; i++)
             {
-                AddChildrenOfNode(innerNode.Children[i], branchObjects[i].transform.Find(NodeName), rotation, scale);
+                AddChildrenOfNode(innerNode.Children[i], branchObjects[i].transform.Find(NodeName), scale);
             }
         }
         else if (node.GetType() == typeof(Leaf))
@@ -221,39 +119,27 @@ public class TreeBuilder : MonoBehaviour
         return root;
     }
 
-    private List<GameObject> AddBranchObjects(Transform parent, int count, float rotation, float scale)
+    private List<GameObject> AddBranchObjects(Transform parent, int count, float scale)
     {
         var branches = new List<GameObject>();
-
-//         Add main trunk first if
-//         1. use allways main trunk is true
-//         2. siblings count is odd
-//         3. except there are exact three siblings and main trunk option is diabled for three sibling
-//        if (!(UseAllwaysMainTrunk || count % 2 != 0 && !(count == 3 && !UseMainTrunkAt3Fork)))
-//        {
-////            branches.Add(AddBranchObject(parent, scale: scale));
-//            i++;
-//            count++;
-//        }
 
         for (var i = 0; i < count; i++)
         {
             // Add a new branch and subsequent edge and node
-            branches.Add(AddBranchObject(parent, count, i, rotation, scale));
+            branches.Add(AddBranchObject(parent, count, i, scale));
         }
 
         return branches;
     }
 
-    private GameObject AddBranchObject(Transform parent, int siblings = 1, int siblingNumber = 0,
-        float rotation = DefaultRotation, float scale = DefaultScale)
+    private GameObject AddBranchObject(Transform parent, int siblingCount = 1, int siblingIndex = 0,
+        float scale = DefaultScale)
     {
         // Add Branch as new origin
-        var branchObject = AddEmptyBranchObject(parent);
-
+        var branchObject = AddEmptyBranchObject(parent, siblingCount, siblingIndex);
         // Store the height of the unrotated edge
         float edgeLength;
-        var edge = AddEdgeObject(branchObject.transform, siblings, siblingNumber, rotation, scale, out edgeLength);
+        var edge = AddEdgeObject(branchObject.transform, siblingCount, siblingIndex, scale, out edgeLength);
 
         // Add node at the end 
         AddEmptyNodeObject(branchObject.transform, edge.transform, edgeLength);
@@ -261,61 +147,93 @@ public class TreeBuilder : MonoBehaviour
         return branchObject;
     }
 
-    private static GameObject AddEmptyBranchObject(Transform parent)
+    private GameObject AddEmptyBranchObject(Transform parent, int siblingsCount, int siblingIndex)
     {
         var branch = new GameObject(BranchName);
         branch.transform.parent = parent;
         branch.transform.localPosition = Vector3.zero;
         branch.transform.localEulerAngles = Vector3.zero;
+
+        if (!GrowInDirectionOfBranches) return branch;
+        
+        RotateBranchOrEdge(branch.transform, siblingsCount, siblingIndex);
+        branch.transform.Rotate(0, (float) GoldenAngle, 0, Space.Self);
+        
         return branch;
     }
 
-    private GameObject AddEdgeObject(Transform branch, int siblingsCount, int siblingIndex, float angle, float scale,
+    /// <summary>
+    /// Rotates the a whole branch or edge according to the siblings count and the own siblings index
+    /// </summary>
+    /// <param name="treeObject"></param>
+    /// <param name="siblingsCount"></param>
+    /// <param name="siblingIndex"></param>
+    private void RotateBranchOrEdge(Transform treeObject, int siblingsCount, int siblingIndex)
+    {
+        float xAngle;
+        float yAngle;
+
+        var mainTrunk = UseAllwaysMainTrunk || siblingsCount % 2 != 0 && !(siblingsCount == 3 && !UseMainTrunkAt3Fork);
+
+        if (!mainTrunk) siblingIndex++;
+        if (mainTrunk) siblingsCount--;
+
+        if (siblingIndex != 0)
+        {
+            xAngle = 30;
+            yAngle = 360 / siblingsCount * --siblingIndex;
+        }
+        else
+        {
+            xAngle = 0;
+            yAngle = 0;
+        }
+
+        treeObject.transform.localEulerAngles = new Vector3(xAngle, yAngle, 0);
+
+//        float xzLength;
+//        if (!mainTrunk)
+//        {
+//            siblingIndex++;
+//        }
+//        
+//
+//        if (siblingIndex == 0)
+//        {
+//            xzLength = 0;
+//        }
+//        else
+//        {
+//            // Do not touch, ask not why, never, ever.
+//            xzLength = edgeLength / ((siblingsCount - 2) / 3 + 2) *
+//                       ((siblingIndex - 1) / 3 + 1);
+//        }
+//     
+//        var xAngle = (float) RadianToDegree(Math.Asin(xzLength / edgeLength));
+//
+//        if (!angle.Equals(0) && !siblingIndex.Equals(0))
+//        {
+//            _currentBranchRotation += (float) GoldenAngle;
+//        }
+//        yAngle = _currentBranchRotation;
+    }
+
+    private GameObject AddEdgeObject(Transform branch, int siblingsCount, int siblingIndex, float scale,
         out float edgeLength)
     {
         var edge = Instantiate(Edge);
         edge.name = EdgeName;
-        edge.transform.parent = branch.transform;
-        edge.transform.localPosition = Vector3.zero;
         edge.transform.localScale = scale * BaseAspectRatio;
         // Store unrotated y size to the edge length, needed for the later calculation of the node coordinates
         edgeLength = GetYSize(edge);
+        edge.transform.parent = branch.transform;
+        edge.transform.localPosition = Vector3.zero;
+        edge.transform.localEulerAngles = Vector3.zero;
 
-//        var xAngle = angle;
-//        var yAngle = 360 / siblingsCount * siblingIndex;
-
-        var mainTrunk = UseAllwaysMainTrunk || siblingsCount == 3 && UseMainTrunkAt3Fork || siblingsCount % 2 != 0;
-
-        float xzLength;
-
-        if (!mainTrunk)
-        {
-            siblingIndex++;
-        }
-
-        if (siblingIndex == 0)
-        {
-            xzLength = 0;
-        }
-        else
-        {
-            // Do not touch, ask not why, never, ever.
-            xzLength = edgeLength / ((siblingsCount - 2) / 3 + 2) *
-                       ((siblingIndex - 1) / 3 + 1);
-        }
-
-        var xAngle = (float) RadianToDegree(Math.Asin(xzLength / edgeLength));
-
-        if (!angle.Equals(0) && !siblingIndex.Equals(0))
-        {
-            _currentBranchRotation += (float) GoldenAngle;
-        }
-        var yAngle = _currentBranchRotation;
-
-
-        edge.transform.localEulerAngles = new Vector3(xAngle, yAngle, 0);
+        if (!GrowInDirectionOfBranches) RotateBranchOrEdge(edge.transform, siblingsCount, siblingIndex);
         return edge;
     }
+
 
     private GameObject AddLeafObject(Transform parent, Color? color = null, int? id = null)
     {
@@ -360,6 +278,7 @@ public class TreeBuilder : MonoBehaviour
         var z = (float) Math.Cos(phi) * xz;
 
         node.transform.localPosition = new Vector3(x, y, z);
+        node.transform.Rotate(0, (float) GoldenAngle, 0);
     }
 
     // ----==== Helper functions ====---- //
@@ -400,5 +319,9 @@ public class TreeBuilder : MonoBehaviour
     {
         Color color;
         return ColorUtility.TryParseHtmlString(hexcolor, out color) ? new Color?(color) : null;
+    }
+    
+    public static float KeepAngleIn360 (float angle) {
+        return (angle %= 360) < 0 ? angle + 360 : angle;
     }
 }
