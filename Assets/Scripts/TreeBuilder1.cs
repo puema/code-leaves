@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using JetBrains.Annotations;
-using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 using NonAbstractNode;
@@ -41,12 +39,6 @@ public class TreeBuilder1 : MonoBehaviour
     private const string LeafName = "Leaf";
     private const string LabelName = "Label";
     private const string TreeDataFilePath = "Assets/StreamingAssets/TreeStructure.json";
-
-
-    private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
-    {
-        TypeNameHandling = TypeNameHandling.Auto
-    };
 
     private InnerNode data = new InnerNode
     {
@@ -157,7 +149,7 @@ public class TreeBuilder1 : MonoBehaviour
     void Start()
     {
 //        SerializeData(data);
-        var data = DesirializeData();
+//        var data = DesirializeData();
 
         var root = new GameObject(TreeName);
         root.transform.position = Vector3.zero + Vector3.forward * 2;
@@ -324,22 +316,22 @@ public class TreeBuilder1 : MonoBehaviour
 
     // ----==== Helper functions ====---- //
 
-    private void SerializeData(object obj)
-    {
-        var json = JsonConvert.SerializeObject(obj, JsonSerializerSettings);
-        File.WriteAllText(TreeDataFilePath, json);
-    }
-
-    private InnerNode DesirializeData()
-    {
-        if (!File.Exists(TreeDataFilePath))
-        {
-            Debug.LogError("Connot load tree data, for there is no such file.");
-            return null;
-        }
-        var json = File.ReadAllText(TreeDataFilePath);
-        return JsonConvert.DeserializeObject<InnerNode>(json, JsonSerializerSettings);
-    }
+//    private void SerializeData(object obj)
+//    {
+//        var json = JsonConvert.SerializeObject(obj, JsonSerializerSettings);
+//        File.WriteAllText(TreeDataFilePath, json);
+//    }
+//
+//    private InnerNode DesirializeData()
+//    {
+//        if (!File.Exists(TreeDataFilePath))
+//        {
+//            Debug.LogError("Connot load tree data, for there is no such file.");
+//            return null;
+//        }
+//        var json = File.ReadAllText(TreeDataFilePath);
+//        return JsonConvert.DeserializeObject<InnerNode>(json, JsonSerializerSettings);
+//    }
 
     private static float GetYSize(GameObject obj)
     {

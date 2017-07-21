@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using JetBrains.Annotations;
-using Newtonsoft.Json;
+//using System.IO;
+//using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 using AbstractNode;
-using NUnit.Framework;
 
 public class TreeBuilder : MonoBehaviour
 {
     // ----==== Meshes as public variables ====---- //
+    public GameObject Floor;
+    
     public GameObject Edge;
 
     public GameObject Leaf;
@@ -47,20 +47,119 @@ public class TreeBuilder : MonoBehaviour
     private static readonly double CircleThroughGoldenAngle = 360 / GoldenAngle;
     private static float _currentBranchRotation = 0;
 
-    private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
+//    private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
+//    {
+//        TypeNameHandling = TypeNameHandling.Auto
+//    };
+    
+    private Node data = new InnerNode
     {
-        TypeNameHandling = TypeNameHandling.Auto
+        Data = new InnerNodeData
+        {
+            Id = "0"
+        },
+        Children = new List<Node>
+        {
+            new InnerNode
+            {
+                Data = new InnerNodeData
+                {
+                    Id = "00"
+                },
+                Children = new List<Node>
+                {
+                    new Leaf
+                    {
+                        Data = new LeafData
+                        {
+                            Color = "208000",
+                            Id = "000"
+                        }
+                    },
+                    new Leaf
+                    {
+                        Data = new LeafData
+                        {
+                            Color = "208000",
+                            Id = "001"
+                        }
+                    }
+                }
+            },
+            new InnerNode
+            {
+                Data = new InnerNodeData
+                {
+                    Id = "01"
+                },
+                Children = new List<Node>
+                {
+                    new Leaf
+                    {
+                        Data = new LeafData
+                        {
+                            Id = "010"
+                        }
+                    },
+                    new Leaf
+                    {
+                        Data = new LeafData
+                        {
+                            Id = "011"
+                        }
+                    },
+                    new InnerNode
+                    {
+                        Data = new InnerNodeData
+                        {
+                            Id = "012"
+                        },
+                        Children = new List<Node>
+                        {
+                            new Leaf
+                            {
+                                Data = new LeafData
+                                {
+                                    Id = "0120"
+                                }
+                            },
+                            new Leaf
+                            {
+                                Data = new LeafData
+                                {
+                                    Id = "0121"
+                                }
+                            }
+                        }
+                    },
+                    new Leaf
+                    {
+                        Data = new LeafData
+                        {
+                            Id = "013"
+                        }
+                    }
+                }
+            },
+            new Leaf
+            {
+                Data = new LeafData
+                {
+                    Id = "02"
+                }
+            }
+        }
     };
 
     // Use this for initialization
     void Start()
     {
 //        SerializeData(this.data);
-        var data = DesirializeData();
+//        var data = DesirializeData();
 
-        var root = AddRootObject();
+        var trunkBase = AddTrunkBaseObject();
 
-        GenerateTreeStructure(data, root.transform);
+        GenerateTreeStructure(data, trunkBase.transform);
     }
 
     /// <summary>
@@ -112,11 +211,12 @@ public class TreeBuilder : MonoBehaviour
     /// Adds the root game object for the tree
     /// </summary>
     /// <returns></returns>
-    private static GameObject AddRootObject()
+    private GameObject AddTrunkBaseObject()
     {
-        var root = new GameObject(TreeName);
-        root.transform.position = Vector3.zero + Vector3.forward * 2;
-        return root;
+        var trunkBase = new GameObject(TreeName);
+        trunkBase.transform.parent = Floor.transform;
+        trunkBase.transform.localPosition = Vector3.zero;
+        return trunkBase;
     }
 
     private List<GameObject> AddBranchObjects(Transform parent, int count, float scale)
@@ -239,13 +339,14 @@ public class TreeBuilder : MonoBehaviour
     {
         var leaf = Instantiate(Leaf);
         leaf.AddComponent<Billboard>();
+        leaf.AddComponent<LeafInputHandler>();
         leaf.name = LeafName;
         leaf.transform.parent = parent;
         leaf.transform.localPosition = Vector3.zero;
 
         if (color != null)
         {
-            leaf.GetComponent<MeshRenderer>().material.color = color.Value;
+                leaf.GetComponent<MeshRenderer>().material.color = color.Value;
         }
 
         if (id != null && InitWithIds)
@@ -283,22 +384,22 @@ public class TreeBuilder : MonoBehaviour
 
     // ----==== Helper functions ====---- //
 
-    private void SerializeData(object obj)
-    {
-        var json = JsonConvert.SerializeObject(obj, JsonSerializerSettings);
-        File.WriteAllText(TreeDataFilePath, json);
-    }
+//    private void SerializeData(object obj)
+//    {
+//        var json = JsonConvert.SerializeObject(obj, JsonSerializerSettings);
+//        File.WriteAllText(TreeDataFilePath, json);
+//    }
 
-    private InnerNode DesirializeData()
-    {
-        if (!File.Exists(TreeDataFilePath))
-        {
-            Debug.LogError("Connot load tree data, for there is no such file.");
-            return null;
-        }
-        var json = File.ReadAllText(TreeDataFilePath);
-        return JsonConvert.DeserializeObject<InnerNode>(json, JsonSerializerSettings);
-    }
+//    private InnerNode DesirializeData()
+//    {
+//        if (!File.Exists(TreeDataFilePath))
+//        {
+//            Debug.LogError("Connot load tree data, for there is no such file.");
+//            return null;
+//        }
+//        var json = File.ReadAllText(TreeDataFilePath);
+//        return JsonConvert.DeserializeObject<InnerNode>(json, JsonSerializerSettings);
+//    }
 
     private static float GetYSize(GameObject obj)
     {
@@ -315,7 +416,7 @@ public class TreeBuilder : MonoBehaviour
         return angle * 180.0 / Math.PI;
     }
 
-    private static Color? HexToNullableColor(string hexcolor)
+    public static Color? HexToNullableColor(string hexcolor)
     {
         Color color;
         return ColorUtility.TryParseHtmlString(hexcolor, out color) ? new Color?(color) : null;
