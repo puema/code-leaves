@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-//using System.IO;
-//using Newtonsoft.Json;
+using System.IO;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 using AbstractNode;
+using JetBrains.Annotations;
 
 public class TreeBuilder : MonoBehaviour
 {
     // ----==== Meshes as public variables ====---- //
     public GameObject Floor;
-    
+
     public GameObject Edge;
 
     public GameObject Leaf;
@@ -24,22 +25,21 @@ public class TreeBuilder : MonoBehaviour
     public bool UseMainTrunkAt3Fork;
 
     public bool GrowInDirectionOfBranches = true;
-
-    public bool InitWithIds;
     // ----------------------- //
 
-    private const float XScale = 1;
-    private const float YScale = 10;
-    private const float ZScale = 1;
-    private static readonly Vector3 BaseAspectRatio = new Vector3(XScale, YScale, ZScale);
     private const float DefaultScale = 1;
+    private const float DistanceLeafToLabel = 0.008f;
+    private const float DistanceNodeToLabel = 0.008f;
+    private static readonly Vector3 BaseAspectRatio = new Vector3(1, 10, 1);
+    private static readonly Vector3 Default3DTextScale = new Vector3(0.005f, 0.005f, 0.005f);
 
-    private const string TreeName = "Tree";
-    private const string BranchName = "Branch";
-    private const string NodeName = "Node";
-    private const string EdgeName = "Edge";
-    private const string LeafName = "Leaf";
-    private const string LabelName = "Label";
+    internal static readonly string TreeName = "Tree";
+    internal static readonly string BranchName = "Branch";
+    internal static readonly string NodeName = "Node";
+    internal static readonly string EdgeName = "Edge";
+    internal static readonly string LeafName = "Leaf";
+    internal static readonly string LabelName = "Label";
+
     private const string TreeDataFilePath = "Assets/StreamingAssets/TreeStructureTypes.json";
 
     private static readonly double GoldenRatio = (1 + Math.Sqrt(5)) / 2;
@@ -47,11 +47,11 @@ public class TreeBuilder : MonoBehaviour
     private static readonly double CircleThroughGoldenAngle = 360 / GoldenAngle;
     private static float _currentBranchRotation = 0;
 
-//    private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
-//    {
-//        TypeNameHandling = TypeNameHandling.Auto
-//    };
-    
+    private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
+    {
+        TypeNameHandling = TypeNameHandling.Auto
+    };
+
     private Node data = new InnerNode
     {
         Data = new InnerNodeData
@@ -155,7 +155,7 @@ public class TreeBuilder : MonoBehaviour
     void Start()
     {
 //        SerializeData(this.data);
-//        var data = DesirializeData();
+        var data = DesirializeData();
 
         var trunkBase = AddTrunkBaseObject();
 
@@ -169,7 +169,7 @@ public class TreeBuilder : MonoBehaviour
     /// <param name="parent"></param>
     private void GenerateTreeStructure(Node node, Transform parent)
     {
-        var trunk = AddBranchObject(parent);
+        var trunk = AddBranchObject(parent, ((InnerNode)node).Data);
         node.AddHeight();
         node.AddChildCount();
         node.SortChildren();
@@ -189,7 +189,7 @@ public class TreeBuilder : MonoBehaviour
             var innerNode = (InnerNode) node;
             if (innerNode.Children == null) return;
             innerNode.SortChildren();
-            var branchObjects = AddBranchObjects(parentObject, innerNode.Children.Count, scale);
+            var branchObjects = AddBranchObjects(parentObject, innerNode.Data, innerNode.Children.Count, scale);
             scale *= 0.8f;
             for (var i = 0; i < innerNode.Children.Count; i++)
             {
@@ -199,7 +199,7 @@ public class TreeBuilder : MonoBehaviour
         else if (node.GetType() == typeof(Leaf))
         {
             var leaf = (Leaf) node;
-            AddLeafObject(parentObject, HexToNullableColor(leaf.Data.Color), leaf.Height);
+            AddLeafObject(parentObject, leaf.Data);
         }
         else
         {
@@ -213,26 +213,23 @@ public class TreeBuilder : MonoBehaviour
     /// <returns></returns>
     private GameObject AddTrunkBaseObject()
     {
-        var trunkBase = new GameObject(TreeName);
-        trunkBase.transform.parent = Floor.transform;
-        trunkBase.transform.localPosition = Vector3.zero;
-        return trunkBase;
+        return InstantiateObject(TreeName, parent: Floor.transform);
     }
 
-    private List<GameObject> AddBranchObjects(Transform parent, int count, float scale)
+    private List<GameObject> AddBranchObjects(Transform parent, InnerNodeData data, int count, float scale)
     {
         var branches = new List<GameObject>();
 
         for (var i = 0; i < count; i++)
         {
             // Add a new branch and subsequent edge and node
-            branches.Add(AddBranchObject(parent, count, i, scale));
+            branches.Add(AddBranchObject(parent, data, count, i, scale));
         }
 
         return branches;
     }
 
-    private GameObject AddBranchObject(Transform parent, int siblingCount = 1, int siblingIndex = 0,
+    private GameObject AddBranchObject(Transform parent, InnerNodeData data, int siblingCount = 1, int siblingIndex = 0,
         float scale = DefaultScale)
     {
         // Add Branch as new origin
@@ -242,23 +239,20 @@ public class TreeBuilder : MonoBehaviour
         var edge = AddEdgeObject(branchObject.transform, siblingCount, siblingIndex, scale, out edgeLength);
 
         // Add node at the end 
-        AddEmptyNodeObject(branchObject.transform, edge.transform, edgeLength);
+        AddEmptyNodeObject(branchObject.transform, edge.transform, edgeLength, data);
 
         return branchObject;
     }
 
     private GameObject AddEmptyBranchObject(Transform parent, int siblingsCount, int siblingIndex)
     {
-        var branch = new GameObject(BranchName);
-        branch.transform.parent = parent;
-        branch.transform.localPosition = Vector3.zero;
-        branch.transform.localEulerAngles = Vector3.zero;
+        var branch = InstantiateObject(BranchName, parent: parent);
 
         if (!GrowInDirectionOfBranches) return branch;
-        
+
         RotateBranchOrEdge(branch.transform, siblingsCount, siblingIndex);
         branch.transform.Rotate(0, (float) GoldenAngle, 0, Space.Self);
-        
+
         return branch;
     }
 
@@ -321,55 +315,36 @@ public class TreeBuilder : MonoBehaviour
     private GameObject AddEdgeObject(Transform branch, int siblingsCount, int siblingIndex, float scale,
         out float edgeLength)
     {
-        var edge = Instantiate(Edge);
-        edge.name = EdgeName;
-        edge.transform.localScale = scale * BaseAspectRatio;
-        // Store unrotated y size to the edge length, needed for the later calculation of the node coordinates
+        var edge = InstantiateObject(EdgeName, Edge, branch.transform, localScale: scale * BaseAspectRatio);
         edgeLength = GetYSize(edge);
-        edge.transform.parent = branch.transform;
-        edge.transform.localPosition = Vector3.zero;
-        edge.transform.localEulerAngles = Vector3.zero;
+        edge.AddComponent<NodeInputHandler>();
 
         if (!GrowInDirectionOfBranches) RotateBranchOrEdge(edge.transform, siblingsCount, siblingIndex);
+        else edge.transform.localEulerAngles = Vector3.zero;
+
         return edge;
     }
 
 
-    private GameObject AddLeafObject(Transform parent, Color? color = null, int? id = null)
+    private GameObject AddLeafObject(Transform parent, LeafData data)
     {
-        var leaf = Instantiate(Leaf);
+        var leaf = InstantiateObject(LeafName, Leaf, parent);
+        var height = GetYSize(leaf);
         leaf.AddComponent<Billboard>();
-        leaf.AddComponent<LeafInputHandler>();
-        leaf.name = LeafName;
-        leaf.transform.parent = parent;
-        leaf.transform.localPosition = Vector3.zero;
+        leaf.AddComponent<NodeInputHandler>();
 
-        if (color != null)
-        {
-                leaf.GetComponent<MeshRenderer>().material.color = color.Value;
-        }
+        var color = HexToNullableColor(data.Color);
+        if (color != null) leaf.GetComponent<MeshRenderer>().material.color = color.Value;
 
-        if (id != null && InitWithIds)
-        {
-            var label = Instantiate(Label);
-            label.name = LabelName;
-            label.transform.parent = leaf.transform;
-            label.transform.localPosition = Vector3.zero;
-            label.transform.localScale = Vector3.one;
-            var text = label.transform.GetChild(0);
-            text.GetComponent<RectTransform>().localPosition = new Vector3(0, 0.04f, 0.02f);
-            text.GetComponent<Text>().text = id.Value.ToString();
-        }
+        var label = InstantiateObject(LabelName, Label, leaf.transform, Vector3.up * (height + DistanceLeafToLabel),
+            Default3DTextScale, isActive: false);
+        label.GetComponent<TextMesh>().text = data.Text;
 
         return leaf;
     }
 
-    private static void AddEmptyNodeObject(Transform branch, Transform edge, float edgeLength)
+    private void AddEmptyNodeObject(Transform branch, Transform edge, float edgeLength, InnerNodeData data)
     {
-        var node = new GameObject(NodeName);
-        node.transform.parent = branch;
-        node.transform.localEulerAngles = Vector3.zero;
-
         var theta = DegreeToRadian(edge.localEulerAngles.x);
         var phi = DegreeToRadian(edge.localEulerAngles.y);
 
@@ -377,29 +352,52 @@ public class TreeBuilder : MonoBehaviour
         var xz = (float) Math.Sin(theta) * edgeLength;
         var x = (float) Math.Sin(phi) * xz;
         var z = (float) Math.Cos(phi) * xz;
-
-        node.transform.localPosition = new Vector3(x, y, z);
+        
+        var node = InstantiateObject(NodeName, parent: branch, localPosition: new Vector3(x, y, z));
         node.transform.Rotate(0, (float) GoldenAngle, 0);
+
+        var label = InstantiateObject(LabelName, Label, node.transform, Vector3.down * DistanceNodeToLabel,
+            isActive: false);
+        label.GetComponent<TextMesh>().text = data.Text;
+        label.AddComponent<Billboard>();
     }
 
     // ----==== Helper functions ====---- //
 
-//    private void SerializeData(object obj)
-//    {
-//        var json = JsonConvert.SerializeObject(obj, JsonSerializerSettings);
-//        File.WriteAllText(TreeDataFilePath, json);
-//    }
+    private static GameObject InstantiateObject(string objName = null, GameObject original = null,
+        Transform parent = null, Vector3? localPosition = null, Vector3? localScale = null,
+        Vector3? localEulerAngles = null, bool isActive = true)
+    {
+        localPosition = localPosition ?? Vector3.zero;
+        localEulerAngles = localEulerAngles ?? Vector3.one;
 
-//    private InnerNode DesirializeData()
-//    {
-//        if (!File.Exists(TreeDataFilePath))
-//        {
-//            Debug.LogError("Connot load tree data, for there is no such file.");
-//            return null;
-//        }
-//        var json = File.ReadAllText(TreeDataFilePath);
-//        return JsonConvert.DeserializeObject<InnerNode>(json, JsonSerializerSettings);
-//    }
+        var gameObj = original == null ? new GameObject(objName) : Instantiate(original);
+        gameObj.SetActive(isActive);
+        if (parent != null) gameObj.transform.SetParent(parent);
+        if (objName != null) gameObj.name = objName;
+        if (localScale != null) gameObj.transform.localScale = localScale.Value;
+        gameObj.transform.localPosition = localPosition.Value;
+        gameObj.transform.localEulerAngles = localEulerAngles.Value;
+
+        return gameObj;
+    }
+
+    private void SerializeData(object obj)
+    {
+        var json = JsonConvert.SerializeObject(obj, JsonSerializerSettings);
+        File.WriteAllText(TreeDataFilePath, json);
+    }
+
+    private InnerNode DesirializeData()
+    {
+        if (!File.Exists(TreeDataFilePath))
+        {
+            Debug.LogError("Connot load tree data, for there is no such file.");
+            return null;
+        }
+        var json = File.ReadAllText(TreeDataFilePath);
+        return JsonConvert.DeserializeObject<InnerNode>(json, JsonSerializerSettings);
+    }
 
     private static float GetYSize(GameObject obj)
     {
@@ -421,8 +419,9 @@ public class TreeBuilder : MonoBehaviour
         Color color;
         return ColorUtility.TryParseHtmlString(hexcolor, out color) ? new Color?(color) : null;
     }
-    
-    public static float KeepAngleIn360 (float angle) {
+
+    public static float KeepAngleIn360(float angle)
+    {
         return (angle %= 360) < 0 ? angle + 360 : angle;
     }
 }

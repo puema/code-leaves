@@ -43,8 +43,7 @@ namespace AbstractNode
 
         public override void SortChildren()
         {
-            if (Children == null) return;
-            Children = Children.OrderByDescending(node => node.Height).ThenByDescending(node => node.ChildCount)
+            Children = Children?.OrderByDescending(node => node.Height).ThenByDescending(node => node.ChildCount)
                 .ToList();
         }
     }
@@ -72,12 +71,14 @@ namespace AbstractNode
     public struct InnerNodeData
     {
         public string Id { get; set; }
+        public string Text { get; set; }
     }
 
     public struct LeafData
     {
         public string Id { get; set; }
         public string Color { get; set; }
+        public string Text { get; set; }
     }
 }
 
