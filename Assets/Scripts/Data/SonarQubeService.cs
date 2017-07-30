@@ -7,8 +7,10 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using HoloToolkit.Sharing;
 using HoloToolkit.Unity;
 using Newtonsoft.Json;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -22,14 +24,23 @@ public class SonarQubeService : Singleton<SonarQubeService>
     private const string sortFields = "path, name";
     private const string strategy = "children";
 
+    private Package root;
+
     private async void Start()
     {
-//        StartCoroutine(GetSonarQubeTree(BaseComponentKey));
-//        var package = await DoStuff(BaseComponentKey);
-//        Logger.Json(package);
+        StartCoroutine(GetSonarQubeTree(BaseComponentKey, element => { root = (Package) element; }));
+        StartCoroutine(WaitABit());
     }
 
-    private IEnumerator GetSonarQubeTree(string sonarQubeComponentKey)
+    private IEnumerator WaitABit()
+    {
+        yield return new WaitForSeconds(60);
+        var json = JsonConvert.SerializeObject(root, Formatting.Indented);
+        Debug.Log("Writing to file...");
+        File.WriteAllText("Assets/StreamingAssets/AirStructure.json", json);
+    }
+
+    private IEnumerator GetSonarQubeTree(string sonarQubeComponentKey, Action<HierarchyElement> callback)
     {
         var url =
             $"{SonarQubeServerUrl}api/components/tree?baseComponentKey={sonarQubeComponentKey}" +
@@ -43,18 +54,42 @@ public class SonarQubeService : Singleton<SonarQubeService>
         var www = new WWW(url, null, headers);
         yield return www;
 
-        handleResponse(www);
+        var sonarQubeTree = JsonConvert.DeserializeObject<SonarQubeTree>(www.text);
+        if (sonarQubeComponentKey ==
+            "com.bmw.ispi.air.central:air-da-document:src/main/java/com/bmw/ispi/air/central/da/document/DocumentStorage.java"
+        )
+        {
+            
+            Logger.Json(sonarQubeTree);
+        }
+        var parent = MapSonarQubeComponentToHierarchyElement(sonarQubeTree.baseComponent);
+        
+        callback(parent);
+        
+        foreach (var component in sonarQubeTree.components)
+        {
+            StartCoroutine(GetSonarQubeTree(component.key, element =>
+            {
+                parent.Children.Add(element);
+            }));
+        }
     }
 
-    private async Task<Package> DoStuff(string sonarQubeComponentKey)
+    private async Task<HierarchyElement> DoStuff(string sonarQubeComponentKey)
     {
         var webRequest = (HttpWebRequest) WebRequest.Create(
             $"{SonarQubeServerUrl}api/components/tree?baseComponentKey={sonarQubeComponentKey}" +
             $"&ps={pageSize}&s={sortFields}&strategy={strategy}");
-        
+
         webRequest.Method = "GET";
         webRequest.Headers.Add("Authorization",
             "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(Token + ":")));
+
+        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+        // allows for validation of SSL conversations
+        ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+
         var response = await webRequest.GetResponseAsync();
 
         var reader = new StreamReader(response.GetResponseStream());
@@ -63,66 +98,67 @@ public class SonarQubeService : Singleton<SonarQubeService>
 
         var sonarQubeTree = JsonConvert.DeserializeObject<SonarQubeTree>(json);
 
-        return MapSonarQubeTreeToPackage(sonarQubeTree);
+        Logger.Json(sonarQubeTree);
+        return MapSonarQubeComponentToHierarchyElement(sonarQubeTree.baseComponent);
     }
 
-    private void handleResponse(WWW webRequest)
+    private HierarchyElement WebClientRequest(string sonarQubeComponentKey)
     {
-        var sonarQubeTree = JsonConvert.DeserializeObject<SonarQubeTree>(webRequest.text);
+        var webClient = new WebClient();
+        webClient.Headers.Add("Authorization",
+            "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(Token + ":")));
+        var json = webClient.DownloadString(
+            $"{SonarQubeServerUrl}api/components/tree?baseComponentKey={sonarQubeComponentKey}" +
+            $"&ps={pageSize}&s={sortFields}&strategy={strategy}");
 
-        var element = MapSonarQubeComponentToPackage(sonarQubeTree.baseComponent);
+        var sonarQubeTree = JsonConvert.DeserializeObject<SonarQubeTree>(json);
+
+        Logger.Json(sonarQubeTree);
+        return MapSonarQubeComponentToHierarchyElement(sonarQubeTree.baseComponent);
+    }
+
+    private static HierarchyElement MapSonarQubeComponentToHierarchyElement(SonarQubeComponent component)
+    {
+        if (component == null) return null;
         
-        Logger.Json(element);
-    }
-
-    private static Package MapSonarQubeTreeToPackage(SonarQubeTree tree)
-    {
-        var package = new Package
+        if (component.qualifier == SonarQubeQualifier.TRK ||
+            component.qualifier == SonarQubeQualifier.BRC ||
+            component.qualifier == SonarQubeQualifier.DIR)
         {
-            Name = tree.baseComponent.name,
-            Key = tree.baseComponent.key,
-            Children = new List<HierarchyElement>()
-        };
-
-        foreach (var component in tree.components)
-        {
-            package.Children.Add(MapSonarQubeComponentToPackage(component));
+            return new Package
+            {
+                Name = component.name,
+                Key = component.key,
+                Children = new List<HierarchyElement>()
+            };
         }
-        return package;
-    }
-
-    private static Package MapSonarQubeComponentToPackage(SonarQubeComponent component)
-    {
-        return new Package
+        return new Class
         {
             Name = component.name,
             Key = component.key,
             Children = new List<HierarchyElement>()
         };
     }
-    
-    public bool MyRemoteCertificateValidationCallback(System.Object sender,
-        X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+}
+
+public class CoroutineWithData
+{
+    public Coroutine coroutine { get; }
+    public object result;
+    private readonly IEnumerator target;
+
+    public CoroutineWithData(MonoBehaviour owner, IEnumerator target)
     {
-        bool isOk = true;
-        // If there are errors in the certificate chain,
-        // look at each error to determine the cause.
-        if (sslPolicyErrors != SslPolicyErrors.None) {
-            for (int i=0; i<chain.ChainStatus.Length; i++) {
-                if (chain.ChainStatus[i].Status == X509ChainStatusFlags.RevocationStatusUnknown) {
-                    continue;
-                }
-                chain.ChainPolicy.RevocationFlag = X509RevocationFlag.EntireChain;
-                chain.ChainPolicy.RevocationMode = X509RevocationMode.Online;
-                chain.ChainPolicy.UrlRetrievalTimeout = new TimeSpan (0, 1, 0);
-                chain.ChainPolicy.VerificationFlags = X509VerificationFlags.AllFlags;
-                bool chainIsValid = chain.Build ((X509Certificate2)certificate);
-                if (!chainIsValid) {
-                    isOk = false;
-                    break;
-                }
-            }
+        this.target = target;
+        coroutine = owner.StartCoroutine(Run());
+    }
+
+    private IEnumerator Run()
+    {
+        while (target.MoveNext())
+        {
+            result = target.Current;
+            yield return result;
         }
-        return isOk;
     }
 }
