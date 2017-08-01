@@ -42,6 +42,13 @@ class SonarQubePaging
     public int total;
 }
 
+/// <summary>
+/// BRC - Sub-projects
+/// DIR - Directories
+/// FIL - Files
+/// TRK - Projects
+/// UTS - Unit Test Files
+/// </summary>
 enum SonarQubeQualifier
 {
     BRC, DIR, FIL, TRK, UTS

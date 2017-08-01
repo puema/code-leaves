@@ -162,6 +162,11 @@ Prefab:
       propertyPath: VisualizeHands
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114000011693831752, guid: 3eddd1c29199313478dd3f912bfab2ab,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3eddd1c29199313478dd3f912bfab2ab, type: 2}
   m_IsPrefabParent: 0
