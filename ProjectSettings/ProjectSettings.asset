@@ -517,11 +517,11 @@ PlayerSettings:
   m_MobileRenderingPath: 1
   metroPackageName: code-leaves
   metroPackageVersion: 1.0.0.0
-  metroCertificatePath: Assets\WSATestCertificate.pfx
+  metroCertificatePath: 
   metroCertificatePassword: 
-  metroCertificateSubject: DefaultCompany
-  metroCertificateIssuer: DefaultCompany
-  metroCertificateNotAfter: 00c02717c0f2d301
+  metroCertificateSubject: 
+  metroCertificateIssuer: 
+  metroCertificateNotAfter: 0000000000000000
   metroApplicationDescription: code-leaves
   wsaImages: {}
   metroTileShortName: 
@@ -622,7 +622,7 @@ PlayerSettings:
   cloudServicesEnabled:
     UNet: 1
   facebookSdkVersion: 7.9.1
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: 93e9766a-ef5f-417d-a4c7-c0cd95f9f9ba
   projectName: code-leaves
   organizationId: mshroomhead
