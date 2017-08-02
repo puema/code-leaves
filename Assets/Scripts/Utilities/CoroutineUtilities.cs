@@ -8,10 +8,19 @@ public static class CoroutineUtils
     {
         return new Coroutine<T>(obj, coroutine);
     }
+    
+    public static IEnumerator WaitForAll<T>(List<Coroutine<T>> coroutines)
+    {
+        while (coroutines.Exists(x => !x.isDone))
+        {
+            yield return null;
+        }
+    }
 }
 
 public class Coroutine<T>
 {
+    public bool isDone;
     public T value;
     public Coroutine coroutine;
     
@@ -33,16 +42,6 @@ public class Coroutine<T>
                 yield return current;
             }
         }
-    }
-}
-
-public static class EnumeratorUtils
-{
-    public static IEnumerator WaitForAll(List<IEnumerator> enumerators)
-    {
-        while (enumerators.Exists(x => x.MoveNext()))
-        {
-            yield return null;
-        }
+        isDone = true;
     }
 }
