@@ -609,7 +609,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SonarQubeServerUrl: https://www.qaware.de/sonarqube/
   Token: d507a619e0f8a2304e70fcd0776204236342b625
-  BaseComponentKey: com.bmw.ispi.air.central:air
+  BaseComponentKey: com.bmw.ispi.air.central:air-awpos
 --- !u!4 &1728612984
 Transform:
   m_ObjectHideFlags: 0

@@ -2,27 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq.Expressions;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using HoloToolkit.Unity;
 using Newtonsoft.Json;
-using NUnit.Framework.Internal.Execution;
 using UnityEngine;
-
-public class CompositionElement
-{
-    public string Key { get; set; }
-    public string Parent { get; set; }
-    public HierarchyElement Element { get; set; }
-}
 
 public class SonarQubeService : Singleton<SonarQubeService>
 {
     public string SonarQubeServerUrl = "https://www.qaware.de/sonarqube/";
     public string Token = "d507a619e0f8a2304e70fcd0776204236342b625";
-    public string BaseComponentKey = "com.bmw.ispi.air.central:air-common";
+    public string BaseComponentKey = "com.bmw.ispi.air.central:air-awpos";
     
     private string keyWithErrorChild = "com.bmw.ispi.air.central:air-common-validation:src/test/java/com/bmw/ispi/air/central/common/validation/ast";
 
@@ -30,27 +21,32 @@ public class SonarQubeService : Singleton<SonarQubeService>
     private const string sortFields = "path, name";
     private const string strategy = "children";
 
-    private Package root;
-    private readonly Queue<string> queue = new Queue<string>();
-    private readonly List<CompositionElement> compositionElements = new List<CompositionElement>();
-
     private IEnumerator Start()
     {
-        HierarchyElement element = null;
-        var coroutine = StartCoroutine(ComposeElements(BaseComponentKey, e => { element = e; }));
-        yield return coroutine;
-        
+        var coroutine = this.StartCoroutine<HierarchyElement>(ComposeElements(keyWithErrorChild));
+        yield return coroutine.coroutine;
+        Logger.Json(coroutine.value);
         // All requests are finished
-        WriteToFile(element);
+        WriteToFile(coroutine.value);
+        
+//        var routine = this.StartCoroutine<int>(TestTypedRoutine());
+//        yield return routine.coroutine;
+//        Debug.Log(routine.value);
+        
+//        CoroutineWithData routine = new CoroutineWithData(this, TestRoutineWithData());
+//        yield return routine.coroutine;
+//        Debug.Log(routine.result);
+
+        
     }
 
-    private IEnumerator ComposeElements(string sonarQubeComponentKey, Action<HierarchyElement> callback)
+    private IEnumerator ComposeElements(string sonarQubeComponentKey)
     {
         // Print key to see progress
         Debug.Log(sonarQubeComponentKey);
-        SonarQubeTree tree = null;
-        var coroutine = StartCoroutine(GetSonarQubeTree(sonarQubeComponentKey, t => tree = t ));
-        yield return coroutine;
+        var coroutine = this.StartCoroutine<SonarQubeTree>(GetSonarQubeTree(sonarQubeComponentKey));
+        yield return coroutine.coroutine;
+        var tree = coroutine.value;
         
         // For now in case of an internal SonarQube error, the requested component is discarded comletely
         if (tree == null) yield break;
@@ -61,36 +57,16 @@ public class SonarQubeService : Singleton<SonarQubeService>
         // Recursive call for all children
         foreach (var component in tree.components)
         {
-            HierarchyElement child = null;
-            var childCoroutine = StartCoroutine(ComposeElements(component.key, e => child = e));
-            yield return childCoroutine;
-            element.Children.Add(child);
+            var childCoroutine = this.StartCoroutine<HierarchyElement>(ComposeElements(component.key));
+            yield return childCoroutine.coroutine;
+            if (childCoroutine.value != null) element.Children.Add(childCoroutine.value);
         }
-        
+//        
         // Element and all children are finished
-        callback(element);
+        yield return element;
     }
 
-    private IEnumerator ProvideItemsInQueue(Action callback)
-    {
-        while (queue.Count != 0)
-        {
-            var key = queue.Dequeue();
-            Debug.Log(key);
-            var coroutine = StartCoroutine(GetSonarQubeTree(key, t =>
-            {
-                foreach (var component in t.components)
-                {
-                    queue.Enqueue(component.key);
-                    
-                }
-            }));
-            yield return coroutine;
-        }
-        callback();
-    }
-
-    private IEnumerator GetSonarQubeTree(string sonarQubeComponentKey, Action<SonarQubeTree> callback)
+    private IEnumerator GetSonarQubeTree(string sonarQubeComponentKey)
     {
         var www = CreateWebRequest(sonarQubeComponentKey);
         yield return www;
@@ -98,12 +74,11 @@ public class SonarQubeService : Singleton<SonarQubeService>
         if (www.error != "")
         {
             Debug.LogWarning("SonarQube HTTP Error with Key: \"" + sonarQubeComponentKey + "\"");
-            callback(null);
         }
         else
         {
             var sonarQubeTree = JsonConvert.DeserializeObject<SonarQubeTree>(www.text);
-            callback(sonarQubeTree);
+            yield return sonarQubeTree;
         }
     }
 
@@ -185,35 +160,5 @@ public class SonarQubeService : Singleton<SonarQubeService>
             Key = component.key,
             Children = new List<HierarchyElement>()
         };
-    }
-
-    private IEnumerator WaitABit()
-    {
-        yield return new WaitForSeconds(60);
-        var json = JsonConvert.SerializeObject(root, Formatting.Indented);
-        Debug.Log("Writing to file...");
-        File.WriteAllText("Assets/StreamingAssets/AirStructure.json", json);
-    }
-}
-
-public class CoroutineWithData
-{
-    public Coroutine coroutine { get; }
-    public object result;
-    private readonly IEnumerator target;
-
-    public CoroutineWithData(MonoBehaviour owner, IEnumerator target)
-    {
-        this.target = target;
-        coroutine = owner.StartCoroutine(Run());
-    }
-
-    private IEnumerator Run()
-    {
-        while (target.MoveNext())
-        {
-            result = target.Current;
-            yield return result;
-        }
     }
 }
