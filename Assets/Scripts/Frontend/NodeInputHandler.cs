@@ -5,18 +5,20 @@ public class NodeInputHandler : MonoBehaviour, IInputClickHandler, IFocusable
 {
     public void OnInputClicked(InputClickedEventData eventData)
     {
-        var labelObject = GetLabelObject(gameObject);
-        if (labelObject == null) return;
-        if (labelObject.activeSelf)
-        {
-            labelObject.SetActive(false);
-            NodeInteractionManager.Instance.RemoveSelectedNode(gameObject);
-        }
-        else
-        {
-            labelObject.SetActive(true);
-            NodeInteractionManager.Instance.AddSelectedNode(gameObject);
-        }
+        TreeBuilder.Instance.HandleClickSomehow(GetComponent<ID>().Id);
+        
+//        var labelObject = GetLabelObject(gameObject);
+//        if (labelObject == null) return;
+//        if (labelObject.activeSelf)
+//        {
+//            labelObject.SetActive(false);
+//            NodeInteractionManager.Instance.RemoveSelectedNode(gameObject);
+//        }
+//        else
+//        {
+//            labelObject.SetActive(true);
+//            NodeInteractionManager.Instance.AddSelectedNode(gameObject);
+//        }
     }
 
     public void OnFocusEnter()

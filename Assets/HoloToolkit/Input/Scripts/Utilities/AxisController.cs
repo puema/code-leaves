@@ -550,6 +550,7 @@ namespace HoloToolkit.Unity.InputModule
 
         private bool IsRunningUnderRemoteDesktop()
         {
+            return false;
             uint processId = GetCurrentProcessId();
             uint sessionId;
             return ProcessIdToSessionId(processId, out sessionId) && (sessionId != WTSGetActiveConsoleSessionId());

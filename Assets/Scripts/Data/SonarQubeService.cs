@@ -30,7 +30,7 @@ public class SonarQubeService : Singleton<SonarQubeService>
     {
         var coroutine = this.StartCoroutine<HierarchyElement>(ComposeElements(BaseComponentKey));
         yield return coroutine.coroutine;
-        Logger.Json(coroutine.value);
+        Logger.Log(coroutine.value);
         Debug.Log("Total calls: " + totalCalls);
         Debug.Log("Successfull calls: " + successfullCalls);
         // All requests are finished
@@ -61,7 +61,7 @@ public class SonarQubeService : Singleton<SonarQubeService>
         yield return CoroutineUtils.WaitForAll(childCoroutines);
 
         element.Children = childCoroutines.Select(c => c.value).Where(value => value != null).ToList();
-//        
+        
         // Element and all children are finished
         yield return element;
     }
@@ -137,7 +137,7 @@ public class SonarQubeService : Singleton<SonarQubeService>
 
         var sonarQubeTree = JsonConvert.DeserializeObject<SonarQubeTree>(json);
 
-        Logger.Json(sonarQubeTree);
+        Logger.Log(sonarQubeTree);
         return MapSonarQubeComponentToHierarchyElement(sonarQubeTree.baseComponent);
     }
 

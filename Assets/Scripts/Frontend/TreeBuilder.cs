@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.UI;
 using AbstractNode;
-using JetBrains.Annotations;
+using HoloToolkit.Unity;
+using UniRx;
 
-public class TreeBuilder : MonoBehaviour
+public class TreeBuilder : Singleton<TreeBuilder>
 {
     // ----==== Meshes as public variables ====---- //
     public GameObject Floor;
@@ -154,12 +155,26 @@ public class TreeBuilder : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-//        SerializeData(this.data);
-        var data = DesirializeData();
+        data = DesirializeData();
+
+//        SerializeData(data);
 
         var trunkBase = AddTrunkBaseObject();
 
         GenerateTreeStructure(data, trunkBase.transform);
+    }
+
+    public void HandleClickSomehow(string id)
+    {
+        Debug.Log("Handling Click! ID: " + id);
+        Node selected = data
+                .Traverse(x => (x as InnerNode)?.Children)
+                .FirstOrDefault(x => x.Data.Id == id);
+
+
+        Debug.Log("Found node: " + Logger.Json(selected));
+        if (selected != null)
+            ((LeafData) selected.Data).Selected.Value ^= true;
     }
 
     /// <summary>
@@ -169,7 +184,7 @@ public class TreeBuilder : MonoBehaviour
     /// <param name="parent"></param>
     private void GenerateTreeStructure(Node node, Transform parent)
     {
-        var trunk = AddBranchObject(parent, ((InnerNode)node).Data);
+        var trunk = AddBranchObject(parent, (InnerNodeData) node.Data);
         node.AddHeight();
         node.AddChildCount();
         node.SortChildren();
@@ -184,22 +199,22 @@ public class TreeBuilder : MonoBehaviour
     /// <param name="scale"></param>
     private void AddChildrenOfNode(Node node, Transform parentObject, float scale = DefaultScale)
     {
-        if (node.GetType() == typeof(InnerNode))
+        if (node is InnerNode)
         {
             var innerNode = (InnerNode) node;
             if (innerNode.Children == null) return;
             innerNode.SortChildren();
-            var branchObjects = AddBranchObjects(parentObject, innerNode.Data, innerNode.Children.Count, scale);
+            var branchObjects = AddBranchObjects(parentObject, (InnerNodeData) innerNode.Data, innerNode.Children.Count, scale);
             scale *= 0.8f;
             for (var i = 0; i < innerNode.Children.Count; i++)
             {
                 AddChildrenOfNode(innerNode.Children[i], branchObjects[i].transform.Find(NodeName), scale);
             }
         }
-        else if (node.GetType() == typeof(Leaf))
+        else if (node is Leaf)
         {
             var leaf = (Leaf) node;
-            AddLeafObject(parentObject, leaf.Data);
+            AddLeafObject(parentObject, (LeafData) leaf.Data);
         }
         else
         {
@@ -246,14 +261,14 @@ public class TreeBuilder : MonoBehaviour
 
     private GameObject AddEmptyBranchObject(Transform parent, int siblingsCount, int siblingIndex)
     {
-        var branch = InstantiateObject(BranchName, parent: parent);
+        var branchObject = InstantiateObject(BranchName, parent: parent);
 
-        if (!GrowInDirectionOfBranches) return branch;
+        if (!GrowInDirectionOfBranches) return branchObject;
 
-        RotateBranchOrEdge(branch.transform, siblingsCount, siblingIndex);
-        branch.transform.Rotate(0, (float) GoldenAngle, 0, Space.Self);
+        RotateBranchOrEdge(branchObject.transform, siblingsCount, siblingIndex);
+        branchObject.transform.Rotate(0, (float) GoldenAngle, 0, Space.Self);
 
-        return branch;
+        return branchObject;
     }
 
     /// <summary>
@@ -315,32 +330,36 @@ public class TreeBuilder : MonoBehaviour
     private GameObject AddEdgeObject(Transform branch, int siblingsCount, int siblingIndex, float scale,
         out float edgeLength)
     {
-        var edge = InstantiateObject(EdgeName, Edge, branch.transform, localScale: scale * BaseAspectRatio);
-        edgeLength = GetYSize(edge);
-        edge.AddComponent<NodeInputHandler>();
+        var edgeObject = InstantiateObject(EdgeName, Edge, branch.transform, localScale: scale * BaseAspectRatio);
+        edgeLength = GetYSize(edgeObject);
+        edgeObject.AddComponent<NodeInputHandler>();
 
-        if (!GrowInDirectionOfBranches) RotateBranchOrEdge(edge.transform, siblingsCount, siblingIndex);
-        else edge.transform.localEulerAngles = Vector3.zero;
+        if (!GrowInDirectionOfBranches) RotateBranchOrEdge(edgeObject.transform, siblingsCount, siblingIndex);
+        else edgeObject.transform.localEulerAngles = Vector3.zero;
 
-        return edge;
+        return edgeObject;
     }
 
 
     private GameObject AddLeafObject(Transform parent, LeafData data)
     {
-        var leaf = InstantiateObject(LeafName, Leaf, parent);
-        var height = GetYSize(leaf);
-        leaf.AddComponent<Billboard>();
-        leaf.AddComponent<NodeInputHandler>();
+        var leafObject = InstantiateObject(LeafName, Leaf, parent);
+        var height = GetYSize(leafObject);
+        leafObject.AddComponent<Billboard>();
+        leafObject.AddComponent<NodeInputHandler>();
+        leafObject.AddComponent<ID>(data.Id);
 
         var color = HexToNullableColor(data.Color);
-        if (color != null) leaf.GetComponent<MeshRenderer>().material.color = color.Value;
+        if (color != null) leafObject.GetComponent<MeshRenderer>().material.color = color.Value;
 
-        var label = InstantiateObject(LabelName, Label, leaf.transform, Vector3.up * (height + DistanceLeafToLabel),
+        var label = InstantiateObject(LabelName, Label, leafObject.transform,
+            Vector3.up * (height + DistanceLeafToLabel),
             Default3DTextScale, isActive: false);
+        data.Selected = new ReactiveProperty<bool>(false);
+        data.Selected.Subscribe(isActive => label.SetActive(isActive));
         label.GetComponent<TextMesh>().text = data.Text;
 
-        return leaf;
+        return leafObject;
     }
 
     private void AddEmptyNodeObject(Transform branch, Transform edge, float edgeLength, InnerNodeData data)
@@ -352,9 +371,10 @@ public class TreeBuilder : MonoBehaviour
         var xz = (float) Math.Sin(theta) * edgeLength;
         var x = (float) Math.Sin(phi) * xz;
         var z = (float) Math.Cos(phi) * xz;
-        
+
         var node = InstantiateObject(NodeName, parent: branch, localPosition: new Vector3(x, y, z));
         node.transform.Rotate(0, (float) GoldenAngle, 0);
+        node.AddComponent<ID>(data.Id);
 
         var label = InstantiateObject(LabelName, Label, node.transform, Vector3.down * DistanceNodeToLabel,
             isActive: false);
@@ -384,7 +404,7 @@ public class TreeBuilder : MonoBehaviour
 
     private void SerializeData(object obj)
     {
-        var json = JsonConvert.SerializeObject(obj, JsonSerializerSettings);
+        var json = JsonConvert.SerializeObject(obj, Formatting.Indented, JsonSerializerSettings);
         File.WriteAllText(TreeDataFilePath, json);
     }
 

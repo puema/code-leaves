@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using UniRx;
 
 namespace AbstractNode
 {
     public abstract class Node
     {
+        
         public int Height { get; set; }
         public int ChildCount { get; set; }
+        public abstract NodeData Data { get; set; }
 
         public abstract int AddHeight();
 
@@ -17,7 +21,8 @@ namespace AbstractNode
 
     public class InnerNode : Node
     {
-        public InnerNodeData Data { get; set; }
+        public override NodeData Data { get; set; }
+
         public List<Node> Children { get; set; }
 
         public override int AddHeight()
@@ -50,7 +55,7 @@ namespace AbstractNode
 
     public class Leaf : Node
     {
-        public LeafData Data { get; set; }
+        public override NodeData Data { get; set; }
 
         public override int AddHeight()
         {
@@ -67,18 +72,21 @@ namespace AbstractNode
         {
         }
     }
-
-    public struct InnerNodeData
+    
+    public abstract class NodeData
     {
         public string Id { get; set; }
         public string Text { get; set; }
     }
 
-    public struct LeafData
+    public class InnerNodeData : NodeData
     {
-        public string Id { get; set; }
+    }
+
+    public class LeafData : NodeData
+    {
         public string Color { get; set; }
-        public string Text { get; set; }
+        public ReactiveProperty<bool> Selected { get; set; }
     }
 }
 
