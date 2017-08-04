@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
-using AbstractNode;
 using HoloToolkit.Unity;
 using UniRx;
 
@@ -41,152 +41,18 @@ public class TreeBuilder : Singleton<TreeBuilder>
     internal static readonly string LeafName = "Leaf";
     internal static readonly string LabelName = "Label";
 
-    private const string TreeDataFilePath = "Assets/StreamingAssets/TreeStructureTypes.json";
-
     private static readonly double GoldenRatio = (1 + Math.Sqrt(5)) / 2;
     private static readonly double GoldenAngle = RadianToDegree(2 * Math.PI - 2 * Math.PI / GoldenRatio);
     private static readonly double CircleThroughGoldenAngle = 360 / GoldenAngle;
     private static float _currentBranchRotation = 0;
 
-    private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
-    {
-        TypeNameHandling = TypeNameHandling.Auto
-    };
-
-    private Node data = new InnerNode
-    {
-        Data = new InnerNodeData
-        {
-            Id = "0"
-        },
-        Children = new List<Node>
-        {
-            new InnerNode
-            {
-                Data = new InnerNodeData
-                {
-                    Id = "00"
-                },
-                Children = new List<Node>
-                {
-                    new Leaf
-                    {
-                        Data = new LeafData
-                        {
-                            Color = "208000",
-                            Id = "000"
-                        }
-                    },
-                    new Leaf
-                    {
-                        Data = new LeafData
-                        {
-                            Color = "208000",
-                            Id = "001"
-                        }
-                    }
-                }
-            },
-            new InnerNode
-            {
-                Data = new InnerNodeData
-                {
-                    Id = "01"
-                },
-                Children = new List<Node>
-                {
-                    new Leaf
-                    {
-                        Data = new LeafData
-                        {
-                            Id = "010"
-                        }
-                    },
-                    new Leaf
-                    {
-                        Data = new LeafData
-                        {
-                            Id = "011"
-                        }
-                    },
-                    new InnerNode
-                    {
-                        Data = new InnerNodeData
-                        {
-                            Id = "012"
-                        },
-                        Children = new List<Node>
-                        {
-                            new Leaf
-                            {
-                                Data = new LeafData
-                                {
-                                    Id = "0120"
-                                }
-                            },
-                            new Leaf
-                            {
-                                Data = new LeafData
-                                {
-                                    Id = "0121"
-                                }
-                            }
-                        }
-                    },
-                    new Leaf
-                    {
-                        Data = new LeafData
-                        {
-                            Id = "013"
-                        }
-                    }
-                }
-            },
-            new Leaf
-            {
-                Data = new LeafData
-                {
-                    Id = "02"
-                }
-            }
-        }
-    };
-
-    // Use this for initialization
-    void Start()
-    {
-        data = DesirializeData();
-
-//        SerializeData(data);
-
-        var trunkBase = AddTrunkBaseObject();
-
-        GenerateTreeStructure(data, trunkBase.transform);
-    }
-
-    public void HandleClickSomehow(string id)
-    {
-        Debug.Log("Handling Click! ID: " + id);
-        Node selected = data
-                .Traverse(x => (x as InnerNode)?.Children)
-                .FirstOrDefault(x => x.Data.Id == id);
-
-
-        Debug.Log("Found node: " + Logger.Json(selected));
-        if (selected != null)
-            ((LeafData) selected.Data).Selected.Value ^= true;
-    }
-
     /// <summary>
     /// Generates the unity tree according to the given data structure of the node
     /// </summary>
     /// <param name="node"></param>
-    /// <param name="parent"></param>
-    private void GenerateTreeStructure(Node node, Transform parent)
+    public void GenerateTreeStructure(UiInnerNode node)
     {
-        var trunk = AddBranchObject(parent, (InnerNodeData) node.Data);
-        node.AddHeight();
-        node.AddChildCount();
+        var trunk = AddBranchObject(AddTrunkBaseObject().transform, node);
         node.SortChildren();
         AddChildrenOfNode(node, trunk.transform.Find(NodeName));
     }
@@ -197,24 +63,23 @@ public class TreeBuilder : Singleton<TreeBuilder>
     /// <param name="node"></param>
     /// <param name="parentObject"></param>
     /// <param name="scale"></param>
-    private void AddChildrenOfNode(Node node, Transform parentObject, float scale = DefaultScale)
+    private void AddChildrenOfNode(UiNode node, Transform parentObject, float scale = DefaultScale)
     {
-        if (node is InnerNode)
+        if (node is UiInnerNode)
         {
-            var innerNode = (InnerNode) node;
+            var innerNode = (UiInnerNode) node;
             if (innerNode.Children == null) return;
-            innerNode.SortChildren();
-            var branchObjects = AddBranchObjects(parentObject, (InnerNodeData) innerNode.Data, innerNode.Children.Count, scale);
+            var branchObjects = AddBranchObjects(parentObject, innerNode, scale);
             scale *= 0.8f;
             for (var i = 0; i < innerNode.Children.Count; i++)
             {
                 AddChildrenOfNode(innerNode.Children[i], branchObjects[i].transform.Find(NodeName), scale);
             }
         }
-        else if (node is Leaf)
+        else if (node is UiLeaf)
         {
-            var leaf = (Leaf) node;
-            AddLeafObject(parentObject, (LeafData) leaf.Data);
+            var leaf = (UiLeaf) node;
+            AddLeafObject(parentObject, leaf);
         }
         else
         {
@@ -231,30 +96,33 @@ public class TreeBuilder : Singleton<TreeBuilder>
         return InstantiateObject(TreeName, parent: Floor.transform);
     }
 
-    private List<GameObject> AddBranchObjects(Transform parent, InnerNodeData data, int count, float scale)
+    private List<GameObject> AddBranchObjects(Transform parent, UiInnerNode node, float scale)
     {
         var branches = new List<GameObject>();
 
+        var count = node.Children.Count;
         for (var i = 0; i < count; i++)
         {
             // Add a new branch and subsequent edge and node
-            branches.Add(AddBranchObject(parent, data, count, i, scale));
+            branches.Add(AddBranchObject(parent, node.Children[i], count, i, scale));
         }
 
         return branches;
     }
 
-    private GameObject AddBranchObject(Transform parent, InnerNodeData data, int siblingCount = 1, int siblingIndex = 0,
+    private GameObject AddBranchObject(Transform parent, UiNode node, int siblingCount = 1, int siblingIndex = 0,
         float scale = DefaultScale)
     {
         // Add Branch as new origin
         var branchObject = AddEmptyBranchObject(parent, siblingCount, siblingIndex);
         // Store the height of the unrotated edge
         float edgeLength;
-        var edge = AddEdgeObject(branchObject.transform, siblingCount, siblingIndex, scale, out edgeLength);
+        float edgeThickness;
+        var edge = AddEdgeObject(branchObject.transform, siblingCount, siblingIndex, scale, out edgeLength,
+            out edgeThickness);
 
         // Add node at the end 
-        AddEmptyNodeObject(branchObject.transform, edge.transform, edgeLength, data);
+        AddEmptyNodeObject(node, branchObject.transform, edge.transform, edgeLength, edgeThickness);
 
         return branchObject;
     }
@@ -328,10 +196,11 @@ public class TreeBuilder : Singleton<TreeBuilder>
     }
 
     private GameObject AddEdgeObject(Transform branch, int siblingsCount, int siblingIndex, float scale,
-        out float edgeLength)
+        out float edgeLength, out float edgeThickness)
     {
         var edgeObject = InstantiateObject(EdgeName, Edge, branch.transform, localScale: scale * BaseAspectRatio);
         edgeLength = GetYSize(edgeObject);
+        edgeThickness = GetZSize(edgeObject);
         edgeObject.AddComponent<NodeInputHandler>();
 
         if (!GrowInDirectionOfBranches) RotateBranchOrEdge(edgeObject.transform, siblingsCount, siblingIndex);
@@ -341,28 +210,62 @@ public class TreeBuilder : Singleton<TreeBuilder>
     }
 
 
-    private GameObject AddLeafObject(Transform parent, LeafData data)
+    private GameObject AddLeafObject(Transform parent, UiLeaf leaf)
     {
         var leafObject = InstantiateObject(LeafName, Leaf, parent);
         var height = GetYSize(leafObject);
         leafObject.AddComponent<Billboard>();
         leafObject.AddComponent<NodeInputHandler>();
-        leafObject.AddComponent<ID>(data.Id);
+        leafObject.AddComponent<ID>(leaf.Id);
 
-        var color = HexToNullableColor(data.Color);
+        var color = HexToNullableColor(leaf.Color?.Value);
         if (color != null) leafObject.GetComponent<MeshRenderer>().material.color = color.Value;
 
-        var label = InstantiateObject(LabelName, Label, leafObject.transform,
-            Vector3.up * (height + DistanceLeafToLabel),
-            Default3DTextScale, isActive: false);
-        data.Selected = new ReactiveProperty<bool>(false);
-        data.Selected.Subscribe(isActive => label.SetActive(isActive));
-        label.GetComponent<TextMesh>().text = data.Text;
+        var label = AddLeafLabel(leafObject.transform, height);
+
+        SubscribeReactNodeProperties(leaf, leafObject, label);
 
         return leafObject;
     }
 
-    private void AddEmptyNodeObject(Transform branch, Transform edge, float edgeLength, InnerNodeData data)
+    private void AddEmptyNodeObject(UiNode node, Transform branch, Transform edge, float edgeLength,
+        float edgeThickness)
+    {
+        var nodeObject = InstantiateObject(NodeName, parent: branch,
+            localPosition: CalculatePositionOfNode(edge, edgeLength));
+        
+        nodeObject.transform.Rotate(0, (float) GoldenAngle, 0);
+        nodeObject.AddComponent<ID>(node.Id);
+        nodeObject.AddComponent<NodeInputHandler>();
+
+        GameObject label = null;
+        if (node is UiInnerNode)
+        {
+            label = AddNodeLabel(nodeObject.transform, edgeThickness / 2);
+        }
+
+        SubscribeReactNodeProperties(node, edge.gameObject, label);
+    }
+
+    private GameObject AddNodeLabel(Transform parent, float z)
+    {
+        var label = InstantiateObject(LabelName, Label, parent, isActive: false);
+        label.transform.Translate(-z, -DistanceNodeToLabel, 0, Space.Self);
+        label.GetComponent<TextMesh>().anchor = TextAnchor.UpperCenter;
+        label.AddComponent<Billboard>();
+        return label;
+    }
+
+    private GameObject AddLeafLabel(Transform parent, float y)
+    {
+        var label = InstantiateObject(LabelName, Label, parent,
+            Vector3.up * (y + DistanceLeafToLabel),
+            Default3DTextScale, isActive: false);
+        label.GetComponent<TextMesh>().anchor = TextAnchor.LowerCenter;
+        return label;
+    }
+
+    private static Vector3 CalculatePositionOfNode(Transform edge, float edgeLength)
     {
         var theta = DegreeToRadian(edge.localEulerAngles.x);
         var phi = DegreeToRadian(edge.localEulerAngles.y);
@@ -372,17 +275,26 @@ public class TreeBuilder : Singleton<TreeBuilder>
         var x = (float) Math.Sin(phi) * xz;
         var z = (float) Math.Cos(phi) * xz;
 
-        var node = InstantiateObject(NodeName, parent: branch, localPosition: new Vector3(x, y, z));
-        node.transform.Rotate(0, (float) GoldenAngle, 0);
-        node.AddComponent<ID>(data.Id);
-
-        var label = InstantiateObject(LabelName, Label, node.transform, Vector3.down * DistanceNodeToLabel,
-            isActive: false);
-        label.GetComponent<TextMesh>().text = data.Text;
-        label.AddComponent<Billboard>();
+        return new Vector3(x, y, z);
     }
 
     // ----==== Helper functions ====---- //
+
+    private static void SubscribeReactNodeProperties(UiNode node, GameObject obj, GameObject label)
+    {
+        node.IsSelected = node.IsSelected ?? new ReactiveProperty<bool>(false);
+        node.IsFocused = node.IsFocused ?? new ReactiveProperty<bool>(false);
+        node.Text = node.Text ?? new ReactiveProperty<string>("No text available.");
+
+        node.IsFocused.Subscribe(isFocused =>
+            obj.GetComponent<MeshRenderer>().material.shader = isFocused
+                ? Shader.Find("Outlined/Diffuse")
+                : Shader.Find("Standard"));
+        if (label == null) return;
+
+        node.IsSelected.Subscribe(label.SetActive);
+        node.Text.Subscribe(text => label.GetComponent<TextMesh>().text = text);
+    }
 
     private static GameObject InstantiateObject(string objName = null, GameObject original = null,
         Transform parent = null, Vector3? localPosition = null, Vector3? localScale = null,
@@ -402,26 +314,14 @@ public class TreeBuilder : Singleton<TreeBuilder>
         return gameObj;
     }
 
-    private void SerializeData(object obj)
-    {
-        var json = JsonConvert.SerializeObject(obj, Formatting.Indented, JsonSerializerSettings);
-        File.WriteAllText(TreeDataFilePath, json);
-    }
-
-    private InnerNode DesirializeData()
-    {
-        if (!File.Exists(TreeDataFilePath))
-        {
-            Debug.LogError("Connot load tree data, for there is no such file.");
-            return null;
-        }
-        var json = File.ReadAllText(TreeDataFilePath);
-        return JsonConvert.DeserializeObject<InnerNode>(json, JsonSerializerSettings);
-    }
-
     private static float GetYSize(GameObject obj)
     {
         return obj.GetComponent<MeshRenderer>().bounds.size.y;
+    }
+
+    private static float GetZSize(GameObject obj)
+    {
+        return obj.GetComponent<MeshRenderer>().bounds.size.z;
     }
 
     private static double DegreeToRadian(double angle)

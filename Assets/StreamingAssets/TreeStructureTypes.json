@@ -1,215 +1,126 @@
 {
-  "Data": {
-    "$type": "AbstractNode.InnerNodeData, Assembly-CSharp",
+    "$type": "UiInnerNode, Assembly-CSharp",
     "Id": "0",
-    "Text": "Package0"
-  },
-  "Children": [
-    {
-      "$type": "AbstractNode.InnerNode, Assembly-CSharp",
-      "Data": {
-        "$type": "AbstractNode.InnerNodeData, Assembly-CSharp",
-        "Id": "00",
-        "Text": "Package00"
-      },
-      "Children": [
+    "Text": { "Value": "Package0" },
+    "Children": [
         {
-          "$type": "AbstractNode.InnerNode, Assembly-CSharp",
-          "Data": {
-            "$type": "AbstractNode.InnerNodeData, Assembly-CSharp",
-            "Id": "000",
-            "Text": "Package000"
-          },
-          "Children": [
-            {
-              "$type": "AbstractNode.Leaf, Assembly-CSharp",
-              "Data": {
-                "$type": "AbstractNode.LeafData, Assembly-CSharp",
-                "Color": "#208000",
-                "Selected": null,
-                "Id": "0000",
-                "Text": "Class0000"
-              },
-              "Height": 0,
-              "ChildCount": 0
-            },
-            {
-              "$type": "AbstractNode.Leaf, Assembly-CSharp",
-              "Data": {
-                "$type": "AbstractNode.LeafData, Assembly-CSharp",
-                "Color": "#208000",
-                "Selected": null,
-                "Id": "0001",
-                "Text": "Class0001"
-              },
-              "Height": 0,
-              "ChildCount": 0
-            }
-          ],
-          "Height": 0,
-          "ChildCount": 0
+            "$type": "UiInnerNode, Assembly-CSharp",
+            "Id": "00",
+            "Text": { "Value": "Package00" },
+            "Children": [
+                {
+                    "$type": "UiInnerNode, Assembly-CSharp",
+                    "Id": "000",
+                    "Text": { "Value": "Package000" },
+                    "Children": [
+                        {
+                            "$type": "UiLeaf, Assembly-CSharp",
+                            "Color": { "Value": "#208000" },
+                            "Selected": null,
+                            "Id": "0000",
+                            "Text": { "Value": "Class0000" }
+                        },
+                        {
+                            "$type": "UiLeaf, Assembly-CSharp",
+                            "Color": { "Value": "#208000" },
+                            "Selected": null,
+                            "Id": "0001",
+                            "Text": { "Value": "Class0001" }
+                        }
+                    ]
+                },
+                {
+                    "$type": "UiLeaf, Assembly-CSharp",
+                    "Color": { "Value": "#208000" },
+                    "Selected": null,
+                    "Id": "001",
+                    "Text": { "Value": "Class001" }
+                },
+                {
+                    "$type": "UiLeaf, Assembly-CSharp",
+                    "Color": { "Value": "#208000" },
+                    "Selected": null,
+                    "Id": "002",
+                    "Text": { "Value": "Class002" }
+                }
+            ]
         },
         {
-          "$type": "AbstractNode.Leaf, Assembly-CSharp",
-          "Data": {
-            "$type": "AbstractNode.LeafData, Assembly-CSharp",
-            "Color": "#208000",
-            "Selected": null,
-            "Id": "001",
-            "Text": "Class001"
-          },
-          "Height": 0,
-          "ChildCount": 0
+            "$type": "UiInnerNode, Assembly-CSharp",
+            "Id": "01",
+            "Text": { "Value": "Package01" },
+            "Children": [
+                {
+                    "$type": "UiLeaf, Assembly-CSharp",
+                    "Color": null,
+                    "Selected": null,
+                    "Id": "010",
+                    "Text": { "Value": "Class010" }
+                },
+                {
+                    "$type": "UiLeaf, Assembly-CSharp",
+                    "Color": null,
+                    "Selected": null,
+                    "Id": "011",
+                    "Text": { "Value": "Class011" }
+                },
+                {
+                    "$type": "UiInnerNode, Assembly-CSharp",
+                    "Id": "012",
+                    "Text": { "Value": "Package010" },
+                    "Children": [
+                        {
+                            "$type": "UiLeaf, Assembly-CSharp",
+                            "Color": null,
+                            "Selected": null,
+                            "Id": "0120",
+                            "Text": { "Value": "Class0120" }
+                        },
+                        {
+                            "$type": "UiLeaf, Assembly-CSharp",
+                            "Color": null,
+                            "Selected": null,
+                            "Id": "0121",
+                            "Text": { "Value": "Class0121" }
+                        },
+                        {
+                            "$type": "UiLeaf, Assembly-CSharp",
+                            "Color": null,
+                            "Selected": null,
+                            "Id": "0122",
+                            "Text": { "Value": "Class0122" }
+                        },
+                        {
+                            "$type": "UiLeaf, Assembly-CSharp",
+                            "Color": null,
+                            "Selected": null,
+                            "Id": "0123",
+                            "Text": { "Value": "Class0123" }
+                        },
+                        {
+                            "$type": "UiLeaf, Assembly-CSharp",
+                            "Color": null,
+                            "Selected": null,
+                            "Id": "0124",
+                            "Text": { "Value": "Class0124" }
+                        }
+                    ]
+                },
+                {
+                    "$type": "UiLeaf, Assembly-CSharp",
+                    "Color": null,
+                    "Selected": null,
+                    "Id": "013",
+                    "Text": { "Value": "Class013" }
+                }
+            ]
         },
         {
-          "$type": "AbstractNode.Leaf, Assembly-CSharp",
-          "Data": {
-            "$type": "AbstractNode.LeafData, Assembly-CSharp",
-            "Color": "#208000",
+            "$type": "UiLeaf, Assembly-CSharp",
+            "Color": null,
             "Selected": null,
-            "Id": "002",
-            "Text": "Class002"
-          },
-          "Height": 0,
-          "ChildCount": 0
+            "Id": "02",
+            "Text": { "Value": "Class02" },
         }
-      ],
-      "Height": 0,
-      "ChildCount": 0
-    },
-    {
-      "$type": "AbstractNode.InnerNode, Assembly-CSharp",
-      "Data": {
-        "$type": "AbstractNode.InnerNodeData, Assembly-CSharp",
-        "Id": "01",
-        "Text": "Package01"
-      },
-      "Children": [
-        {
-          "$type": "AbstractNode.Leaf, Assembly-CSharp",
-          "Data": {
-            "$type": "AbstractNode.LeafData, Assembly-CSharp",
-            "Color": null,
-            "Selected": null,
-            "Id": "010",
-            "Text": "Class010"
-          },
-          "Height": 0,
-          "ChildCount": 0
-        },
-        {
-          "$type": "AbstractNode.Leaf, Assembly-CSharp",
-          "Data": {
-            "$type": "AbstractNode.LeafData, Assembly-CSharp",
-            "Color": null,
-            "Selected": null,
-            "Id": "011",
-            "Text": "Class011"
-          },
-          "Height": 0,
-          "ChildCount": 0
-        },
-        {
-          "$type": "AbstractNode.InnerNode, Assembly-CSharp",
-          "Data": {
-            "$type": "AbstractNode.InnerNodeData, Assembly-CSharp",
-            "Id": "012",
-            "Text": "Package010"
-          },
-          "Children": [
-            {
-              "$type": "AbstractNode.Leaf, Assembly-CSharp",
-              "Data": {
-                "$type": "AbstractNode.LeafData, Assembly-CSharp",
-                "Color": null,
-                "Selected": null,
-                "Id": "0120",
-                "Text": "Class0120"
-              },
-              "Height": 0,
-              "ChildCount": 0
-            },
-            {
-              "$type": "AbstractNode.Leaf, Assembly-CSharp",
-              "Data": {
-                "$type": "AbstractNode.LeafData, Assembly-CSharp",
-                "Color": null,
-                "Selected": null,
-                "Id": "0121",
-                "Text": "Class0121"
-              },
-              "Height": 0,
-              "ChildCount": 0
-            },
-            {
-              "$type": "AbstractNode.Leaf, Assembly-CSharp",
-              "Data": {
-                "$type": "AbstractNode.LeafData, Assembly-CSharp",
-                "Color": null,
-                "Selected": null,
-                "Id": "0122",
-                "Text": "Class0122"
-              },
-              "Height": 0,
-              "ChildCount": 0
-            },
-            {
-              "$type": "AbstractNode.Leaf, Assembly-CSharp",
-              "Data": {
-                "$type": "AbstractNode.LeafData, Assembly-CSharp",
-                "Color": null,
-                "Selected": null,
-                "Id": "0123",
-                "Text": "Class0123"
-              },
-              "Height": 0,
-              "ChildCount": 0
-            },
-            {
-              "$type": "AbstractNode.Leaf, Assembly-CSharp",
-              "Data": {
-                "$type": "AbstractNode.LeafData, Assembly-CSharp",
-                "Color": null,
-                "Selected": null,
-                "Id": "0124",
-                "Text": "Class0124"
-              },
-              "Height": 0,
-              "ChildCount": 0
-            }
-          ],
-          "Height": 0,
-          "ChildCount": 0
-        },
-        {
-          "$type": "AbstractNode.Leaf, Assembly-CSharp",
-          "Data": {
-            "$type": "AbstractNode.LeafData, Assembly-CSharp",
-            "Color": null,
-            "Selected": null,
-            "Id": "013",
-            "Text": "Class013"
-          },
-          "Height": 0,
-          "ChildCount": 0
-        }
-      ],
-      "Height": 0,
-      "ChildCount": 0
-    },
-    {
-      "$type": "AbstractNode.Leaf, Assembly-CSharp",
-      "Data": {
-        "$type": "AbstractNode.LeafData, Assembly-CSharp",
-        "Color": null,
-        "Selected": null,
-        "Id": "02",
-        "Text": "Class02"
-      },
-      "Height": 0,
-      "ChildCount": 0
-    }
-  ],
-  "Height": 0,
-  "ChildCount": 0
+    ]
 }
