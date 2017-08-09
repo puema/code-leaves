@@ -106,41 +106,6 @@ public class SonarQubeService : Singleton<SonarQubeService>
         File.WriteAllText("Assets/StreamingAssets/AirStructure2.json", json);
     }
 
-    private IEnumerator GetSonarQubeTree_back(string sonarQubeComponentKey, Action<HierarchyElement> callback)
-    {
-        var www = CreateWebRequest(sonarQubeComponentKey);
-        yield return www;
-
-        var sonarQubeTree = JsonConvert.DeserializeObject<SonarQubeTree>(www.text);
-        var parent = MapSonarQubeComponentToHierarchyElement(sonarQubeTree.baseComponent);
-
-        callback(parent);
-    }
-
-    private async Task<HierarchyElement> DoStuff(string sonarQubeComponentKey)
-    {
-        ServicePointManager.ServerCertificateValidationCallback += (o, certificate, chain, errors) => true;
-
-        var webRequest = (HttpWebRequest) WebRequest.Create(
-            $"{SonarQubeServerUrl}api/components/tree?baseComponentKey={sonarQubeComponentKey}" +
-            $"&ps={pageSize}&s={sortFields}&strategy={strategy}");
-
-        webRequest.Method = "GET";
-        webRequest.Headers.Add("Authorization",
-            "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(Token + ":")));
-
-        var response = await webRequest.GetResponseAsync();
-
-        var reader = new StreamReader(response.GetResponseStream());
-        var json = reader.ReadToEnd();
-        Debug.Log(json);
-
-        var sonarQubeTree = JsonConvert.DeserializeObject<SonarQubeTree>(json);
-
-        Logger.Log(sonarQubeTree);
-        return MapSonarQubeComponentToHierarchyElement(sonarQubeTree.baseComponent);
-    }
-
     private static HierarchyElement MapSonarQubeComponentToHierarchyElement(SonarQubeComponent component)
     {
         if (component == null) return null;

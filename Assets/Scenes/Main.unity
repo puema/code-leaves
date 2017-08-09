@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.45002466, g: 0.5000725, b: 0.5753673, a: 1}
+  m_IndirectSpecularColor: {r: 0.45011294, g: 0.50015485, b: 0.57545805, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -150,12 +150,12 @@ Prefab:
     - target: {fileID: 114000010697249598, guid: 3eddd1c29199313478dd3f912bfab2ab,
         type: 2}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114000012864906760, guid: 3eddd1c29199313478dd3f912bfab2ab,
         type: 2}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114000011693831752, guid: 3eddd1c29199313478dd3f912bfab2ab,
         type: 2}
@@ -323,7 +323,7 @@ MonoBehaviour:
   PlaceParentOnTap: 1
   ParentGameObjectToPlace: {fileID: 1046413522}
   IsBeingPlaced: 0
-  AllowMeshVisualizationControl: 0
+  AllowMeshVisualizationControl: 1
 --- !u!114 &320236164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -822,18 +822,23 @@ Prefab:
     - target: {fileID: 114000011154029958, guid: 2ed75ffdf9031c94e8bce4b3d17b9928,
         type: 2}
       propertyPath: drawVisualMeshes
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114000012149591842, guid: 2ed75ffdf9031c94e8bce4b3d17b9928,
         type: 2}
       propertyPath: RoomModel
       value: 
-      objectReference: {fileID: 100006, guid: 4e1b0ad98a14c4cfe9182f52c4ed8f23, type: 3}
+      objectReference: {fileID: 100006, guid: 6722a3e8152328b43b1e56638cf7f54a, type: 3}
     - target: {fileID: 114000011154029958, guid: 2ed75ffdf9031c94e8bce4b3d17b9928,
         type: 2}
       propertyPath: surfaceMaterial
       value: 
-      objectReference: {fileID: 2100000, guid: e691bce0240cb4d4b945042260561ffa, type: 2}
+      objectReference: {fileID: 2100000, guid: 6cec46d5b336e2a4b9b2e1d3e8e3754c, type: 2}
+    - target: {fileID: 114000011154029958, guid: 2ed75ffdf9031c94e8bce4b3d17b9928,
+        type: 2}
+      propertyPath: castShadows
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2ed75ffdf9031c94e8bce4b3d17b9928, type: 2}
   m_IsPrefabParent: 0

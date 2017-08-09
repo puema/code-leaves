@@ -517,11 +517,11 @@ PlayerSettings:
   m_MobileRenderingPath: 1
   metroPackageName: code-leaves
   metroPackageVersion: 1.0.0.0
-  metroCertificatePath: 
+  metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: 
-  metroCertificateIssuer: 
-  metroCertificateNotAfter: 0000000000000000
+  metroCertificateSubject: DefaultCompany
+  metroCertificateIssuer: DefaultCompany
+  metroCertificateNotAfter: 00c02717c0f2d301
   metroApplicationDescription: code-leaves
   wsaImages: {}
   metroTileShortName: 

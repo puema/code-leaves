@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.IO;
-using System.Linq;
-using Newtonsoft.Json;
-using UnityEngine;
 using HoloToolkit.Unity;
 using UniRx;
+using UnityEngine;
 
 public class TreeBuilder : Singleton<TreeBuilder>
 {
@@ -18,6 +14,10 @@ public class TreeBuilder : Singleton<TreeBuilder>
     public GameObject Leaf;
 
     public GameObject Label;
+
+    public Shader StandardShader;
+
+    public Shader FocusedShader;
     // -------------------------------------------- //
 
     // ----==== Flags ====---- //
@@ -216,7 +216,7 @@ public class TreeBuilder : Singleton<TreeBuilder>
         var height = GetYSize(leafObject);
         leafObject.AddComponent<Billboard>();
         leafObject.AddComponent<NodeInputHandler>();
-        leafObject.AddComponent<ID>(leaf.Id);
+        leafObject.AddComponent<ID>().Id = leaf.Id;
 
         var color = HexToNullableColor(leaf.Color?.Value);
         if (color != null) leafObject.GetComponent<MeshRenderer>().material.color = color.Value;
@@ -235,7 +235,7 @@ public class TreeBuilder : Singleton<TreeBuilder>
             localPosition: CalculatePositionOfNode(edge, edgeLength));
         
         nodeObject.transform.Rotate(0, (float) GoldenAngle, 0);
-        nodeObject.AddComponent<ID>(node.Id);
+        nodeObject.AddComponent<ID>().Id = node.Id;
         nodeObject.AddComponent<NodeInputHandler>();
 
         GameObject label = null;
@@ -280,7 +280,7 @@ public class TreeBuilder : Singleton<TreeBuilder>
 
     // ----==== Helper functions ====---- //
 
-    private static void SubscribeReactNodeProperties(UiNode node, GameObject obj, GameObject label)
+    private void SubscribeReactNodeProperties(UiNode node, GameObject obj, GameObject label)
     {
         node.IsSelected = node.IsSelected ?? new ReactiveProperty<bool>(false);
         node.IsFocused = node.IsFocused ?? new ReactiveProperty<bool>(false);
@@ -288,8 +288,8 @@ public class TreeBuilder : Singleton<TreeBuilder>
 
         node.IsFocused.Subscribe(isFocused =>
             obj.GetComponent<MeshRenderer>().material.shader = isFocused
-                ? Shader.Find("Outlined/Diffuse")
-                : Shader.Find("Standard"));
+                ? FocusedShader
+                : StandardShader);
         if (label == null) return;
 
         node.IsSelected.Subscribe(label.SetActive);
