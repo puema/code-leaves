@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System.Collections.Generic;
+using Core;
 using UnityEngine;
 using HoloToolkit.Unity.SpatialMapping;
 
@@ -154,6 +155,7 @@ namespace HoloToolkit.Unity.InputModule
                 // Add world anchor when object placement is done.
                 WorldAnchorManager.Instance.AttachAnchor(gameObject, SavedAnchorFriendlyName);
 #endif
+                InteractionManager.Instance.HandleFloorInteractionCompleted();
             }
         }
 

@@ -271,13 +271,13 @@ namespace HoloToolkit.Unity
                 Vector3 lerpTargetPosition = targetPosition;
                 if (SmoothLerpToTarget)
                 {
-                    lerpTargetPosition = Vector3.Lerp(transform.position, lerpTargetPosition, SmoothPositionLerpRatio);
+                    lerpTargetPosition = Vector3.Lerp(transform.localPosition, lerpTargetPosition, SmoothPositionLerpRatio);
                 }
 
-                Vector3 newPosition = NonLinearInterpolateTo(transform.position, lerpTargetPosition, deltaTime, PositionPerSecond);
+                Vector3 newPosition = NonLinearInterpolateTo(transform.localPosition, lerpTargetPosition, deltaTime, PositionPerSecond);
                 if ((targetPosition - newPosition).sqrMagnitude <= smallNumber)
                 {
-                    // Snap to final position
+                    // Snap to final localPosition
                     newPosition = targetPosition;
                     AnimatingPosition = false;
                 }
@@ -286,7 +286,7 @@ namespace HoloToolkit.Unity
                     interpOccuredThisFrame = true;
                 }
 
-                transform.position = newPosition;
+                transform.localPosition = newPosition;
 
                 //calculate interpolatedVelocity and store position for next frame
                 PositionVelocity = oldPosition - newPosition;

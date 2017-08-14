@@ -2,7 +2,7 @@
 
 public class Billboard : MonoBehaviour {
 
-	public Camera camera;
+	private new Camera camera;
 
 	private void Start()
 	{

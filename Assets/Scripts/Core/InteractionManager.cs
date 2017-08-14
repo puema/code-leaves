@@ -5,11 +5,18 @@ namespace Core
 {
     public class InteractionManager : Singleton<InteractionManager>
     {
-        public UiNode Root;
+        private AppState AppState;
+        private UiNode Root;
     
         public void Start()
         {
+            AppState = ApplicationManager.Instance.AppState;
             Root = ApplicationManager.Instance.Root;
+        }
+
+        public void HandleMenuInput(FloorInteractionMode mode)
+        {
+            AppState.FloorInteractionMode.Value = mode;
         }
 
         public void HandleNodeClick(string id)
@@ -31,6 +38,11 @@ namespace Core
             var focused = FindUiNode(id);
             if (focused == null) return;
             focused.IsFocused.Value = false;
+        }
+
+        public void HandleFloorInteractionCompleted()
+        {
+            AppState.FloorInteractionMode.Value = FloorInteractionMode.TapToMenu;
         }
 
         public void HandleEmptyClick()
