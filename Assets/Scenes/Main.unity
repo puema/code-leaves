@@ -461,7 +461,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UseUnscaledTime: 1
-  PositionPerSecond: 30
+  PositionPerSecond: 10
   RotationDegreesPerSecond: 720
   RotationSpeedScaler: 0
   ScalePerSecond: 5
@@ -1667,7 +1667,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UseUnscaledTime: 1
-  PositionPerSecond: 30
+  PositionPerSecond: 10
   RotationDegreesPerSecond: 720
   RotationSpeedScaler: 0
   ScalePerSecond: 5
@@ -1900,7 +1900,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UseUnscaledTime: 1
-  PositionPerSecond: 30
+  PositionPerSecond: 10
   RotationDegreesPerSecond: 720
   RotationSpeedScaler: 0
   ScalePerSecond: 5
