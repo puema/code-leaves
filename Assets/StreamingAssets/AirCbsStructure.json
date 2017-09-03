@@ -1,0 +1,451 @@
+{
+  "Name": "air-cbs",
+  "Key": "com.bmw.ispi.air.central:air-cbs",
+  "Children": [
+    {
+      "Name": "air-cbs-api",
+      "Key": "com.bmw.ispi.air.central:air-cbs-api",
+      "Children": [
+        {
+          "Name": "src/main/java/com/bmw/ispi/air/central/cbs/api",
+          "Key": "com.bmw.ispi.air.central:air-cbs-api:src/main/java/com/bmw/ispi/air/central/cbs/api",
+          "Children": [
+            {
+              "Name": "ConditionBasedServiceDto.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-api:src/main/java/com/bmw/ispi/air/central/cbs/api/ConditionBasedServiceDto.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "ConditionBasedServiceSearch.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-api:src/main/java/com/bmw/ispi/air/central/cbs/api/ConditionBasedServiceSearch.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "VehicleServiceType.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-api:src/main/java/com/bmw/ispi/air/central/cbs/api/VehicleServiceType.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "src/test/java/com/bmw/ispi/air/central/cbs/api",
+          "Key": "com.bmw.ispi.air.central:air-cbs-api:src/test/java/com/bmw/ispi/air/central/cbs/api",
+          "Children": [
+            {
+              "Name": "ConditionBasedServiceDtoTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-api:src/test/java/com/bmw/ispi/air/central/cbs/api/ConditionBasedServiceDtoTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "VehicleServiceTypeTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-api:src/test/java/com/bmw/ispi/air/central/cbs/api/VehicleServiceTypeTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        }
+      ],
+      "Assoziations": null,
+      "Metrics": null
+    },
+    {
+      "Name": "air-cbs-core",
+      "Key": "com.bmw.ispi.air.central:air-cbs-core",
+      "Children": [
+        {
+          "Name": "src/main/java/com/bmw/ispi/air/central/cbs/core",
+          "Key": "com.bmw.ispi.air.central:air-cbs-core:src/main/java/com/bmw/ispi/air/central/cbs/core",
+          "Children": [
+            {
+              "Name": "ConditionBasedServiceDao.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-core:src/main/java/com/bmw/ispi/air/central/cbs/core/ConditionBasedServiceDao.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "src/main/java/com/bmw/ispi/air/central/cbs/core/impl",
+          "Key": "com.bmw.ispi.air.central:air-cbs-core:src/main/java/com/bmw/ispi/air/central/cbs/core/impl",
+          "Children": [
+            {
+              "Name": "ConditionBasedServiceDaoImpl.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-core:src/main/java/com/bmw/ispi/air/central/cbs/core/impl/ConditionBasedServiceDaoImpl.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "ConditionBasedServiceFilter.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-core:src/main/java/com/bmw/ispi/air/central/cbs/core/impl/ConditionBasedServiceFilter.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "ConditionBasedServiceResultConverter.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-core:src/main/java/com/bmw/ispi/air/central/cbs/core/impl/ConditionBasedServiceResultConverter.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "ConditionBasedServiceSearchImpl.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-core:src/main/java/com/bmw/ispi/air/central/cbs/core/impl/ConditionBasedServiceSearchImpl.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "ResultConverterUtils.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-core:src/main/java/com/bmw/ispi/air/central/cbs/core/impl/ResultConverterUtils.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "src/test/java/com/bmw/ispi/air/central/cbs/core",
+          "Key": "com.bmw.ispi.air.central:air-cbs-core:src/test/java/com/bmw/ispi/air/central/cbs/core",
+          "Children": [
+            {
+              "Name": "CbsCoreComponentsTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-core:src/test/java/com/bmw/ispi/air/central/cbs/core/CbsCoreComponentsTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "ConditionBasedServiceEtTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-core:src/test/java/com/bmw/ispi/air/central/cbs/core/ConditionBasedServiceEtTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "src/test/java/com/bmw/ispi/air/central/cbs/core/impl",
+          "Key": "com.bmw.ispi.air.central:air-cbs-core:src/test/java/com/bmw/ispi/air/central/cbs/core/impl",
+          "Children": [
+            {
+              "Name": "ConditionBasedServiceDaoImplTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-core:src/test/java/com/bmw/ispi/air/central/cbs/core/impl/ConditionBasedServiceDaoImplTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "ConditionBasedServiceFilterTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-core:src/test/java/com/bmw/ispi/air/central/cbs/core/impl/ConditionBasedServiceFilterTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "ConditionBasedServiceResultConverterTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-core:src/test/java/com/bmw/ispi/air/central/cbs/core/impl/ConditionBasedServiceResultConverterTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "ConditionBasedServiceSearchImplTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-core:src/test/java/com/bmw/ispi/air/central/cbs/core/impl/ConditionBasedServiceSearchImplTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "ResultConverterUtilsTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-core:src/test/java/com/bmw/ispi/air/central/cbs/core/impl/ResultConverterUtilsTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        }
+      ],
+      "Assoziations": null,
+      "Metrics": null
+    },
+    {
+      "Name": "air-cbs-loader",
+      "Key": "com.bmw.ispi.air.central:air-cbs-loader",
+      "Children": [
+        {
+          "Name": "src/main/java/com/bmw/ispi/air/central/cbs/loader",
+          "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/main/java/com/bmw/ispi/air/central/cbs/loader",
+          "Children": [
+            {
+              "Name": "ConditionBasedServiceLoaderApp.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/main/java/com/bmw/ispi/air/central/cbs/loader/ConditionBasedServiceLoaderApp.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "src/main/java/com/bmw/ispi/air/central/cbs/loader/data",
+          "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/main/java/com/bmw/ispi/air/central/cbs/loader/data",
+          "Children": [
+            {
+              "Name": "Awpos.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/main/java/com/bmw/ispi/air/central/cbs/loader/data/Awpos.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "ConditionBasedServiceExtendedEt.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/main/java/com/bmw/ispi/air/central/cbs/loader/data/ConditionBasedServiceExtendedEt.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "LinkedCbs.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/main/java/com/bmw/ispi/air/central/cbs/loader/data/LinkedCbs.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "SharedDataKeys.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/main/java/com/bmw/ispi/air/central/cbs/loader/data/SharedDataKeys.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "SsiGueltigkeit.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/main/java/com/bmw/ispi/air/central/cbs/loader/data/SsiGueltigkeit.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "src/main/java/com/bmw/ispi/air/central/cbs/loader/extractor",
+          "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/main/java/com/bmw/ispi/air/central/cbs/loader/extractor",
+          "Children": [
+            {
+              "Name": "ConditionBasedServiceExtractor.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/main/java/com/bmw/ispi/air/central/cbs/loader/extractor/ConditionBasedServiceExtractor.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "src/main/java/com/bmw/ispi/air/central/cbs/loader/step",
+          "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/main/java/com/bmw/ispi/air/central/cbs/loader/step",
+          "Children": [
+            {
+              "Name": "EnrichAwposStep.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/main/java/com/bmw/ispi/air/central/cbs/loader/step/EnrichAwposStep.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "EnrichCbsTextStep.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/main/java/com/bmw/ispi/air/central/cbs/loader/step/EnrichCbsTextStep.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "EnrichLinkedCbs.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/main/java/com/bmw/ispi/air/central/cbs/loader/step/EnrichLinkedCbs.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "EnrichSsiGueltigkeitStep.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/main/java/com/bmw/ispi/air/central/cbs/loader/step/EnrichSsiGueltigkeitStep.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "LoadCbsTextStep.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/main/java/com/bmw/ispi/air/central/cbs/loader/step/LoadCbsTextStep.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "LoadSsiGueltigkeitStep.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/main/java/com/bmw/ispi/air/central/cbs/loader/step/LoadSsiGueltigkeitStep.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "SsiGueltigkeitBuilder.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/main/java/com/bmw/ispi/air/central/cbs/loader/step/SsiGueltigkeitBuilder.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "src/test/java/com/bmw/ispi/air/central/cbs/loader/data",
+          "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/test/java/com/bmw/ispi/air/central/cbs/loader/data",
+          "Children": [
+            {
+              "Name": "AwposTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/test/java/com/bmw/ispi/air/central/cbs/loader/data/AwposTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "ConditionBasedServiceExtendedEtSolrEtUUIDMapperTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/test/java/com/bmw/ispi/air/central/cbs/loader/data/ConditionBasedServiceExtendedEtSolrEtUUIDMapperTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "ConditionBasedServiceExtendedEtTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/test/java/com/bmw/ispi/air/central/cbs/loader/data/ConditionBasedServiceExtendedEtTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "LinkedCbsTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/test/java/com/bmw/ispi/air/central/cbs/loader/data/LinkedCbsTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "SsiGueltigkeitTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/test/java/com/bmw/ispi/air/central/cbs/loader/data/SsiGueltigkeitTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "src/test/java/com/bmw/ispi/air/central/cbs/loader/extractor",
+          "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/test/java/com/bmw/ispi/air/central/cbs/loader/extractor",
+          "Children": [
+            {
+              "Name": "ConditionBasedServiceExtendedEtExtractorTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/test/java/com/bmw/ispi/air/central/cbs/loader/extractor/ConditionBasedServiceExtendedEtExtractorTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "src/test/java/com/bmw/ispi/air/central/cbs/loader/step",
+          "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/test/java/com/bmw/ispi/air/central/cbs/loader/step",
+          "Children": [
+            {
+              "Name": "EnrichAwposStepTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/test/java/com/bmw/ispi/air/central/cbs/loader/step/EnrichAwposStepTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "EnrichCbsTextStepTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/test/java/com/bmw/ispi/air/central/cbs/loader/step/EnrichCbsTextStepTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "EnrichLinkedCbsTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/test/java/com/bmw/ispi/air/central/cbs/loader/step/EnrichLinkedCbsTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "EnrichSsiGueltigkeitStepTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/test/java/com/bmw/ispi/air/central/cbs/loader/step/EnrichSsiGueltigkeitStepTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "LoadCbsTextStepTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/test/java/com/bmw/ispi/air/central/cbs/loader/step/LoadCbsTextStepTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "LoadSsiGueltigkeitStepTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/test/java/com/bmw/ispi/air/central/cbs/loader/step/LoadSsiGueltigkeitStepTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "SsiGueltigkeitBuilderTest.java",
+              "Key": "com.bmw.ispi.air.central:air-cbs-loader:src/test/java/com/bmw/ispi/air/central/cbs/loader/step/SsiGueltigkeitBuilderTest.java",
+              "Children": [],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        }
+      ],
+      "Assoziations": null,
+      "Metrics": null
+    }
+  ],
+  "Assoziations": null,
+  "Metrics": null
+}

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Data;
 using HoloToolkit.Unity;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -28,7 +29,7 @@ public class SonarQubeService : Singleton<SonarQubeService>
 
     private IEnumerator Start()
     {
-        var coroutine = this.StartCoroutine<HierarchyElement>(ComposeElements(BaseComponentKey));
+        var coroutine = this.StartCoroutine<SoftwareArtefact>(ComposeElements(BaseComponentKey));
         yield return coroutine.coroutine;
         Logger.Log(coroutine.value);
         Debug.Log("Total calls: " + totalCalls);
@@ -52,11 +53,11 @@ public class SonarQubeService : Singleton<SonarQubeService>
         successfullCalls++;
 
         // Map the requested component to our abstract software model
-        HierarchyElement element = MapSonarQubeComponentToHierarchyElement(tree.baseComponent);
+        SoftwareArtefact element = MapSonarQubeComponentToHierarchyElement(tree.baseComponent);
 
         // Store child coroutines to be able to join them
-        List<Coroutine<HierarchyElement>> childCoroutines = tree.components
-            .Select(component => this.StartCoroutine<HierarchyElement>(ComposeElements(component.key))).ToList();
+        List<Coroutine<SoftwareArtefact>> childCoroutines = tree.components
+            .Select(component => this.StartCoroutine<SoftwareArtefact>(ComposeElements(component.key))).ToList();
 
         yield return CoroutineUtils.WaitForAll(childCoroutines);
 
@@ -99,14 +100,14 @@ public class SonarQubeService : Singleton<SonarQubeService>
         return www;
     }
 
-    private static void WriteToFile(HierarchyElement element)
+    private static void WriteToFile(SoftwareArtefact element)
     {
         var json = JsonConvert.SerializeObject(element, Formatting.Indented);
         Debug.Log("Writing to file...");
         File.WriteAllText("Assets/StreamingAssets/AirStructure2.json", json);
     }
 
-    private static HierarchyElement MapSonarQubeComponentToHierarchyElement(SonarQubeComponent component)
+    private static SoftwareArtefact MapSonarQubeComponentToHierarchyElement(SonarQubeComponent component)
     {
         if (component == null) return null;
 
@@ -114,18 +115,18 @@ public class SonarQubeService : Singleton<SonarQubeService>
             component.qualifier == SonarQubeQualifier.BRC ||
             component.qualifier == SonarQubeQualifier.DIR)
         {
-            return new Package
+            return new SoftwareArtefact
             {
                 Name = component.name,
                 Key = component.key,
-                Children = new List<HierarchyElement>()
+                Children = new List<SoftwareArtefact>()
             };
         }
-        return new Class
+        return new SoftwareArtefact
         {
             Name = component.name,
             Key = component.key,
-            Children = new List<HierarchyElement>()
+            Children = new List<SoftwareArtefact>()
         };
     }
 }

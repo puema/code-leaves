@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Frontend;
 using HoloToolkit.Unity;
 
 namespace Core
@@ -21,7 +22,7 @@ namespace Core
 
         public void HandleNodeClick(string id)
         {
-            UiNode selected = FindUiNode(id);
+            var selected = FindUiNode(id);
             if (selected == null) return;
             selected.IsSelected.Value ^= true;
         }

@@ -8,7 +8,7 @@ Material:
   m_PrefabInternal: {fileID: 0}
   m_Name: TransparentButton
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: _ALPHAPREMULTIPLY_ON
+  m_ShaderKeywords: _ALPHAPREMULTIPLY_ON _USECOLOR_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -43,10 +43,14 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _MainTex:
+    - _EmissionTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 14.8, y: 8.85}
+        m_Offset: {x: 0.52, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -62,6 +66,7 @@ Material:
     m_Floats:
     - PixelSnap: 0
     - _BumpScale: 1
+    - _Cull: 2
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
@@ -72,14 +77,28 @@ Material:
     - _Metallic: 0
     - _Mode: 3
     - _OcclusionStrength: 1
+    - _Opacity: 1
     - _Parallax: 0.02
+    - _RimPower: 6.93
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
+    - _UseBumpMap: 0
+    - _UseColor: 1
+    - _UseEmissionTex: 0
+    - _UseMainTex: 1
+    - _UseOcclusionRim: 1
+    - _WireThickness: 304
+    - _ZTest: 4
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 0.13235295, g: 0.13235295, b: 0.13235295, a: 0.128}
+    - _BaseColor: {r: 0.39705884, g: 0.39705884, b: 0.39705884, a: 0.503}
+    - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 0.684}
+    - _Color1: {r: 0.366, g: 0.366, b: 0.366, a: 0.28235295}
+    - _Color2: {r: 0.328, g: 0.328, b: 0.328, a: 0.28235295}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _RimColor: {r: 1, g: 0, b: 0, a: 1}
+    - _WireColor: {r: 0.347, g: 0.347, b: 0.347, a: 0.259}

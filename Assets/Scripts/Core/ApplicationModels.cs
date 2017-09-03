@@ -33,11 +33,12 @@ namespace Core
     public class InnerNode : Node
     {
         public List<Node> Children { get; set; }
+        public List<InnerNodeData> Data { get; set; }
     }
 
     public class Leaf : Node
     {
-        public List<LeafData> LeafData { get; set; }
+        public List<LeafData> Data { get; set; }
     }
 
     public class Edge
