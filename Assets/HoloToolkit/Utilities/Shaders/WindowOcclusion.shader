@@ -17,7 +17,7 @@ Shader "HoloToolkit/WindowOcclusion"
 
         Pass
         {
-            ColorMask 0 // Color will not be rendered.
+            ColorMask 1 // Color will not be rendered.
 
             CGPROGRAM
             #pragma vertex vert
