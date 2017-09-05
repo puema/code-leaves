@@ -8,7 +8,7 @@ namespace Frontend
     public class Forest
     {
         public Floor Floor { get; set; }
-        public List<UiNode> Trees { get; set; }
+        public UiNode Root { get; set; }
     }
 
     public class Floor

@@ -12,7 +12,6 @@ namespace Core
 {
     public class ApplicationManager : Singleton<ApplicationManager>
     {
-        public UiNode Root;
         public Forest Forest;
         public AppState AppState;
 
@@ -41,8 +40,7 @@ namespace Core
 
             Forest = new Forest
             {
-                Trees = (node as InnerNode)?.Children.Select(AppToUiMapper.Map).ToList() ??
-                        new List<UiNode> {AppToUiMapper.Map(node)}
+                Root = AppToUiMapper.Map(node)
             };
 
             base.Awake();
@@ -52,11 +50,14 @@ namespace Core
 
         private void Start()
         {
-            var count = Forest.Trees.Count;
-            for (var i = 0; i < count; i++)
+            var trees = (Forest.Root as UiInnerNode)?.Children ?? new List<UiNode>();
+            var i = 0;
+            var count = trees.Count;
+            foreach (var tree in trees)
             {
-                TreeBuilder.Instance.GenerateTreeStructure(Forest.Trees[i],
+                TreeBuilder.Instance.GenerateTreeStructure(tree,
                     new Vector2((i - count / 2) * 3, (i - count / 2) * 3));
+                i++;
             }
         }
 

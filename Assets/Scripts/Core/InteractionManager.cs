@@ -7,12 +7,12 @@ namespace Core
     public class InteractionManager : Singleton<InteractionManager>
     {
         private AppState AppState;
-        private UiNode Root;
-    
+        private Forest Forest;
+
         public void Start()
         {
             AppState = ApplicationManager.Instance.AppState;
-            Root = ApplicationManager.Instance.Root;
+            Forest = ApplicationManager.Instance.Forest;
         }
 
         public void HandleMenuInput(FloorInteractionMode mode)
@@ -33,7 +33,7 @@ namespace Core
             if (focused == null) return;
             focused.IsFocused.Value = true;
         }
-    
+
         public void HandleNodeFocusExit(string id)
         {
             var focused = FindUiNode(id);
@@ -48,7 +48,7 @@ namespace Core
 
         public void HandleEmptyClick()
         {
-            Root
+            Forest.Root
                 .Traverse(x => (x as UiInnerNode)?.Children)
                 .ToList()
                 .ForEach(x => x.IsSelected.Value = false);
@@ -56,7 +56,7 @@ namespace Core
 
         private UiNode FindUiNode(string id)
         {
-            return Root
+            return Forest.Root
                 .Traverse(x => (x as UiInnerNode)?.Children)
                 .FirstOrDefault(x => x.Id == id);
         }

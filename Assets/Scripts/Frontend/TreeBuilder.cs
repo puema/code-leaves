@@ -307,7 +307,7 @@ namespace Frontend
             Vector3? localEulerAngles = null, bool isActive = true)
         {
             localPosition = localPosition ?? Vector3.zero;
-            localEulerAngles = localEulerAngles ?? Vector3.one;
+            localEulerAngles = localEulerAngles ?? Vector3.zero;
 
             var gameObj = original == null ? new GameObject(objName) : Instantiate(original);
             gameObj.SetActive(isActive);
