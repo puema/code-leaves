@@ -21,7 +21,7 @@ namespace Core
             AppData = null
         };
 
-        private const string TreeDataFile = "AirCbsStructure.json";
+        private const string TreeDataFile = "TestStructure.json";
 
         private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
@@ -55,7 +55,7 @@ namespace Core
             var count = trees.Count;
             foreach (var tree in trees)
             {
-                TreeBuilder.Instance.GenerateTreeStructure(tree,
+                TreeBuilder.Instance.GenerateTree(tree,
                     new Vector2((i - count / 2) * 3, (i - count / 2) * 3));
                 i++;
             }

@@ -10,7 +10,7 @@ namespace Data
         {
             if (artefact == null) return null;
             
-            if (artefact.Children.Count > 0)
+            if (artefact.Children?.Count > 0)
             {
                 return new InnerNode
                 {

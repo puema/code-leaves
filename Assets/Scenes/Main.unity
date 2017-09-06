@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.45011294, g: 0.50015485, b: 0.57545805, a: 1}
+  m_IndirectSpecularColor: {r: 0.45002466, g: 0.5000725, b: 0.5753673, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1881,7 +1881,9 @@ MonoBehaviour:
   Floor: {fileID: 320236158}
   Edge: {fileID: 100000, guid: 8b44cdb28fa434139834fdbce47973b7, type: 3}
   Leaf: {fileID: 100000, guid: 53d3ac3856451414fb781ce7a8eed188, type: 3}
-  Label: {fileID: 1645417770877770, guid: 1c439f1cec47e4dfb886493ca01d693d, type: 2}
+  LeafLabel: {fileID: 1645417770877770, guid: 1c439f1cec47e4dfb886493ca01d693d, type: 2}
+  InnerNodeLabel: {fileID: 1142729377975720, guid: 7f40173f12eaa494f82ded982428bcfa,
+    type: 2}
   StandardShader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   FocusedShader: {fileID: 4800000, guid: cf9ebb8e83ba48d2bf8d1b04685a5301, type: 3}
   UseAllwaysMainTrunk: 0

@@ -15,7 +15,9 @@ namespace Frontend
 
         public GameObject Leaf;
 
-        public GameObject Label;
+        public GameObject LeafLabel;
+        
+        public GameObject InnerNodeLabel;
 
         public Shader StandardShader;
 
@@ -30,54 +32,61 @@ namespace Frontend
         public bool GrowInDirectionOfBranches = true;
         // ----------------------- //
 
-        private const float DefaultScale = 1;
         private const float DistanceLeafToLabel = 0.008f;
         private const float DistanceNodeToLabel = 0.008f;
-        private static readonly Vector3 BaseAspectRatio = new Vector3(1, 10, 1);
+        private static readonly Vector3 DefaultEdgeScale = new Vector3(1, 10, 1);
         private static readonly Vector3 Default3DTextScale = new Vector3(0.005f, 0.005f, 0.005f);
 
-        internal static readonly string TreeName = "Tree";
-        internal static readonly string BranchName = "Branch";
-        internal static readonly string NodeName = "Node";
-        internal static readonly string EdgeName = "Edge";
-        internal static readonly string LeafName = "Leaf";
-        internal static readonly string LabelName = "Label";
+        internal const string TreeName = "Tree";
+        internal const string BranchName = "Branch";
+        internal const string NodeName = "Node";
+        internal const string EdgeName = "Edge";
+        internal const string LeafName = "Leaf";
+        internal const string LabelName = "Label";
 
-        private static readonly double GoldenRatio = (1 + Math.Sqrt(5)) / 2;
-        private static readonly double GoldenAngle = RadianToDegree(2 * Math.PI - 2 * Math.PI / GoldenRatio);
-        private static readonly double CircleThroughGoldenAngle = 360 / GoldenAngle;
         private static float _currentBranchRotation = 0;
+        private float DefaultEdgeHeight;
+
+        protected override void Awake()
+        {
+            Edge.transform.localScale = DefaultEdgeScale;
+            DefaultEdgeHeight = GetYSize(Edge);
+            base.Awake();
+        }
 
         /// <summary>
         /// Generates the unity tree according to the given data structure of the node
         /// </summary>
         /// <param name="node"></param>
         /// <param name="position"></param>
-        public void GenerateTreeStructure(UiNode node, Vector2 position)
+        public void GenerateTree(UiNode node, Vector2 position)
         {
             var tree = AddTreeObject(position);
-            var trunk = AddBranchObject(node, tree.transform);
+            var trunkObject = AddEmptyBranchObject(tree.transform);
+            var edgeObject = AddEdgeObject(trunkObject.transform, DefaultEdgeScale.y, 0, 0);
+            var nodeObject = AddEmptyNodeObject(node, trunkObject.transform, edgeObject,
+                new Vector3(0, DefaultEdgeHeight, 0));
             node.SortChildren();
-            AddChildrenOfNode(node, trunk.transform.Find(NodeName));
+            GenerateBranchs(node, nodeObject.transform);
         }
 
         /// <summary>
-        /// Adds the children of a node to the given parent transform 
+        /// Adds recursively the children of a node to the given parent transform 
         /// </summary>
         /// <param name="node"></param>
         /// <param name="parentObject"></param>
-        /// <param name="scale"></param>
-        private void AddChildrenOfNode(UiNode node, Transform parentObject, float scale = DefaultScale)
+        private void GenerateBranchs(UiNode node, Transform parentObject)
         {
             if (node is UiInnerNode)
             {
                 var innerNode = (UiInnerNode) node;
                 if (innerNode.Children == null) return;
-                var branchObjects = AddBranchObjects(parentObject, innerNode, scale);
-                scale *= 0.8f;
+
+                var nodeObjects = AddChildrenToNode(innerNode, parentObject);
+
                 for (var i = 0; i < innerNode.Children.Count; i++)
                 {
-                    AddChildrenOfNode(innerNode.Children[i], branchObjects[i].transform.Find(NodeName), scale);
+                    GenerateBranchs(innerNode.Children[i], nodeObjects[i].transform);
                 }
             }
             else if (node is UiLeaf)
@@ -91,126 +100,54 @@ namespace Frontend
             }
         }
 
+        private List<GameObject> AddChildrenToNode(UiInnerNode node, Transform parent)
+        {
+            var nodeObjects = new List<GameObject>();
+
+            var count = node.Children.Count;
+            for (var i = 0; i < count; i++)
+            {
+                var r = TreeGeometry.CalcRadius(i);
+                var phi = TreeGeometry.CalcPhi(i);
+                var theta = TreeGeometry.CalcTheta(DefaultEdgeHeight, r);
+                var l = TreeGeometry.CalcEdgeLength(DefaultEdgeHeight, theta);
+                var nodePosition = TreeGeometry.CalcNodePosition(l, theta, phi);
+
+                var branchObject = AddEmptyBranchObject(parent);
+                var edgeObject = AddEdgeObject(branchObject.transform,
+                    TreeGeometry.SizeToScale(l, DefaultEdgeHeight, DefaultEdgeScale.y), theta, phi);
+                var nodeObject = AddEmptyNodeObject(node.Children[i], branchObject.transform, edgeObject, nodePosition);
+
+                nodeObjects.Add(nodeObject);
+            }
+
+            return nodeObjects;
+        }
+
         /// <summary>
-        /// Adds the root game object for the tree
+        /// Adds the tree game object for the tree
         /// </summary>
-        /// <returns></returns>
         private GameObject AddTreeObject(Vector2 position)
         {
             return InstantiateObject(TreeName, parent: Floor.transform,
                 localPosition: new Vector3(position.x, 0f, position.y));
         }
 
-        private List<GameObject> AddBranchObjects(Transform parent, UiInnerNode node, float scale)
+        private GameObject AddEmptyBranchObject(Transform parent)
         {
-            var branches = new List<GameObject>();
-
-            var count = node.Children.Count;
-            for (var i = 0; i < count; i++)
-            {
-                // Add a new branch and subsequent edge and node
-                branches.Add(AddBranchObject(node.Children[i], parent, count, i, scale));
-            }
-
-            return branches;
+            return InstantiateObject(BranchName, parent: parent);
         }
 
-        private GameObject AddBranchObject(UiNode node, Transform parent, int siblingCount = 1, int siblingIndex = 0,
-            float scale = DefaultScale)
+        private GameObject AddEdgeObject(Transform parent, float length, float theta, float phi, float? diameter = null)
         {
-            // Add Branch as new origin
-            var branchObject = AddEmptyBranchObject(parent, siblingCount, siblingIndex);
-            // Store the height of the unrotated edge
-            float edgeLength;
-            float edgeThickness;
-            var edge = AddEdgeObject(branchObject.transform, siblingCount, siblingIndex, scale, out edgeLength,
-                out edgeThickness);
+            diameter = diameter ?? DefaultEdgeScale.x;
 
-            // Add node at the end 
-            AddEmptyNodeObject(node, branchObject.transform, edge.transform, edgeLength, edgeThickness);
-
-            return branchObject;
-        }
-
-        private GameObject AddEmptyBranchObject(Transform parent, int siblingsCount, int siblingIndex)
-        {
-            var branchObject = InstantiateObject(BranchName, parent: parent);
-
-            if (!GrowInDirectionOfBranches) return branchObject;
-
-            RotateBranchOrEdge(branchObject.transform, siblingsCount, siblingIndex);
-            branchObject.transform.Rotate(0, (float) GoldenAngle, 0, Space.Self);
-
-            return branchObject;
-        }
-
-        /// <summary>
-        /// Rotates the a whole branch or edge according to the siblings count and the own siblings index
-        /// </summary>
-        /// <param name="treeObject"></param>
-        /// <param name="siblingsCount"></param>
-        /// <param name="siblingIndex"></param>
-        private void RotateBranchOrEdge(Transform treeObject, int siblingsCount, int siblingIndex)
-        {
-            float xAngle;
-            float yAngle;
-
-            var mainTrunk = UseAllwaysMainTrunk ||
-                            siblingsCount % 2 != 0 && !(siblingsCount == 3 && !UseMainTrunkAt3Fork);
-
-            if (!mainTrunk) siblingIndex++;
-            if (mainTrunk) siblingsCount--;
-
-            if (siblingIndex != 0)
-            {
-                xAngle = 30;
-                yAngle = 360 / siblingsCount * --siblingIndex;
-            }
-            else
-            {
-                xAngle = 0;
-                yAngle = 0;
-            }
-
-            treeObject.transform.localEulerAngles = new Vector3(xAngle, yAngle, 0);
-
-//        float xzLength;
-//        if (!mainTrunk)
-//        {
-//            siblingIndex++;
-//        }
-//        
-//
-//        if (siblingIndex == 0)
-//        {
-//            xzLength = 0;
-//        }
-//        else
-//        {
-//            // Do not touch, ask not why, never, ever.
-//            xzLength = edgeLength / ((siblingsCount - 2) / 3 + 2) *
-//                       ((siblingIndex - 1) / 3 + 1);
-//        }
-//     
-//        var xAngle = (float) RadianToDegree(Math.Asin(xzLength / edgeLength));
-//
-//        if (!angle.Equals(0) && !siblingIndex.Equals(0))
-//        {
-//            _currentBranchRotation += (float) GoldenAngle;
-//        }
-//        yAngle = _currentBranchRotation;
-        }
-
-        private GameObject AddEdgeObject(Transform branch, int siblingsCount, int siblingIndex, float scale,
-            out float edgeLength, out float edgeThickness)
-        {
-            var edgeObject = InstantiateObject(EdgeName, Edge, branch.transform, localScale: scale * BaseAspectRatio);
-            edgeLength = GetYSize(edgeObject);
-            edgeThickness = GetZSize(edgeObject);
+            var edgeObject = InstantiateObject(
+                EdgeName, Edge, parent.transform,
+                localEulerAngles: new Vector3(theta, phi, 0),
+                localScale: new Vector3(diameter.Value, length, diameter.Value)
+            );
             edgeObject.AddComponent<NodeInputHandler>();
-
-            if (!GrowInDirectionOfBranches) RotateBranchOrEdge(edgeObject.transform, siblingsCount, siblingIndex);
-            else edgeObject.transform.localEulerAngles = Vector3.zero;
 
             return edgeObject;
         }
@@ -234,54 +171,45 @@ namespace Frontend
             return leafObject;
         }
 
-        private void AddEmptyNodeObject(UiNode node, Transform branch, Transform edge, float edgeLength,
-            float edgeThickness)
+        private GameObject AddEmptyNodeObject(UiNode node, Transform branch, GameObject edge, Vector3 position)
         {
-            var nodeObject = InstantiateObject(NodeName, parent: branch,
-                localPosition: CalculatePositionOfNode(edge, edgeLength));
+            var nodeObject = InstantiateObject(
+                NodeName,
+                parent: branch,
+                localPosition: position
+            );
 
-            nodeObject.transform.Rotate(0, (float) GoldenAngle, 0);
             nodeObject.AddComponent<ID>().Id = node.Id;
             nodeObject.AddComponent<NodeInputHandler>();
 
             GameObject label = null;
             if (node is UiInnerNode)
             {
-                label = AddNodeLabel(nodeObject.transform, edgeThickness / 2);
+                label = AddNodeLabel(nodeObject.transform);
             }
 
-            SubscribeReactNodeProperties(node, edge.gameObject, label);
+            SubscribeReactNodeProperties(node, edge, label);
+
+            return nodeObject;
         }
 
-        private GameObject AddNodeLabel(Transform parent, float z)
+        private GameObject AddNodeLabel(Transform parent)
         {
-            var label = InstantiateObject(LabelName, Label, parent, isActive: false);
-            label.transform.Translate(-z, -DistanceNodeToLabel, 0, Space.Self);
-            label.GetComponent<TextMesh>().anchor = TextAnchor.UpperCenter;
-            label.AddComponent<Billboard>();
-            return label;
+            var labelWrapper = InstantiateObject(LabelName, InnerNodeLabel, parent);
+            labelWrapper.AddComponent<Billboard>();
+            var labelObject = labelWrapper.transform.GetChild(0).gameObject;
+            labelObject.GetComponent<TextMesh>().anchor = TextAnchor.UpperCenter;
+            labelObject.SetActive(false);
+            return labelObject;
         }
 
         private GameObject AddLeafLabel(Transform parent, float y)
         {
-            var label = InstantiateObject(LabelName, Label, parent,
+            var label = InstantiateObject(LabelName, LeafLabel, parent,
                 Vector3.up * (y + DistanceLeafToLabel),
                 Default3DTextScale, isActive: false);
             label.GetComponent<TextMesh>().anchor = TextAnchor.LowerCenter;
             return label;
-        }
-
-        private static Vector3 CalculatePositionOfNode(Transform edge, float edgeLength)
-        {
-            var theta = DegreeToRadian(edge.localEulerAngles.x);
-            var phi = DegreeToRadian(edge.localEulerAngles.y);
-
-            var y = (float) Math.Cos(theta) * edgeLength;
-            var xz = (float) Math.Sin(theta) * edgeLength;
-            var x = (float) Math.Sin(phi) * xz;
-            var z = (float) Math.Cos(phi) * xz;
-
-            return new Vector3(x, y, z);
         }
 
         // ----==== Helper functions ====---- //
@@ -328,16 +256,6 @@ namespace Frontend
         private static float GetZSize(GameObject obj)
         {
             return obj.GetComponent<MeshRenderer>().bounds.size.z;
-        }
-
-        private static double DegreeToRadian(double angle)
-        {
-            return angle * Math.PI / 180.0;
-        }
-
-        private static double RadianToDegree(double angle)
-        {
-            return angle * 180.0 / Math.PI;
         }
 
         public static float KeepAngleIn360(float angle)
