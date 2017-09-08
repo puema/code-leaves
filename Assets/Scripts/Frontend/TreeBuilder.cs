@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using HoloToolkit.Unity;
+﻿using HoloToolkit.Unity;
 using UniRx;
 using UnityEngine;
 
@@ -89,14 +88,14 @@ namespace Frontend
 
                 return;
             }
-            
+
             if (node is UiLeaf)
             {
                 var leaf = (UiLeaf) node;
                 AddLeafObject(parentObject, leaf);
                 return;
             }
-            
+
             Debug.LogError("Unknown type of node, aborting structure generation");
         }
 

@@ -26,7 +26,9 @@ namespace Frontend
 
         public abstract int GetHeight();
 
-        public abstract int GetChildCount();
+        public abstract int GetDescendantsCount();
+
+        public abstract int GetWidth();
 
         public abstract void SortChildren();
     }
@@ -40,28 +42,25 @@ namespace Frontend
 
         public override int GetHeight()
         {
-            if (Children == null) return 0;
-
             // Calculate max depth of each child, select the heighest and add to own depth
-            var maxChildrenHeight = Children.Select(child => child.GetHeight()).Concat(new[] {0}).Max() + 1;
-
-            return maxChildrenHeight;
+            return Children?.Select(child => child.GetHeight()).Concat(new[] {0}).Max() + 1 ?? 0;
         }
 
-        public override int GetChildCount()
+        public override int GetDescendantsCount()
         {
-            if (Children == null) return 0;
+            return Children?.Select(child => child.GetDescendantsCount() + 1).Sum() ?? 0;
+        }
 
-            var childCount = Children.Select(child => child.GetChildCount() + 1).Sum();
-
-            return childCount;
+        public override int GetWidth()
+        {
+            return 0;
         }
 
         public override void SortChildren()
         {
             Children = Children?
                 .OrderByDescending(node => node.GetHeight())
-                .ThenByDescending(node => node.GetChildCount())
+                .ThenByDescending(node => node.GetDescendantsCount())
                 .ToList();
             Children?
                 .ForEach(x => x.SortChildren());
@@ -77,7 +76,12 @@ namespace Frontend
             return 0;
         }
 
-        public override int GetChildCount()
+        public override int GetDescendantsCount()
+        {
+            return 0;
+        }
+
+        public override int GetWidth()
         {
             return 0;
         }
