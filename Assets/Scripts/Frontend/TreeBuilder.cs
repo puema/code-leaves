@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using HoloToolkit.Unity;
 using UniRx;
 using UnityEngine;
@@ -16,7 +15,7 @@ namespace Frontend
         public GameObject Leaf;
 
         public GameObject LeafLabel;
-        
+
         public GameObject InnerNodeLabel;
 
         public Shader StandardShader;
@@ -80,53 +79,43 @@ namespace Frontend
             if (node is UiInnerNode)
             {
                 var innerNode = (UiInnerNode) node;
-                if (innerNode.Children == null) return;
-
-                var nodeObjects = AddChildrenToNode(innerNode, parentObject);
 
                 for (var i = 0; i < innerNode.Children.Count; i++)
                 {
-                    GenerateBranchs(innerNode.Children[i], nodeObjects[i].transform);
+                    var nodeObject = AddChild(innerNode, parentObject, i);
+
+                    GenerateBranchs(innerNode.Children[i], nodeObject.transform);
                 }
+
+                return;
             }
-            else if (node is UiLeaf)
+            
+            if (node is UiLeaf)
             {
                 var leaf = (UiLeaf) node;
                 AddLeafObject(parentObject, leaf);
+                return;
             }
-            else
-            {
-                Debug.LogError("Unknown type of node, aborting structure generation");
-            }
+            
+            Debug.LogError("Unknown type of node, aborting structure generation");
         }
 
-        private List<GameObject> AddChildrenToNode(UiInnerNode node, Transform parent)
+        private GameObject AddChild(UiInnerNode node, Transform parent, int n)
         {
-            var nodeObjects = new List<GameObject>();
+            var r = TreeGeometry.CalcRadius(n);
+            var phi = TreeGeometry.CalcPhi(n);
+            var theta = TreeGeometry.CalcTheta(DefaultEdgeHeight, r);
+            var l = TreeGeometry.CalcEdgeLength(DefaultEdgeHeight, theta);
+            var nodePosition = TreeGeometry.CalcNodePosition(l, theta, phi);
 
-            var count = node.Children.Count;
-            for (var i = 0; i < count; i++)
-            {
-                var r = TreeGeometry.CalcRadius(i);
-                var phi = TreeGeometry.CalcPhi(i);
-                var theta = TreeGeometry.CalcTheta(DefaultEdgeHeight, r);
-                var l = TreeGeometry.CalcEdgeLength(DefaultEdgeHeight, theta);
-                var nodePosition = TreeGeometry.CalcNodePosition(l, theta, phi);
+            var branchObject = AddEmptyBranchObject(parent);
+            var edgeObject = AddEdgeObject(branchObject.transform,
+                TreeGeometry.SizeToScale(l, DefaultEdgeHeight, DefaultEdgeScale.y), theta, phi);
+            var nodeObject = AddEmptyNodeObject(node.Children[n], branchObject.transform, edgeObject, nodePosition);
 
-                var branchObject = AddEmptyBranchObject(parent);
-                var edgeObject = AddEdgeObject(branchObject.transform,
-                    TreeGeometry.SizeToScale(l, DefaultEdgeHeight, DefaultEdgeScale.y), theta, phi);
-                var nodeObject = AddEmptyNodeObject(node.Children[i], branchObject.transform, edgeObject, nodePosition);
-
-                nodeObjects.Add(nodeObject);
-            }
-
-            return nodeObjects;
+            return nodeObject;
         }
 
-        /// <summary>
-        /// Adds the tree game object for the tree
-        /// </summary>
         private GameObject AddTreeObject(Vector2 position)
         {
             return InstantiateObject(TreeName, parent: Floor.transform,
@@ -195,7 +184,7 @@ namespace Frontend
 
         private GameObject AddNodeLabel(Transform parent)
         {
-            var labelWrapper = InstantiateObject(LabelName, InnerNodeLabel, parent);
+            var labelWrapper = InstantiateObject(LabelName, InnerNodeLabel, parent, Vector3.down * DistanceNodeToLabel);
             labelWrapper.AddComponent<Billboard>();
             var labelObject = labelWrapper.transform.GetChild(0).gameObject;
             labelObject.GetComponent<TextMesh>().anchor = TextAnchor.UpperCenter;

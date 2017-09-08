@@ -8,7 +8,6 @@ namespace Frontend
         public const float NodeDistanceFactor = 0.05f;
         
         private static readonly double GoldenRatio = (1 + Math.Sqrt(5)) / 2;
-        public static readonly double GoldenAngle = RadianToDegree(2 * Math.PI - 2 * Math.PI / GoldenRatio);
 
         /// <summary>
         /// Calculates the distance between the central node and the nth sibling
