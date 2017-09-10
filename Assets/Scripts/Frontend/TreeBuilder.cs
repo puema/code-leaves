@@ -42,7 +42,6 @@ namespace Frontend
         internal const string LeafName = "Leaf";
         internal const string LabelName = "Label";
 
-        private static float _currentBranchRotation = 0;
         private float DefaultEdgeHeight;
 
         protected override void Awake()
@@ -101,7 +100,7 @@ namespace Frontend
 
         private GameObject AddChild(UiInnerNode node, Transform parent, int n)
         {
-            var r = TreeGeometry.CalcRadius(n);
+            var r = TreeGeometry.CalcRadius(node, n);
             var phi = TreeGeometry.CalcPhi(n);
             var theta = TreeGeometry.CalcTheta(DefaultEdgeHeight, r);
             var l = TreeGeometry.CalcEdgeLength(DefaultEdgeHeight, theta);
@@ -216,6 +215,7 @@ namespace Frontend
 
             node.IsSelected.Subscribe(label.SetActive);
             node.Text.Subscribe(text => label.GetComponent<TextMesh>().text = text);
+//            label.GetComponent<TextMesh>().text = node.GetWidth().ToString();
         }
 
         private static GameObject InstantiateObject(string objName = null, GameObject original = null,

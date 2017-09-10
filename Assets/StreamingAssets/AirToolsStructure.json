@@ -1,0 +1,1237 @@
+{
+  "Name": "air",
+  "Key": "com.bmw.ispi.air.central:air",
+  "Children": [
+    {
+      "Name": "air-tools",
+      "Key": "com.bmw.ispi.air.central:air-tools",
+      "Children": [
+        {
+          "Name": "air-betriebstool-vm",
+          "Key": "com.bmw.ispi.air.central:air-betriebstool-vm",
+          "Children": [],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "air-code-quality-contract",
+          "Key": "com.bmw.ispi.air.central:air-code-quality-contract",
+          "Children": [
+            {
+              "Name": "src/main/java/edu/umd/cs/findbugs/annotations",
+              "Key": "com.bmw.ispi.air.central:air-code-quality-contract:src/main/java/edu/umd/cs/findbugs/annotations",
+              "Children": [
+                {
+                  "Name": "FindBugsWarnings.java",
+                  "Key": "com.bmw.ispi.air.central:air-code-quality-contract:src/main/java/edu/umd/cs/findbugs/annotations/FindBugsWarnings.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "SuppressWarnings.java",
+                  "Key": "com.bmw.ispi.air.central:air-code-quality-contract:src/main/java/edu/umd/cs/findbugs/annotations/SuppressWarnings.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                }
+              ],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "air-cucumber-qc",
+          "Key": "com.bmw.ispi.air.central:air-cucumber-qc",
+          "Children": [
+            {
+              "Name": "src/main/java/com/bmw/ispi/air/central/cucumber",
+              "Key": "com.bmw.ispi.air.central:air-cucumber-qc:src/main/java/com/bmw/ispi/air/central/cucumber",
+              "Children": [
+                {
+                  "Name": "TestSetsExporter.java",
+                  "Key": "com.bmw.ispi.air.central:air-cucumber-qc:src/main/java/com/bmw/ispi/air/central/cucumber/TestSetsExporter.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                }
+              ],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "src/main/java/com/bmw/ispi/air/central/cucumber/csv",
+              "Key": "com.bmw.ispi.air.central:air-cucumber-qc:src/main/java/com/bmw/ispi/air/central/cucumber/csv",
+              "Children": [
+                {
+                  "Name": "SimpleCsvRow.java",
+                  "Key": "com.bmw.ispi.air.central:air-cucumber-qc:src/main/java/com/bmw/ispi/air/central/cucumber/csv/SimpleCsvRow.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "SimpleCsvSheet.java",
+                  "Key": "com.bmw.ispi.air.central:air-cucumber-qc:src/main/java/com/bmw/ispi/air/central/cucumber/csv/SimpleCsvSheet.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                }
+              ],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "src/main/java/com/bmw/ispi/air/central/cucumber/qc",
+              "Key": "com.bmw.ispi.air.central:air-cucumber-qc:src/main/java/com/bmw/ispi/air/central/cucumber/qc",
+              "Children": [
+                {
+                  "Name": "IuAQCFormatter.java",
+                  "Key": "com.bmw.ispi.air.central:air-cucumber-qc:src/main/java/com/bmw/ispi/air/central/cucumber/qc/IuAQCFormatter.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "NotIuAQCFormatter.java",
+                  "Key": "com.bmw.ispi.air.central:air-cucumber-qc:src/main/java/com/bmw/ispi/air/central/cucumber/qc/NotIuAQCFormatter.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "QCExporter.java",
+                  "Key": "com.bmw.ispi.air.central:air-cucumber-qc:src/main/java/com/bmw/ispi/air/central/cucumber/qc/QCExporter.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "QCStatus.java",
+                  "Key": "com.bmw.ispi.air.central:air-cucumber-qc:src/main/java/com/bmw/ispi/air/central/cucumber/qc/QCStatus.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                }
+              ],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "src/main/java/com/bmw/ispi/air/central/cucumber/testresults",
+              "Key": "com.bmw.ispi.air.central:air-cucumber-qc:src/main/java/com/bmw/ispi/air/central/cucumber/testresults",
+              "Children": [
+                {
+                  "Name": "TestResult.java",
+                  "Key": "com.bmw.ispi.air.central:air-cucumber-qc:src/main/java/com/bmw/ispi/air/central/cucumber/testresults/TestResult.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "TestSetResult.java",
+                  "Key": "com.bmw.ispi.air.central:air-cucumber-qc:src/main/java/com/bmw/ispi/air/central/cucumber/testresults/TestSetResult.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                }
+              ],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "src/test/java/com/bmw/ispi/air/central/cucumber/qc",
+              "Key": "com.bmw.ispi.air.central:air-cucumber-qc:src/test/java/com/bmw/ispi/air/central/cucumber/qc",
+              "Children": [
+                {
+                  "Name": "QCExporterTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-cucumber-qc:src/test/java/com/bmw/ispi/air/central/cucumber/qc/QCExporterTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                }
+              ],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "src/test/java/com/bmw/ispi/air/central/cucumber/testresults",
+              "Key": "com.bmw.ispi.air.central:air-cucumber-qc:src/test/java/com/bmw/ispi/air/central/cucumber/testresults",
+              "Children": [
+                {
+                  "Name": "TestSetResultTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-cucumber-qc:src/test/java/com/bmw/ispi/air/central/cucumber/testresults/TestSetResultTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                }
+              ],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "air-gentext-plugin",
+          "Key": "com.bmw.ispi.air.central:air-gentext-plugin",
+          "Children": [
+            {
+              "Name": "src/main/java/com/bmw/ispi/air/central/maven/gentext",
+              "Key": "com.bmw.ispi.air.central:air-gentext-plugin:src/main/java/com/bmw/ispi/air/central/maven/gentext",
+              "Children": [
+                {
+                  "Name": "GenHgUgTextsMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-gentext-plugin:src/main/java/com/bmw/ispi/air/central/maven/gentext/GenHgUgTextsMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "HgUgTextsGenerator.java",
+                  "Key": "com.bmw.ispi.air.central:air-gentext-plugin:src/main/java/com/bmw/ispi/air/central/maven/gentext/HgUgTextsGenerator.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "TextLoader.java",
+                  "Key": "com.bmw.ispi.air.central:air-gentext-plugin:src/main/java/com/bmw/ispi/air/central/maven/gentext/TextLoader.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "TextWriter.java",
+                  "Key": "com.bmw.ispi.air.central:air-gentext-plugin:src/main/java/com/bmw/ispi/air/central/maven/gentext/TextWriter.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                }
+              ],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "src/test/java/com/bmw/ispi/air/central/maven/gentext",
+              "Key": "com.bmw.ispi.air.central:air-gentext-plugin:src/test/java/com/bmw/ispi/air/central/maven/gentext",
+              "Children": [
+                {
+                  "Name": "GenHgUgComponentsTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-gentext-plugin:src/test/java/com/bmw/ispi/air/central/maven/gentext/GenHgUgComponentsTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "GenHgUgTextsMojoTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-gentext-plugin:src/test/java/com/bmw/ispi/air/central/maven/gentext/GenHgUgTextsMojoTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "HgUgTextsGeneratorTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-gentext-plugin:src/test/java/com/bmw/ispi/air/central/maven/gentext/HgUgTextsGeneratorTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "MissingPropertiesApp.java",
+                  "Key": "com.bmw.ispi.air.central:air-gentext-plugin:src/test/java/com/bmw/ispi/air/central/maven/gentext/MissingPropertiesApp.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "TextLoaderTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-gentext-plugin:src/test/java/com/bmw/ispi/air/central/maven/gentext/TextLoaderTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "TextWriterTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-gentext-plugin:src/test/java/com/bmw/ispi/air/central/maven/gentext/TextWriterTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                }
+              ],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "air-loader-maven-plugin",
+          "Key": "com.bmw.ispi.air.central:air-loader-maven-plugin",
+          "Children": [
+            {
+              "Name": "src/main/java/com/bmw/ispi/air/central/maven/loader",
+              "Key": "com.bmw.ispi.air.central:air-loader-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/loader",
+              "Children": [
+                {
+                  "Name": "AbstractLoaderMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-loader-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/loader/AbstractLoaderMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "Loader.java",
+                  "Key": "com.bmw.ispi.air.central:air-loader-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/loader/Loader.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "RunBulkMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-loader-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/loader/RunBulkMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "RunDefaultMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-loader-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/loader/RunDefaultMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "RunDeltaMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-loader-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/loader/RunDeltaMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "RunFullMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-loader-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/loader/RunFullMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                }
+              ],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "src/test/java/com/bmw/ispi/air/central/maven/loader",
+              "Key": "com.bmw.ispi.air.central:air-loader-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/loader",
+              "Children": [
+                {
+                  "Name": "RunBulkMojoTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-loader-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/loader/RunBulkMojoTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "RunDefaultMojoTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-loader-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/loader/RunDefaultMojoTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "RunDeltaMojoTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-loader-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/loader/RunDeltaMojoTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "RunFullMojoTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-loader-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/loader/RunFullMojoTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "TestLoaderApp.java",
+                  "Key": "com.bmw.ispi.air.central:air-loader-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/loader/TestLoaderApp.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                }
+              ],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "air-provisioning-vm",
+          "Key": "com.bmw.ispi.air.central:air-provisioning-vm",
+          "Children": [],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "air-solr-index-splitter",
+          "Key": "com.bmw.ispi.air.central:air-solr-index-splitter",
+          "Children": [],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "air-staging-maven-plugin",
+          "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin",
+          "Children": [
+            {
+              "Name": "src/main/java/com/bmw/ispi/air/central/maven/staging",
+              "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging",
+              "Children": [
+                {
+                  "Name": "SshException.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/SshException.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "SshExecCommand.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/SshExecCommand.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "SshExecResult.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/SshExecResult.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "SshTransport.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/SshTransport.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "SshTransportFactory.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/SshTransportFactory.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                }
+              ],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "src/main/java/com/bmw/ispi/air/central/maven/staging/impl",
+              "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl",
+              "Children": [
+                {
+                  "Name": "AbstractAsadminMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/AbstractAsadminMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "AbstractCommandMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/AbstractCommandMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "AbstractStagingMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/AbstractStagingMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "AbstractTarballMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/AbstractTarballMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "AsadminCommandImpl.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/AsadminCommandImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "CdCommandImpl.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/CdCommandImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "CompositeCommandImpl.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/CompositeCommandImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "ExtractTarballCommandImpl.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/ExtractTarballCommandImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "GFserverCommand.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/GFserverCommand.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "GFserverSshExecCommandImpl.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/GFserverSshExecCommandImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "HotDeployWarMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/HotDeployWarMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "KillAllMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/KillAllMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "KillMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/KillMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "MkdirCommandImpl.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/MkdirCommandImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "RecreateMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/RecreateMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "RestoreMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/RestoreMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "RmCommandImpl.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/RmCommandImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "RollingUpgradeMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/RollingUpgradeMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "ScpCommandImpl.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/ScpCommandImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "SshExecCommandImpl.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/SshExecCommandImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "SshTransportFactoryImpl.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/SshTransportFactoryImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "SshTransportImpl.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/SshTransportImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "SshTransportUtil.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/SshTransportUtil.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "StartAllMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/StartAllMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "StartMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/StartMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "StatusMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/StatusMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "StopAllMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/StopAllMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "StopMojo.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/StopMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "UlimitCommandImpl.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/staging/impl/UlimitCommandImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                }
+              ],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "src/test/java/com/bmw/ispi/air/central/maven/staging/impl",
+              "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl",
+              "Children": [
+                {
+                  "Name": "AsadminCommandImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/AsadminCommandImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "CdCommandImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/CdCommandImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "CompositeCommandImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/CompositeCommandImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "ExtractTarballCommandImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/ExtractTarballCommandImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "GFserverSshExecCommandImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/GFserverSshExecCommandImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "HotDeployWarMojoTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/HotDeployWarMojoTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "KillAllMojoTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/KillAllMojoTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "KillMojoTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/KillMojoTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "MkdirCommandImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/MkdirCommandImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "RecreateMojoTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/RecreateMojoTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "RestoreMojoTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/RestoreMojoTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "RmCommandImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/RmCommandImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "RollingUpgradeMojoTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/RollingUpgradeMojoTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "ScpCommandImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/ScpCommandImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "SshExecCommandImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/SshExecCommandImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "SshTransportImplSlowTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/SshTransportImplSlowTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "SshTransportUtilTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/SshTransportUtilTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "StartAllMojoTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/StartAllMojoTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "StartMojoTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/StartMojoTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "StatusMojoTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/StatusMojoTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "StopAllMojoTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/StopAllMojoTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "StopMojoTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/StopMojoTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "UlimitCommandImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:air-staging-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/staging/impl/UlimitCommandImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                }
+              ],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "air-support-tools",
+          "Key": "com.bmw.ispi.air.central:air-support-tools",
+          "Children": [],
+          "Assoziations": null,
+          "Metrics": null
+        },
+        {
+          "Name": "mir-generator-maven-plugin",
+          "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin",
+          "Children": [
+            {
+              "Name": "src/main/java/com/bmw/ispi/air/central/maven/mir",
+              "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir",
+              "Children": [
+                {
+                  "Name": "AbstractGenerateMojo.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/AbstractGenerateMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "Artefact.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/Artefact.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "ArtefactStrategy.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/ArtefactStrategy.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "FileArtefact.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/FileArtefact.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "FileGenerator.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/FileGenerator.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "FileGeneratorFactory.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/FileGeneratorFactory.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "GenerateResourcesMojo.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/GenerateResourcesMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "GenerateSourcesMojo.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/GenerateSourcesMojo.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "GroovyArtefact.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/GroovyArtefact.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "JavaArtefact.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/JavaArtefact.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "JavaNames.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/JavaNames.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "JavaTypes.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/JavaTypes.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "MirAttribute.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/MirAttribute.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "MirModel.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/MirModel.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "MirModelHandler.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/MirModelHandler.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "MirSolrServerLocator.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/MirSolrServerLocator.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "MirSourceGenerator.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/MirSourceGenerator.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "MirSourceGeneratorStrategy.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/MirSourceGeneratorStrategy.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "MirSystem.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/MirSystem.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "MirTable.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/MirTable.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                }
+              ],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "src/main/java/com/bmw/ispi/air/central/maven/mir/impl",
+              "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/impl",
+              "Children": [
+                {
+                  "Name": "AbstractFileGenerator.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/impl/AbstractFileGenerator.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "AbstractMirSourceGeneratorStrategy.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/impl/AbstractMirSourceGeneratorStrategy.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "AllAttributesMirSourceGeneratorStrategyImpl.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/impl/AllAttributesMirSourceGeneratorStrategyImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "AllTablesMirSourceGeneratorStrategyImpl.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/impl/AllTablesMirSourceGeneratorStrategyImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "EmbeddedMirSolrServerLocatorImpl.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/impl/EmbeddedMirSolrServerLocatorImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "FileGeneratorType.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/impl/FileGeneratorType.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "ForEachTableMirSourceGeneratorStrategyImpl.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/impl/ForEachTableMirSourceGeneratorStrategyImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "FreemarkerFileGeneratorImpl.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/impl/FreemarkerFileGeneratorImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "GenericSourceGeneratorStrategyImpl.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/impl/GenericSourceGeneratorStrategyImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "MirModelHandlerImpl.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/impl/MirModelHandlerImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "MirSourceGeneratorImpl.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/impl/MirSourceGeneratorImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "SingleTableMirSourceGeneratorStrategyImpl.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/impl/SingleTableMirSourceGeneratorStrategyImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "VelocityFileGeneratorImpl.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/main/java/com/bmw/ispi/air/central/maven/mir/impl/VelocityFileGeneratorImpl.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                }
+              ],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "src/test/java/com/bmw/ispi/air/central/maven/mir",
+              "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir",
+              "Children": [
+                {
+                  "Name": "GenerateResourcesMojoTest.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/GenerateResourcesMojoTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "GenerateSourcesMojoTest.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/GenerateSourcesMojoTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "GroovyArtefactTest.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/GroovyArtefactTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "JavaArtefactTest.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/JavaArtefactTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "JavaTypesTest.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/JavaTypesTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "MirSystemTest.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/MirSystemTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "MirTableTest.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/MirTableTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "TestableMavenProjectStub.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/TestableMavenProjectStub.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                }
+              ],
+              "Assoziations": null,
+              "Metrics": null
+            },
+            {
+              "Name": "src/test/java/com/bmw/ispi/air/central/maven/mir/impl",
+              "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/impl",
+              "Children": [
+                {
+                  "Name": "AbstractMirSourceGeneratorStrategyTest.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/impl/AbstractMirSourceGeneratorStrategyTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "AllAttributesMirSourceGeneratorStrategyImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/impl/AllAttributesMirSourceGeneratorStrategyImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "AllTablesMirSourceGeneratorStrategyImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/impl/AllTablesMirSourceGeneratorStrategyImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "EmbeddedMirSolrServerLocatorImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/impl/EmbeddedMirSolrServerLocatorImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "FileGeneratorTypeTest.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/impl/FileGeneratorTypeTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "ForEachTableMirSourceGeneratorStrategyImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/impl/ForEachTableMirSourceGeneratorStrategyImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "FreemarkerFileGeneratorImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/impl/FreemarkerFileGeneratorImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "MirModelHandlerImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/impl/MirModelHandlerImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "MirSourceGeneratorImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/impl/MirSourceGeneratorImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "SingleTableMirSourceGeneratorStrategyImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/impl/SingleTableMirSourceGeneratorStrategyImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                },
+                {
+                  "Name": "VelocityFileGeneratorImplTest.java",
+                  "Key": "com.bmw.ispi.air.central:mir-generator-maven-plugin:src/test/java/com/bmw/ispi/air/central/maven/mir/impl/VelocityFileGeneratorImplTest.java",
+                  "Children": [],
+                  "Assoziations": null,
+                  "Metrics": null
+                }
+              ],
+              "Assoziations": null,
+              "Metrics": null
+            }
+          ],
+          "Assoziations": null,
+          "Metrics": null
+        }
+      ],
+      "Assoziations": null,
+      "Metrics": null
+    }
+  ],
+  "Assoziations": null,
+  "Metrics": null
+}

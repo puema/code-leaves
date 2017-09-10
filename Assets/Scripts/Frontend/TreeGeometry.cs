@@ -1,4 +1,5 @@
 ﻿using System;
+using Core;
 using UnityEngine;
 
 namespace Frontend
@@ -6,17 +7,27 @@ namespace Frontend
     public static class TreeGeometry
     {
         public const float NodeDistanceFactor = 0.05f;
-        
-        private static readonly double GoldenRatio = (1 + Math.Sqrt(5)) / 2;
+        public static readonly double GoldenRatio = (1 + Math.Sqrt(5)) / 2;
+        public static readonly double GoldenAngle = RadianToDegree(2 * Math.PI / Math.Pow(GoldenRatio, 2));
 
         /// <summary>
         /// Calculates the distance between the central node and the nth sibling
         /// </summary>
+        /// <param name="node"></param>
         /// <param name="n"></param>
         /// <returns>Radius</returns>
-        public static float CalcRadius(int n)
+        public static float CalcRadius(UiInnerNode node, int n)
         {
-            return (float) Math.Sqrt(n) * NodeDistanceFactor;
+//            if (node.Id == "com.bmw.ispi.air.central:air-staging-maven-plugin") Debug.Log(n);
+
+            if (n == 0)
+                return 0;
+
+            if (node.Children[n] is UiLeaf)
+                return (float) Math.Sqrt(n) * NodeDistanceFactor;
+
+            return (float) (Math.Sqrt(node.Children[0].GetWidth()) + Math.Sqrt(node.Children[n].GetWidth())) *
+                   NodeDistanceFactor;
         }
 
         /// <summary>

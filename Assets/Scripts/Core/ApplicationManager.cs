@@ -21,7 +21,7 @@ namespace Core
             AppData = null
         };
 
-        private const string TreeDataFile = "AirCbsStructure.json";
+        private const string TreeDataFile = "AirStructure.json";
 
         private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
@@ -51,14 +51,17 @@ namespace Core
         private void Start()
         {
             var trees = (Forest.Root as UiInnerNode)?.Children ?? new List<UiNode>();
-            var i = 0;
             var count = trees.Count;
-            foreach (var tree in trees)
+            for (var i = 0; i < count; i++)
             {
-                TreeBuilder.Instance.GenerateTree(tree,
-                    new Vector2((i - count / 2) * 3, (i - count / 2) * 3));
-                i++;
+                TreeBuilder.Instance.GenerateTree(trees[i], CalcTreePosition(trees, i));
             }
+        }
+
+        private Vector2 CalcTreePosition(IReadOnlyList<UiNode> trees, int n)
+        {
+            var x = n * 20f;
+            return new Vector2(x, 0);
         }
 
         private void SerializeData(object obj, string path)

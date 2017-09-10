@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Core;
 using UniRx;
 using UnityEngine;
 
@@ -43,7 +45,7 @@ namespace Frontend
         public override int GetHeight()
         {
             // Calculate max depth of each child, select the heighest and add to own depth
-            return Children?.Select(child => child.GetHeight()).Concat(new[] {0}).Max() + 1 ?? 0;
+            return Children?.Select(child => child.GetHeight()).Max() + 1 ?? 0;
         }
 
         public override int GetDescendantsCount()
@@ -53,7 +55,7 @@ namespace Frontend
 
         public override int GetWidth()
         {
-            return 0;
+            return Children?.Select(child => child.GetWidth()).Sum() ?? 0;
         }
 
         public override void SortChildren()
@@ -83,7 +85,7 @@ namespace Frontend
 
         public override int GetWidth()
         {
-            return 0;
+            return 1;
         }
 
         public override void SortChildren()
