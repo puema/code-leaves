@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Core;
-using UniRx;
-using UnityEngine;
+﻿﻿using System.Collections.Generic;
+ using System.Linq;
+ using UniRx;
+ using UnityEngine;
 
 namespace Frontend
 {

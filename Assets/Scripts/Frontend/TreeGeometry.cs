@@ -1,6 +1,6 @@
 ﻿using System;
-using Core;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Frontend
 {
@@ -9,6 +9,8 @@ namespace Frontend
         public const float NodeDistanceFactor = 0.05f;
         public static readonly double GoldenRatio = (1 + Math.Sqrt(5)) / 2;
         public static readonly double GoldenAngle = RadianToDegree(2 * Math.PI / Math.Pow(GoldenRatio, 2));
+        
+        private static Random Random = new Random();
 
         /// <summary>
         /// Calculates the distance between the central node and the nth sibling
@@ -18,8 +20,6 @@ namespace Frontend
         /// <returns>Radius</returns>
         public static float CalcRadius(UiInnerNode node, int n)
         {
-//            if (node.Id == "com.bmw.ispi.air.central:air-staging-maven-plugin") Debug.Log(n);
-
             if (n == 0)
                 return 0;
 
@@ -33,11 +33,12 @@ namespace Frontend
         /// <summary>
         /// Calculates the azimuth angle, the rotation of an edge around the y-axis
         /// </summary>
-        /// <param name="n"></param>
+        /// <param name="initial">Initial angle</param>
+        /// <param name="n">Nth point</param>
         /// <returns>Azimuth angle</returns>
-        public static float CalcPhi(int n)
+        public static float CalcPhi(int n, float initial)
         {
-            return RadianToDegree(2 * Math.PI * n / Math.Pow(GoldenRatio, 2));
+            return initial + RadianToDegree(2 * Math.PI * n / Math.Pow(GoldenRatio, 2));
         }
 
         /// <summary>
@@ -84,6 +85,11 @@ namespace Frontend
         public static float SizeToScale(float size, float defaultSize, float defaultScale)
         {
             return defaultScale * size / defaultSize;
+        }
+
+        public static float GetRandomAngle()
+        {
+            return Random.Next(0, 360);
         }
 
         private static float DegreeToRadian(float angle)

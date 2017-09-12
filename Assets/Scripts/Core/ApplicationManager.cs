@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Data;
@@ -21,7 +22,7 @@ namespace Core
             AppData = null
         };
 
-        private const string TreeDataFile = "AirStructure.json";
+        private const string TreeDataFile = "AirToolsStructure.json";
 
         private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
@@ -58,10 +59,13 @@ namespace Core
             }
         }
 
-        private Vector2 CalcTreePosition(IReadOnlyList<UiNode> trees, int n)
+        private static Vector2 CalcTreePosition(IReadOnlyCollection<UiNode> trees, int n)
         {
-            var x = n * 20f;
-            return new Vector2(x, 0);
+            var rowDistance = trees.Select(tree => tree.GetWidth()).Max() * 0.0025f;
+            var forestLength = (int) Math.Floor(Math.Sqrt(trees.Count));
+            var x = (n % forestLength - forestLength / 2) * rowDistance;
+            var y = (n / forestLength - forestLength / 2) * rowDistance;
+            return new Vector2(x, y);
         }
 
         private void SerializeData(object obj, string path)

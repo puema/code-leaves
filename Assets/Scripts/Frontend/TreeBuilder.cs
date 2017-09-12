@@ -1,6 +1,7 @@
 ﻿using HoloToolkit.Unity;
 using UniRx;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Frontend
 {
@@ -78,9 +79,11 @@ namespace Frontend
             {
                 var innerNode = (UiInnerNode) node;
 
+                var rndAngle = TreeGeometry.GetRandomAngle();
+                
                 for (var i = 0; i < innerNode.Children.Count; i++)
                 {
-                    var nodeObject = AddChild(innerNode, parentObject, i);
+                    var nodeObject = AddChild(innerNode, parentObject, i, rndAngle);
 
                     GenerateBranchs(innerNode.Children[i], nodeObject.transform);
                 }
@@ -98,10 +101,10 @@ namespace Frontend
             Debug.LogError("Unknown type of node, aborting structure generation");
         }
 
-        private GameObject AddChild(UiInnerNode node, Transform parent, int n)
+        private GameObject AddChild(UiInnerNode node, Transform parent, int n, float initialPhi = 0)
         {
             var r = TreeGeometry.CalcRadius(node, n);
-            var phi = TreeGeometry.CalcPhi(n);
+            var phi = TreeGeometry.CalcPhi(n, initialPhi);
             var theta = TreeGeometry.CalcTheta(DefaultEdgeHeight, r);
             var l = TreeGeometry.CalcEdgeLength(DefaultEdgeHeight, theta);
             var nodePosition = TreeGeometry.CalcNodePosition(l, theta, phi);
