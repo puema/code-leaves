@@ -22,7 +22,7 @@ namespace Core
             AppData = null
         };
 
-        private const string TreeDataFile = "AirToolsStructure.json";
+        private const string TreeDataFile = "TestStructure.json";
 
         private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {

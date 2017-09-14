@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.45011294, g: 0.50015485, b: 0.57545805, a: 1}
+  m_IndirectSpecularColor: {r: 0.45002466, g: 0.5000725, b: 0.5753673, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1878,17 +1878,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80f0a267e580c409f939168d580146d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Floor: {fileID: 320236158}
-  Edge: {fileID: 100000, guid: 8b44cdb28fa434139834fdbce47973b7, type: 3}
-  Leaf: {fileID: 100000, guid: 53d3ac3856451414fb781ce7a8eed188, type: 3}
-  LeafLabel: {fileID: 1645417770877770, guid: 1c439f1cec47e4dfb886493ca01d693d, type: 2}
-  InnerNodeLabel: {fileID: 1142729377975720, guid: 7f40173f12eaa494f82ded982428bcfa,
-    type: 2}
-  StandardShader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  FocusedShader: {fileID: 4800000, guid: cf9ebb8e83ba48d2bf8d1b04685a5301, type: 3}
-  UseAllwaysMainTrunk: 0
-  UseMainTrunkAt3Fork: 0
-  GrowInDirectionOfBranches: 0
 --- !u!4 &2014305779
 Transform:
   m_ObjectHideFlags: 0
@@ -1910,11 +1899,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 2014305777}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0166d8ff8d905b048b2448179e1f5d11, type: 3}
+  m_Script: {fileID: 11500000, guid: 2a07d682610c4a8bb8b86b018980f544, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _components:
-  - {fileID: 2014305778}
-  _identifier: 
-  _context: {fileID: 0}
-  _bindType: 0
+  Floor: {fileID: 320236158}
+  Edge: {fileID: 100000, guid: 8b44cdb28fa434139834fdbce47973b7, type: 3}
+  Leaf: {fileID: 100000, guid: 53d3ac3856451414fb781ce7a8eed188, type: 3}
+  LeafLabel: {fileID: 1645417770877770, guid: 1c439f1cec47e4dfb886493ca01d693d, type: 2}
+  InnerNodeLabel: {fileID: 1142729377975720, guid: 7f40173f12eaa494f82ded982428bcfa,
+    type: 2}
+  CirclePlane: {fileID: 1699572988692848, guid: 27bb87e9932e44bec88cfa5d902b99d5,
+    type: 2}
+  StandardShader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  FocusedShader: {fileID: 4800000, guid: cf9ebb8e83ba48d2bf8d1b04685a5301, type: 3}
+  VisualizeCircles:
+    value: 1

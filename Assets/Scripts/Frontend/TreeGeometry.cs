@@ -9,7 +9,7 @@ namespace Frontend
         public const float NodeDistanceFactor = 0.05f;
         public static readonly double GoldenRatio = (1 + Math.Sqrt(5)) / 2;
         public static readonly double GoldenAngle = RadianToDegree(2 * Math.PI / Math.Pow(GoldenRatio, 2));
-        
+
         private static Random Random = new Random();
 
         /// <summary>
@@ -80,6 +80,33 @@ namespace Frontend
             var z = (float) (Math.Cos(phi) * Math.Sin(theta) * l);
 
             return new Vector3(x, y, z);
+        }
+
+        private static Vector2 CalcTangentCircleCenter(Vector2 c1, Vector2 c2, float r1, float r2, float r3)
+        {
+            var a = r1 + r3;
+            var b = r2 + r3;
+            var c = r2 + r2;
+
+            var alpha = CalcAlpha(a, b, c);
+
+            var x = r1;
+            var y = (float) Math.Sin(DegreeToRadian(alpha)) * b;
+
+            return new Vector2(x, y);
+        }
+
+        /// <summary>
+        /// Calculates the alpha angle of a trianle with 3 given sides
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        public static float CalcAlpha(float a, float b, float c)
+        {
+            // Law of cosins
+            return RadianToDegree(Math.Acos((Math.Pow(b, 2) + Math.Pow(c, 2) - Math.Pow(a, 2)) / 2 * b * c));
         }
 
         public static float SizeToScale(float size, float defaultSize, float defaultScale)
