@@ -15,13 +15,34 @@ namespace Utilities
         {
             return current.Previous ?? current.List.Last;
         }
-        
-        public static int GetIndex<T>(this LinkedList<T> list, T node)
+
+        public static bool IsAfter<T>(this LinkedListNode<T> find, LinkedListNode<T> node)
         {
-            var index = list.TakeWhile(n => n.Equals(node)).Count();
-            if (index == list.Count)
-                throw new InvalidOperationException("No match.");
-            return index == list.Count ? -1 : index;
+            var found = false;
+            var next = node;
+            var previous = node;
+            
+            while (!found)
+            {
+                next = next.Next();
+                previous = previous.Previous();
+                
+                if (next == previous || next.Next() == previous)
+                    throw new InvalidOperationException("No match.");
+
+                if (next == find || previous == find)
+                    found = true;
+            }
+            
+            return next.Equals(find);
+        }
+
+        public static void DeleteAfterUntil<T>(this LinkedListNode<T> after, LinkedListNode<T> until)
+        {
+            while (after.Next() != until)
+            {
+                after.List.Remove(after.Next());
+            }
         }
     }
 }

@@ -11,11 +11,6 @@ namespace Frontend
     {
         private Instantiator Instantiator;
 
-        protected override void Awake()
-        {
-            base.Awake();
-        }
-
         /// <summary>
         /// Generates the unity tree according to the given data structure of the node
         /// </summary>
@@ -54,6 +49,10 @@ namespace Frontend
                     DistributeCirclePacking(innerNode, parent);
                 }
 
+                Instantiator.AddCircleVisualization(
+                    parent.Find(Instantiator.BranchName).Find(Instantiator.NodeName),
+                    innerNode.Circle.Radius);
+
                 return;
             }
 
@@ -80,10 +79,6 @@ namespace Frontend
             }
 
             innerNode.Circle.Radius = TreeGeometry.CalcRadius(innerNode.Children.Count - 1);
-
-            Instantiator.AddCircleVisualization(
-                parent.Find(Instantiator.BranchName).Find(Instantiator.NodeName),
-                innerNode.Circle.Radius);
         }
 
         /// <summary>
@@ -97,70 +92,88 @@ namespace Frontend
 
             if (innerNode.Children.Count <= 1) return;
 
-            var C_1 = innerNode.Children[0].Circle;
-            var C_2 = innerNode.Children[1].Circle;
-
-            C_2.Position.Value = TreeGeometry.CalcTangentCircleCenter(C_1.Position.Value, C_1.Radius, C_2.Radius,
-                TreeGeometry.GetRandomAngle());
-
-            var frontChain = new LinkedList<Circle>(new[] {C_1, C_2});
+            var frontChain = new LinkedList<Circle>();
+            
+            AddToFrontChain(frontChain, innerNode.Children[0].Circle, innerNode.Children[1].Circle);
 
             for (var i = 2; i < innerNode.Children.Count; i++)
             {
-                var C_m = frontChain.Aggregate(
-                    (current, next) =>
-                        next.Position.Value.magnitude < current.Position.Value.magnitude ? next : current);
-                // m = n + 1
-                var C_n_Node = frontChain.Find(C_m).Next();
-                var C_n = C_n_Node.Value;
-//                var C_n = frontChain.Last.Value;
+                // C_m is circle with minimal distance to origin
+                var C_m = GetC_m(frontChain);
 
+                // C_n is circle after C_n, n = m + 1
+                var C_n = C_m.Next();
+
+                // C_i is circle of current inner node, claculate potential position
                 var C_i_radius = innerNode.Children[i].Circle.Radius;
-                var C_i_position = TreeGeometry.CalcTangentCircleCenter(C_m.Position.Value, C_n.Position.Value,
-                    C_m.Radius,
-                    C_n.Radius, C_i_radius);
-                
-                Circle C_j;
-                try
-                {
-                    C_j = frontChain.First(c =>
-                        TreeGeometry.Intersects(c.Position.Value, C_i_position, c.Radius, C_i_radius));
-                }
-                catch
-                {
-                    C_j = null;
-                }
-                
+                var C_i_position = TreeGeometry.CalcTangentCircleCenter(C_m.Value.Position.Value, 
+                    C_n.Value.Position.Value, C_m.Value.Radius, C_n.Value.Radius, C_i_radius);
+
+                // C_j is circle that intersects C_i
+                var C_j = GetC_j(frontChain, C_i_position, C_i_radius);
+
+                // No intersection, place C_i
                 if (C_j == null)
                 {
                     innerNode.Children[i].Circle.Position.Value = C_i_position;
-                    frontChain.AddBefore(C_n_Node, innerNode.Children[i].Circle);
+                    frontChain.AddBefore(C_n, innerNode.Children[i].Circle);
                     continue;
                 }
-                
-//                if (frontChain.GetIndex(C_j) > frontChain.GetIndex(C_n))
-//                {
-//                    var next = frontChain.Find(C_j).Next();
-//                    while (next.Value != C_n)
-//                    {
-//                        next = next.Next;
-//                        frontChain.Remove(next.Previous);
-//                    }
-//                }
-//                else
-//                {
-//                    var previous = frontChain.Find(C_j).Previous();
-//                    while (previous.Value != C_n)
-//                    {
-//                        previous = previous.Previous;
-//                        frontChain.Remove(previous.Next);
-//                    }
-//                }
 
+                // Delete old circles from front chain
+                if (C_j.IsAfter(C_n))
+                {
+                    C_m.DeleteAfterUntil(C_j);
+                }
+                else
+                {
+                    C_j.DeleteAfterUntil(C_n);
+                }
+
+                // Proceed with C_i circle again, position is calculated according to updated front chain
+                i--;
             }
 
+            var C_max = frontChain.Aggregate(
+                (current, next) =>
+                    next.Position.Value.magnitude + next.Radius > current.Position.Value.magnitude + current.Radius
+                        ? next
+                        : current);
+
+            innerNode.Circle.Radius = Vector2.Distance(C_max.Position.Value, Vector2.zero) + C_max.Radius;
         }
-        
+
+        private static void AddToFrontChain(LinkedList<Circle> frontChain, Circle c1, Circle c2)
+        {
+            c2.Position.Value = TreeGeometry.CalcTangentCircleCenter(c1.Position.Value, c1.Radius, c2.Radius,
+                TreeGeometry.GetRandomAngle());
+            frontChain.AddLast(c1);
+            frontChain.AddLast(c2);
+        }
+
+        private static LinkedListNode<Circle> GetC_m(LinkedList<Circle> frontChain)
+        {
+            var C_m = frontChain.Aggregate(
+                (current, next) =>
+                    next.Position.Value.magnitude < current.Position.Value.magnitude ? next : current);
+            return frontChain.Find(C_m);
+        }
+
+        private static LinkedListNode<Circle> GetC_j(LinkedList<Circle> frontChain, Vector2 C_i_position, float C_i_radius)
+        {
+            Circle C_j;
+            try
+            {
+                C_j = frontChain.First(c =>
+                    TreeGeometry.Intersects(c.Position.Value, C_i_position, c.Radius, C_i_radius));
+            }
+            catch
+            {
+                C_j = null;
+            }
+            return frontChain.Find(C_j);
+        }
+
         private void GenerateUnsdistributedBranches(UiInnerNode innerNode, Transform parent)
         {
             foreach (var child in innerNode.Children)

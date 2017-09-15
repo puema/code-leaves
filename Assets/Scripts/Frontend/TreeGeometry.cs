@@ -139,7 +139,6 @@ namespace Frontend
 
         public static bool Intersects(Vector2 c1, Vector2 c2, float r1, float r2)
         {
-            Debug.Log(r1 + r2 - Vector2.Distance(c1, c2));
             return r1 + r2 - Vector2.Distance(c1, c2) > IntersectTolerance;
         }
 

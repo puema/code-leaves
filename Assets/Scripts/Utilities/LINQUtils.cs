@@ -2,20 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public static class LINQUtils
+namespace Utilities
 {
-    public static IEnumerable<T> Traverse<T>(this T source, Func<T, IEnumerable<T>> childSelector)
+    public static class LINQUtils
     {
-        var queue = new Queue<T>();
-        queue.Enqueue(source);
-        while (queue.Any())
+        public static IEnumerable<T> Traverse<T>(this T source, Func<T, IEnumerable<T>> childSelector)
         {
-            var next = queue.Dequeue();
-            yield return next;
-            var childs = childSelector(next);
-            if (childs == null) continue;
-            foreach (var child in childs)
-                queue.Enqueue(child);
+            var queue = new Queue<T>();
+            queue.Enqueue(source);
+            while (queue.Any())
+            {
+                var next = queue.Dequeue();
+                yield return next;
+                var childs = childSelector(next);
+                if (childs == null) continue;
+                foreach (var child in childs)
+                    queue.Enqueue(child);
+            }
         }
     }
 }

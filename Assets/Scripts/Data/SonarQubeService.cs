@@ -10,6 +10,7 @@ using Data;
 using HoloToolkit.Unity;
 using Newtonsoft.Json;
 using UnityEngine;
+using Logger = Utilities.Logger;
 
 public class SonarQubeService : Singleton<SonarQubeService>
 {
