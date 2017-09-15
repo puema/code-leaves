@@ -1,7 +1,7 @@
-﻿﻿using System.Collections.Generic;
- using System.Linq;
- using UniRx;
- using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UniRx;
+using UnityEngine;
 
 namespace Frontend
 {
@@ -18,7 +18,9 @@ namespace Frontend
 
     public abstract class UiNode
     {
-        public string Id;
+        public string Id { get; set; }
+
+        public Circle Circle { get; set; } = new Circle();
 
         public ReactiveProperty<string> Text { get; set; }
         public ReactiveProperty<bool> IsSelected { get; set; }
@@ -38,7 +40,6 @@ namespace Frontend
         public ReactiveProperty<float> Thickness { set; get; }
 
         public List<UiNode> Children { get; set; }
-
 
         public override int GetHeight()
         {
@@ -65,6 +66,12 @@ namespace Frontend
             Children?
                 .ForEach(x => x.SortChildren());
         }
+    }
+
+    public class Circle
+    {
+        public float Radius { get; set; } = 0;
+        public ReactiveProperty<Vector2> Position { get; set; } = new ReactiveProperty<Vector2>(new Vector2(0, 0));
     }
 
     public class UiLeaf : UiNode

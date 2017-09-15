@@ -5,7 +5,7 @@ using Utilities;
 
 namespace Frontend
 {
-    public class ObjectInstantiator : Singleton<ObjectInstantiator>
+    public class Instantiator : Singleton<Instantiator>
     {
         // ----==== Meshes as public variables ====---- //
         public GameObject Floor;
