@@ -7,7 +7,7 @@ namespace Frontend
     public static class TreeGeometry
     {
         public const float NodeDistanceFactor = 0.05f;
-        public const float IntersectTolerance = 1.0E-7f;
+        public const float IntersectTolerance = 1.0E-5f;
         public static readonly double GoldenRatio = (1 + Math.Sqrt(5)) / 2;
         public static readonly double GoldenAngle = RadianToDegree(2 * Math.PI / Math.Pow(GoldenRatio, 2));
 
@@ -18,7 +18,7 @@ namespace Frontend
         /// </summary>
         /// <param name="n"></param>
         /// <returns>Radius</returns>
-        public static float CalcRadius(int n)
+        public static float CalcSunflowerRadius(int n)
         {
             return (float) Math.Sqrt(n) * NodeDistanceFactor;
         }
@@ -104,8 +104,9 @@ namespace Frontend
             var d = c2 - c1;
             var d1 = (float) (0.5f * ((Math.Pow(r1, 2) - Math.Pow(r2, 2)) / Math.Pow(d.magnitude, 2) + 1)) * d;
             var h = (float) Math.Sqrt(Math.Pow(r1, 2) - Math.Pow(d1.magnitude, 2));
+            h = float.IsNaN(h) ? 0 : h;
             var e1 = d.normalized;
-            var e2 = new Vector2(- e1.y, e1.x);
+            var e2 = new Vector2(-e1.y, e1.x);
             var c3_1 = c1 + d1 + h * e2;
             var c3_2 = c1 + d1 - h * e2;
             return new[] {c3_1, c3_2};

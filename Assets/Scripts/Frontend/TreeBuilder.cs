@@ -4,6 +4,7 @@ using HoloToolkit.Unity;
 using UniRx;
 using UnityEngine;
 using Utilities;
+using Logger = Utilities.Logger;
 
 namespace Frontend
 {
@@ -46,6 +47,7 @@ namespace Frontend
                 }
                 else
                 {
+                    GenerateUnsdistributedBranches(innerNode, parent);
                     DistributeCirclePacking(innerNode, parent);
                 }
 
@@ -78,7 +80,9 @@ namespace Frontend
                 GenerateBranches(child, nodeObject.transform);
             }
 
-            innerNode.Circle.Radius = TreeGeometry.CalcRadius(innerNode.Children.Count - 1);
+            innerNode.Circle.Radius = innerNode.Children.Count == 1
+                ? TreeGeometry.NodeDistanceFactor
+                : TreeGeometry.CalcSunflowerRadius(innerNode.Children.Count - 1);
         }
 
         /// <summary>
@@ -88,59 +92,59 @@ namespace Frontend
         /// <param name="parent"></param>
         private void DistributeCirclePacking(UiInnerNode innerNode, Transform parent)
         {
-            GenerateUnsdistributedBranches(innerNode, parent);
-
             if (innerNode.Children.Count <= 1) return;
 
             var frontChain = new LinkedList<Circle>();
-            
+
             AddToFrontChain(frontChain, innerNode.Children[0].Circle, innerNode.Children[1].Circle);
 
             for (var i = 2; i < innerNode.Children.Count; i++)
             {
-                // C_m is circle with minimal distance to origin
-                var C_m = GetC_m(frontChain);
+                // circle with minimal distance to origin
+                var tangentCircle1 = GetClosestFromOrigin(frontChain);
 
-                // C_n is circle after C_n, n = m + 1
-                var C_n = C_m.Next();
+                // circle after tangent circle 1
+                var tangentCircle2 = tangentCircle1.Next();
 
-                // C_i is circle of current inner node, claculate potential position
-                var C_i_radius = innerNode.Children[i].Circle.Radius;
-                var C_i_position = TreeGeometry.CalcTangentCircleCenter(C_m.Value.Position.Value, 
-                    C_n.Value.Position.Value, C_m.Value.Radius, C_n.Value.Radius, C_i_radius);
+                // circle of current inner node, claculate potential position
+                var currentCircleRad = innerNode.Children[i].Circle.Radius;
+                var currentCirclePos = TreeGeometry.CalcTangentCircleCenter(tangentCircle1.Value.Position.Value,
+                    tangentCircle2.Value.Position.Value, tangentCircle1.Value.Radius, tangentCircle2.Value.Radius,
+                    currentCircleRad);
 
-                // C_j is circle that intersects C_i
-                var C_j = GetC_j(frontChain, C_i_position, C_i_radius);
+                // circle that intersects current circle
+                var intersectingCircle = GetIntersectingCircle(frontChain, currentCirclePos, currentCircleRad);
 
-                // No intersection, place C_i
-                if (C_j == null)
+                // No intersection, place current circle
+                if (intersectingCircle == null)
                 {
-                    innerNode.Children[i].Circle.Position.Value = C_i_position;
-                    frontChain.AddBefore(C_n, innerNode.Children[i].Circle);
+                    innerNode.Children[i].Circle.Position.Value = currentCirclePos;
+                    frontChain.AddBefore(tangentCircle2, innerNode.Children[i].Circle);
                     continue;
                 }
 
                 // Delete old circles from front chain
-                if (C_j.IsAfter(C_n))
+                if (intersectingCircle.IsAfter(tangentCircle2))
                 {
-                    C_m.DeleteAfterUntil(C_j);
+                    tangentCircle1.DeleteAfterUntil(intersectingCircle);
                 }
                 else
                 {
-                    C_j.DeleteAfterUntil(C_n);
+                    intersectingCircle.DeleteAfterUntil(tangentCircle2);
                 }
 
-                // Proceed with C_i circle again, position is calculated according to updated front chain
+                // Proceed with current circle again, position is calculated according to updated front chain
                 i--;
             }
 
-            var C_max = frontChain.Aggregate(
+            var maxDistanceCircle = frontChain.Aggregate(
                 (current, next) =>
                     next.Position.Value.magnitude + next.Radius > current.Position.Value.magnitude + current.Radius
                         ? next
                         : current);
 
-            innerNode.Circle.Radius = Vector2.Distance(C_max.Position.Value, Vector2.zero) + C_max.Radius;
+            innerNode.Circle.Radius = Vector2.Distance(maxDistanceCircle.Position.Value, Vector2.zero) +
+                                      maxDistanceCircle.Radius;
         }
 
         private static void AddToFrontChain(LinkedList<Circle> frontChain, Circle c1, Circle c2)
@@ -151,27 +155,17 @@ namespace Frontend
             frontChain.AddLast(c2);
         }
 
-        private static LinkedListNode<Circle> GetC_m(LinkedList<Circle> frontChain)
+        private static LinkedListNode<Circle> GetClosestFromOrigin(LinkedList<Circle> frontChain)
         {
-            var C_m = frontChain.Aggregate(
-                (current, next) =>
-                    next.Position.Value.magnitude < current.Position.Value.magnitude ? next : current);
-            return frontChain.Find(C_m);
+            return frontChain.Find(frontChain.Aggregate(
+                (current, next) => next.Position.Value.magnitude < current.Position.Value.magnitude ? next : current));
         }
 
-        private static LinkedListNode<Circle> GetC_j(LinkedList<Circle> frontChain, Vector2 C_i_position, float C_i_radius)
+        private static LinkedListNode<Circle> GetIntersectingCircle(LinkedList<Circle> frontChain, Vector2 position,
+            float radius)
         {
-            Circle C_j;
-            try
-            {
-                C_j = frontChain.First(c =>
-                    TreeGeometry.Intersects(c.Position.Value, C_i_position, c.Radius, C_i_radius));
-            }
-            catch
-            {
-                C_j = null;
-            }
-            return frontChain.Find(C_j);
+            return frontChain.Find(frontChain.FirstOrDefault(
+                c => TreeGeometry.Intersects(c.Position.Value, position, c.Radius, radius)));
         }
 
         private void GenerateUnsdistributedBranches(UiInnerNode innerNode, Transform parent)
@@ -193,7 +187,7 @@ namespace Frontend
 
         private GameObject AddChildContainer(UiNode node, Transform parent, int n, float initialPhi = 0)
         {
-            var r = TreeGeometry.CalcRadius(n);
+            var r = TreeGeometry.CalcSunflowerRadius(n);
             var phi = TreeGeometry.CalcPhi(n, initialPhi);
             var theta = TreeGeometry.CalcTheta(Instantiator.DefaultEdgeHeight, r);
             var l = TreeGeometry.CalcEdgeLength(Instantiator.DefaultEdgeHeight, theta);

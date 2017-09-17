@@ -22,7 +22,7 @@ namespace Core
             AppData = null
         };
 
-        private const string TreeDataFile = "TestStructure.json";
+        private const string TreeDataFile = "AirStructure.json";
 
         private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
@@ -61,7 +61,7 @@ namespace Core
 
         private static Vector2 CalcTreePosition(IReadOnlyCollection<UiNode> trees, int n)
         {
-            var rowDistance = trees.Select(tree => tree.GetWidth()).Max() * 0.0025f;
+            const float rowDistance = 1.3f;
             var forestLength = (int) Math.Floor(Math.Sqrt(trees.Count));
             var x = (n % forestLength - forestLength / 2) * rowDistance;
             var y = (n / forestLength - forestLength / 2) * rowDistance;

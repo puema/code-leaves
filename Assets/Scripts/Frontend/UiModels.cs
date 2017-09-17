@@ -20,7 +20,7 @@ namespace Frontend
     {
         public string Id { get; set; }
 
-        public Circle Circle { get; set; } = new Circle();
+        public abstract Circle Circle { get; set; }
 
         public ReactiveProperty<string> Text { get; set; }
         public ReactiveProperty<bool> IsSelected { get; set; }
@@ -38,6 +38,8 @@ namespace Frontend
     public class UiInnerNode : UiNode
     {
         public ReactiveProperty<float> Thickness { set; get; }
+        
+        public override Circle Circle { get; set; } = new Circle();
 
         public List<UiNode> Children { get; set; }
 
@@ -77,6 +79,8 @@ namespace Frontend
     public class UiLeaf : UiNode
     {
         public ReactiveProperty<Color?> Color { get; set; }
+        
+        public override Circle Circle { get; set; } = new Circle{ Radius = TreeGeometry.NodeDistanceFactor / 2 };
 
         public override int GetHeight()
         {
