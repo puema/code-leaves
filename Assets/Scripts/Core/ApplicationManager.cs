@@ -51,12 +51,18 @@ namespace Core
 
         private void Start()
         {
-            var trees = (Forest.Root as UiInnerNode)?.Children ?? new List<UiNode>();
-            var count = trees.Count;
-            for (var i = 0; i < count; i++)
+            var forest = Forest.Root as UiInnerNode;
+            forest?.SortChildren();
+            var trees = forest?.Children ?? new List<UiNode>();
+            for (var i = 0; i < trees.Count; i++)
             {
-                TreeBuilder.Instance.GenerateTree(trees[i], CalcTreePosition(trees, i));
+                var treeObject = TreeBuilder.Instance.GenerateTree(trees[i], CalcTreePosition(trees, i));
+                trees[i].Circle.Position.Subscribe(v =>
+                {
+                    treeObject.transform.position = new Vector3(v.x, 0, v.y);
+                });
             }
+            TreeBuilder.Instance.CirclePacking(Forest.Root as UiInnerNode);
         }
 
         private static Vector2 CalcTreePosition(IReadOnlyCollection<UiNode> trees, int n)

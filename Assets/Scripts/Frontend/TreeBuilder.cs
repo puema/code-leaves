@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using HoloToolkit.Unity;
 using UniRx;
@@ -17,7 +18,7 @@ namespace Frontend
         /// </summary>
         /// <param name="node"></param>
         /// <param name="position"></param>
-        public void GenerateTree(UiNode node, Vector2 position)
+        public GameObject GenerateTree(UiNode node, Vector2 position)
         {
             Instantiator = Instantiator.Instance;
             var tree = Instantiator.AddTreeObject(position);
@@ -26,8 +27,8 @@ namespace Frontend
                 Instantiator.AddEdgeObject(trunkObject.transform, Instantiator.DefaultEdgeScale.y, 0, 0);
             var nodeObject = Instantiator.AddEmptyNodeObject(node, trunkObject.transform,
                 new Vector3(0, Instantiator.DefaultEdgeHeight, 0), edgeObject);
-            node.SortChildren();
             GenerateBranches(node, nodeObject.transform);
+            return tree;
         }
 
         /// <summary>
@@ -47,7 +48,6 @@ namespace Frontend
                 }
                 else
                 {
-                    GenerateUnsdistributedBranches(innerNode, parent);
                     DistributeCirclePacking(innerNode, parent);
                 }
 
@@ -85,18 +85,29 @@ namespace Frontend
                 : TreeGeometry.CalcSunflowerRadius(innerNode.Children.Count - 1);
         }
 
+        private void DistributeCirclePacking(UiInnerNode innerNode, Transform parent)
+        {
+            GenerateUnsdistributedBranches(innerNode, parent);
+
+            var frontChain = CirclePacking(innerNode);
+
+            var maxDistanceCircle = frontChain.Aggregate(
+                (current, next) =>
+                    next.Position.Value.magnitude + next.Radius > current.Position.Value.magnitude + current.Radius
+                        ? next
+                        : current);
+
+            innerNode.Circle.Radius = Vector2.Distance(maxDistanceCircle.Position.Value, Vector2.zero) +
+                                      maxDistanceCircle.Radius;
+        }
+
         /// <summary>
         /// From Wang's circle packing algorithm, see "Visualization of large hierarchical data by circle packing"
         /// </summary>
         /// <param name="innerNode"></param>
-        /// <param name="parent"></param>
-        private void DistributeCirclePacking(UiInnerNode innerNode, Transform parent)
+        internal LinkedList<Circle> CirclePacking(UiInnerNode innerNode)
         {
-            if (innerNode.Children.Count <= 1) return;
-
-            var frontChain = new LinkedList<Circle>();
-
-            AddToFrontChain(frontChain, innerNode.Children[0].Circle, innerNode.Children[1].Circle);
+            var frontChain = InitFrontchain(innerNode);
 
             for (var i = 2; i < innerNode.Children.Count; i++)
             {
@@ -137,22 +148,27 @@ namespace Frontend
                 i--;
             }
 
-            var maxDistanceCircle = frontChain.Aggregate(
-                (current, next) =>
-                    next.Position.Value.magnitude + next.Radius > current.Position.Value.magnitude + current.Radius
-                        ? next
-                        : current);
-
-            innerNode.Circle.Radius = Vector2.Distance(maxDistanceCircle.Position.Value, Vector2.zero) +
-                                      maxDistanceCircle.Radius;
+            return frontChain;
         }
 
-        private static void AddToFrontChain(LinkedList<Circle> frontChain, Circle c1, Circle c2)
+        private static LinkedList<Circle> InitFrontchain(UiInnerNode node)
         {
-            c2.Position.Value = TreeGeometry.CalcTangentCircleCenter(c1.Position.Value, c1.Radius, c2.Radius,
-                TreeGeometry.GetRandomAngle());
+            var frontChain = new LinkedList<Circle>();
+
+            if (node.Children.Count == 0) return frontChain;
+
+            var c1 = node.Children[0].Circle;
             frontChain.AddLast(c1);
+
+            if (node.Children.Count == 1) return frontChain;
+
+            var c2 = node.Children[1].Circle;
+            c2.Position.Value = TreeGeometry.CalcTangentCircleCenter(c1.Position.Value, c1.Radius,
+                c2.Radius,
+                TreeGeometry.GetRandomAngle());
             frontChain.AddLast(c2);
+
+            return frontChain;
         }
 
         private static LinkedListNode<Circle> GetClosestFromOrigin(LinkedList<Circle> frontChain)
@@ -176,7 +192,7 @@ namespace Frontend
                 var edgeObject =
                     Instantiator.AddEdgeObject(branchObject.transform, Instantiator.DefaultEdgeScale.y, 0, 0);
                 var nodeObject =
-                    Instantiator.AddEmptyNodeObject(innerNode, branchObject.transform,
+                    Instantiator.AddEmptyNodeObject(child, branchObject.transform,
                         Vector3.up * Instantiator.DefaultEdgeHeight, edgeObject);
 
                 SubscribeNodePosition(child.Circle, nodeObject, edgeObject);
