@@ -138,7 +138,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1322054983157204}
-  m_Mesh: {fileID: 4300000, guid: b7545e8ef292d46bba6e47216e64e4ac, type: 3}
+  m_Mesh: {fileID: 4300000, guid: c6af4768766004593bd24886717a18f8, type: 3}
 --- !u!64 &64336560851302030
 MeshCollider:
   m_ObjectHideFlags: 1
@@ -152,4 +152,4 @@ MeshCollider:
   m_Convex: 0
   m_InflateMesh: 0
   m_SkinWidth: 0.01
-  m_Mesh: {fileID: 4300000, guid: b7545e8ef292d46bba6e47216e64e4ac, type: 3}
+  m_Mesh: {fileID: 4300000, guid: c6af4768766004593bd24886717a18f8, type: 3}

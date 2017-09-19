@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using HoloToolkit.Unity;
-using UniRx;
 using UnityEngine;
 using Utilities;
-using Logger = Utilities.Logger;
 
 namespace Frontend
 {
     public class TreeBuilder : Singleton<TreeBuilder>
     {
-        private Instantiator Instantiator;
+        private SceneManipulator sceneManipulator;
 
         /// <summary>
         /// Generates the unity tree according to the given data structure of the node
@@ -20,13 +17,13 @@ namespace Frontend
         /// <param name="position"></param>
         public GameObject GenerateTree(UiNode node, Vector2 position)
         {
-            Instantiator = Instantiator.Instance;
-            var tree = Instantiator.AddTreeObject(position);
-            var trunkObject = Instantiator.AddEmptyBranchObject(tree.transform);
+            sceneManipulator = SceneManipulator.Instance;
+            var tree = sceneManipulator.AddTreeObject(position);
+            var trunkObject = sceneManipulator.AddEmptyBranchObject(tree.transform);
             var edgeObject =
-                Instantiator.AddEdgeObject(trunkObject.transform, Instantiator.DefaultEdgeScale.y, 0, 0);
-            var nodeObject = Instantiator.AddEmptyNodeObject(node, trunkObject.transform,
-                new Vector3(0, Instantiator.DefaultEdgeHeight, 0), edgeObject);
+                sceneManipulator.AddEdgeObject(trunkObject.transform, sceneManipulator.DefaultEdgeScale.y, 0, 0);
+            var nodeObject = sceneManipulator.AddEmptyNodeObject(node, trunkObject.transform,
+                new Vector3(0, sceneManipulator.DefaultEdgeHeight, 0), edgeObject);
             GenerateBranches(node, nodeObject.transform);
             return tree;
         }
@@ -51,8 +48,8 @@ namespace Frontend
                     DistributeCirclePacking(innerNode, parent);
                 }
 
-                Instantiator.AddCircleVisualization(
-                    parent.Find(Instantiator.BranchName).Find(Instantiator.NodeName),
+                sceneManipulator.AddCircleVisualization(
+                    parent.Find(SceneManipulator.BranchName).Find(SceneManipulator.NodeName),
                     innerNode.Circle.Radius);
 
                 return;
@@ -61,7 +58,7 @@ namespace Frontend
             if (node is UiLeaf)
             {
                 var leaf = (UiLeaf) node;
-                Instantiator.AddLeafObject(parent, leaf);
+                sceneManipulator.AddLeafObject(parent, leaf);
                 return;
             }
 
@@ -89,16 +86,7 @@ namespace Frontend
         {
             GenerateUnsdistributedBranches(innerNode, parent);
 
-            var frontChain = CirclePacking(innerNode);
-
-            var maxDistanceCircle = frontChain.Aggregate(
-                (current, next) =>
-                    next.Position.Value.magnitude + next.Radius > current.Position.Value.magnitude + current.Radius
-                        ? next
-                        : current);
-
-            innerNode.Circle.Radius = Vector2.Distance(maxDistanceCircle.Position.Value, Vector2.zero) +
-                                      maxDistanceCircle.Radius;
+            CirclePacking(innerNode);
         }
 
         /// <summary>
@@ -147,8 +135,22 @@ namespace Frontend
                 // Proceed with current circle again, position is calculated according to updated front chain
                 i--;
             }
+            
+            innerNode.Circle.Radius = GetEnclosingRadius(frontChain);
 
             return frontChain;
+        }
+
+        private static float GetEnclosingRadius(IEnumerable<Circle> frontChain)
+        {
+            var maxDistanceCircle = frontChain.Aggregate(
+                (current, next) =>
+                    next.Position.Value.magnitude + next.Radius > current.Position.Value.magnitude + current.Radius
+                        ? next
+                        : current);
+
+            return Vector2.Distance(maxDistanceCircle.Position.Value, Vector2.zero) +
+                                      maxDistanceCircle.Radius;
         }
 
         private static LinkedList<Circle> InitFrontchain(UiInnerNode node)
@@ -188,14 +190,14 @@ namespace Frontend
         {
             foreach (var child in innerNode.Children)
             {
-                var branchObject = Instantiator.AddEmptyBranchObject(parent);
+                var branchObject = sceneManipulator.AddEmptyBranchObject(parent);
                 var edgeObject =
-                    Instantiator.AddEdgeObject(branchObject.transform, Instantiator.DefaultEdgeScale.y, 0, 0);
+                    sceneManipulator.AddEdgeObject(branchObject.transform, sceneManipulator.DefaultEdgeScale.y, 0, 0);
                 var nodeObject =
-                    Instantiator.AddEmptyNodeObject(child, branchObject.transform,
-                        Vector3.up * Instantiator.DefaultEdgeHeight, edgeObject);
+                    sceneManipulator.AddEmptyNodeObject(child, branchObject.transform,
+                        Vector3.up * sceneManipulator.DefaultEdgeHeight, edgeObject);
 
-                SubscribeNodePosition(child.Circle, nodeObject, edgeObject);
+                sceneManipulator.SubscribeNodePosition(child.Circle, nodeObject, edgeObject);
 
                 GenerateBranches(child, nodeObject.transform);
             }
@@ -205,43 +207,18 @@ namespace Frontend
         {
             var r = TreeGeometry.CalcSunflowerRadius(n);
             var phi = TreeGeometry.CalcPhi(n, initialPhi);
-            var theta = TreeGeometry.CalcTheta(Instantiator.DefaultEdgeHeight, r);
-            var l = TreeGeometry.CalcEdgeLength(Instantiator.DefaultEdgeHeight, theta);
+            var theta = TreeGeometry.CalcTheta(sceneManipulator.DefaultEdgeHeight, r);
+            var l = TreeGeometry.CalcEdgeLength(sceneManipulator.DefaultEdgeHeight, theta);
             var nodePosition = TreeGeometry.CalcNodePosition(l, theta, phi);
 
-            var branchObject = Instantiator.AddEmptyBranchObject(parent);
-            var edgeObject = Instantiator.AddEdgeObject(branchObject.transform,
-                TreeGeometry.SizeToScale(l, Instantiator.DefaultEdgeHeight, Instantiator.DefaultEdgeScale.y), theta,
+            var branchObject = sceneManipulator.AddEmptyBranchObject(parent);
+            var edgeObject = sceneManipulator.AddEdgeObject(branchObject.transform,
+                TreeGeometry.SizeToScale(l, sceneManipulator.DefaultEdgeHeight, sceneManipulator.DefaultEdgeScale.y), theta,
                 phi);
             var nodeObject =
-                Instantiator.AddEmptyNodeObject(node, branchObject.transform, nodePosition, edgeObject);
+                sceneManipulator.AddEmptyNodeObject(node, branchObject.transform, nodePosition, edgeObject);
 
             return nodeObject;
-        }
-
-        /// <summary>
-        /// Sets position of node according to the circle property and adjust edge properly
-        /// </summary>
-        /// <param name="circle"></param>
-        /// <param name="node"></param>
-        /// <param name="edge"></param>
-        private void SubscribeNodePosition(Circle circle, GameObject node, GameObject edge)
-        {
-            circle.Position.Subscribe(v =>
-            {
-                var y = node.transform.localPosition.y;
-                node.transform.localPosition = new Vector3(v.x, y, v.y);
-
-                var phi = TreeGeometry.CalcAlpha(v.x, v.y);
-                var theta = TreeGeometry.CalcTheta(Instantiator.DefaultEdgeHeight, v.magnitude);
-                edge.transform.localEulerAngles = new Vector3(theta, phi, 0);
-
-                var diameter = edge.transform.localScale.x;
-                var l = TreeGeometry.CalcEdgeLength(Instantiator.DefaultEdgeHeight, theta);
-                edge.transform.localScale = new Vector3(diameter,
-                    TreeGeometry.SizeToScale(l, Instantiator.DefaultEdgeHeight, Instantiator.DefaultEdgeScale.y),
-                    diameter);
-            });
         }
 
         private static bool HasOnlyLeaves(UiInnerNode node)

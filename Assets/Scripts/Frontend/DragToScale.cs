@@ -1,6 +1,7 @@
 ﻿using Core;
 using HoloToolkit.Unity.InputModule;
 using UnityEngine;
+using Utilities;
 
 namespace Frontend
 {
@@ -16,6 +17,8 @@ namespace Frontend
         private void Start()
         {
             if (Target == null) Target = gameObject;
+            MinScale = TreeGeometry.SizeToScale(0.5f, GetComponentInChildren<Renderer>().bounds.size.x,
+                gameObject.transform.localScale.x);
         }
 
         public void OnManipulationStarted(ManipulationEventData eventData)

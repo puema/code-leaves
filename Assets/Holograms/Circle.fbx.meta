@@ -1,19 +1,20 @@
 fileFormatVersion: 2
-guid: b7545e8ef292d46bba6e47216e64e4ac
-timeCreated: 1505314742
+guid: c6af4768766004593bd24886717a18f8
+timeCreated: 1505809440
 licenseType: Free
 ModelImporter:
   serializedVersion: 21
   fileIDToRecycleName:
     100000: //RootNode
-    100002: CirclePlane
+    100002: circlePlane
     100004: nurbsCircle1
     400000: //RootNode
-    400002: CirclePlane
+    400002: circlePlane
     400004: nurbsCircle1
-    2300000: CirclePlane
-    3300000: CirclePlane
-    4300000: CirclePlane
+    2300000: circlePlane
+    3300000: circlePlane
+    4300000: circlePlane
+    6400000: circlePlane
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -44,7 +45,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1

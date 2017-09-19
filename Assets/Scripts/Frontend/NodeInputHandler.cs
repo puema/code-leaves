@@ -24,7 +24,7 @@ namespace Frontend
         public static string GetNodeId(GameObject obj)
         {
             var component = obj.GetComponent<ID>() ??
-                            obj.transform.parent.Find(Instantiator.NodeName).GetComponent<ID>();
+                            obj.transform.parent.Find(SceneManipulator.NodeName).GetComponent<ID>();
             if (component != null) return component.Id;
             Debug.Log("Node ID not found!");
             return null;

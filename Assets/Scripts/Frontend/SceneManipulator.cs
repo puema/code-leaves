@@ -1,13 +1,16 @@
 ﻿using HoloToolkit.Unity;
+using HUX.Focus;
 using UniRx;
 using UnityEngine;
 using Utilities;
 
 namespace Frontend
 {
-    public class Instantiator : Singleton<Instantiator>
+    public class SceneManipulator : Singleton<SceneManipulator>
     {
         // ----==== Meshes as public variables ====---- //
+        public GameObject Forest;
+        
         public GameObject Floor;
 
         public GameObject Edge;
@@ -40,21 +43,21 @@ namespace Frontend
 
         internal float DefaultEdgeHeight;
         internal float DefaultCirclePlaneRadius;
-        
+
         private const float DistanceNodeToLabel = 0.008f;
         private const float DistanceLeafToLabel = 0.008f;
 
         protected override void Awake()
         {
             Edge.transform.localScale = DefaultEdgeScale;
-            DefaultEdgeHeight = GameObjectUtils.GetYSize(Edge);
-            DefaultCirclePlaneRadius = GameObjectUtils.GetXSize(CirclePlane.transform.GetChild(0).gameObject) / 2;
+            DefaultEdgeHeight = Edge.GetSize(Axis.Y);
+            DefaultCirclePlaneRadius = CirclePlane.transform.GetChild(0).gameObject.GetSize(Axis.X) / 2;
             base.Awake();
         }
 
         internal GameObject AddTreeObject(Vector2 position)
         {
-            return InstantiateObject(TreeName, parent: Floor.transform,
+            return InstantiateObject(TreeName, parent: Forest.transform,
                 localPosition: new Vector3(position.x, 0f, position.y));
         }
 
@@ -82,7 +85,7 @@ namespace Frontend
         internal GameObject AddLeafObject(Transform parent, UiLeaf leaf)
         {
             var leafObject = InstantiateObject(LeafName, Leaf, parent);
-            var height = GameObjectUtils.GetYSize(leafObject);
+            var height = leafObject.GetSize(Axis.Y);
             leafObject.AddComponent<Billboard>();
             leafObject.AddComponent<NodeInputHandler>();
             leafObject.AddComponent<ID>().Id = leaf.Id;
@@ -165,6 +168,31 @@ namespace Frontend
 //            label.GetComponent<TextMesh>().text = node.GetWidth().ToString();
         }
 
+        /// <summary>
+        /// Sets position of node according to the circle property and adjust edge properly
+        /// </summary>
+        /// <param name="circle"></param>
+        /// <param name="node"></param>
+        /// <param name="edge"></param>
+        internal void SubscribeNodePosition(Circle circle, GameObject node, GameObject edge)
+        {
+            circle.Position.Subscribe(v =>
+            {
+                var y = node.transform.localPosition.y;
+                node.transform.localPosition = new Vector3(v.x, y, v.y);
+
+                var phi = TreeGeometry.CalcAlpha(v.x, v.y);
+                var theta = TreeGeometry.CalcTheta(DefaultEdgeHeight, v.magnitude);
+                edge.transform.localEulerAngles = new Vector3(theta, phi, 0);
+
+                var diameter = edge.transform.localScale.x;
+                var l = TreeGeometry.CalcEdgeLength(DefaultEdgeHeight, theta);
+                edge.transform.localScale = new Vector3(diameter,
+                    TreeGeometry.SizeToScale(l, DefaultEdgeHeight, DefaultEdgeScale.y),
+                    diameter);
+            });
+        }
+
         internal GameObject InstantiateObject(string objName = null, GameObject original = null,
             Transform parent = null, Vector3? localPosition = null, Vector3? localScale = null,
             Vector3? localEulerAngles = null, bool isActive = true)
@@ -181,6 +209,13 @@ namespace Frontend
             gameObj.transform.localEulerAngles = localEulerAngles.Value;
 
             return gameObj;
+        }
+
+        public void AdjustFloorRadius(UiNode forest)
+        {
+            var xScale = Floor.SizeToScale(Axis.X, forest.Circle.Radius * 2);
+            var zScale = Floor.SizeToScale(Axis.Z, forest.Circle.Radius * 2);
+            Floor.transform.localScale = new Vector3(xScale, 1, zScale);
         }
     }
 }

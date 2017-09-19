@@ -59,10 +59,11 @@ namespace Core
                 var treeObject = TreeBuilder.Instance.GenerateTree(trees[i], CalcTreePosition(trees, i));
                 trees[i].Circle.Position.Subscribe(v =>
                 {
-                    treeObject.transform.position = new Vector3(v.x, 0, v.y);
+                    treeObject.transform.localPosition = new Vector3(v.x, 0, v.y);
                 });
             }
             TreeBuilder.Instance.CirclePacking(Forest.Root as UiInnerNode);
+            SceneManipulator.Instance.AdjustFloorRadius(Forest.Root);
         }
 
         private static Vector2 CalcTreePosition(IReadOnlyCollection<UiNode> trees, int n)
