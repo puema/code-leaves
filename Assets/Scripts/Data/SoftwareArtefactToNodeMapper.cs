@@ -30,7 +30,11 @@ namespace Data
                     Name = artefact.Name,
                     Key = artefact.Key,
                     Edge = null,
-                    Data = new List<LeafData>()
+                    Data = artefact.Metrics?.Select(a => new LeafData
+                    {
+                        Key = a.Key,
+                        Value = a.Value
+                    }).ToList()
                 };
             }
 

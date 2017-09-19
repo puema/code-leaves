@@ -19,7 +19,7 @@ namespace Core
         public string Name { get; set; }
         public DateTime Timestamp { get; set; }
         public TimeSpan TimeSpan { get; set; }
-        public Dictionary<string, double> SnapshotProperties { get; set; }
+        public Dictionary<string, float> SnapshotProperties { get; set; }
         public Node Root { get; set; }
     }
 
@@ -63,14 +63,14 @@ namespace Core
     public struct LeafData
     {
         public string Key { get; set; }
-        public double Value { set; get; }
+        public float Value { set; get; }
         public List<string> Infos { get; set; }
     }
 
     public struct InnerNodeData
     {
         public string Key { get; set; }
-        public double Value { set; get; }
+        public float Value { set; get; }
         public List<string> Infos { get; set; }
     }
 }

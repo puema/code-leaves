@@ -30,7 +30,7 @@ namespace Data
     public struct Metric
     {
         public string Key { get; set; }
-        public double Value { set; get; }
+        public float Value { set; get; }
         public List<string> CodeSnippets { get; set; }
     }
 }

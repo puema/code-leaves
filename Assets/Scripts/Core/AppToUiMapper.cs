@@ -9,37 +9,46 @@ namespace Core
     {
         public static UiNode Map(Node node)
         {
-            if (node is InnerNode)
+            var innerNode = node as InnerNode;
+            if (innerNode != null)
             {
                 return new UiInnerNode
                 {
-                    Id = node.Key,
+                    Id = innerNode.Key,
                     IsFocused = new ReactiveProperty<bool>(false),
                     IsSelected = new ReactiveProperty<bool>(false),
-                    Text = new ReactiveProperty<string>(node.Name),
-                    Children = ((InnerNode)node).Children.Select(Map).ToList()
+                    Text = new ReactiveProperty<string>(innerNode.Name),
+                    Children = innerNode.Children.Select(Map).ToList()
                 };
             }
-            
-            if (node is Leaf)
+
+            var leaf = node as Leaf;
+            if (leaf != null)
             {
                 return new UiLeaf
                 {
-                    Id = node.Key,
+                    Id = leaf.Key,
                     IsFocused = new ReactiveProperty<bool>(false),
                     IsSelected = new ReactiveProperty<bool>(false),
-                    Text = new ReactiveProperty<string>(node.Name),
-                    Color = new ReactiveProperty<Color?>(HexToNullableColor("#208000"))
+                    Text = new ReactiveProperty<string>(leaf.Name),
+                    Color = new ReactiveProperty<Color?>(PercentageToNullableColor(leaf))
                 };
             }
-            
+
             return null;
         }
-        
+
         public static Color? HexToNullableColor(string hexcolor)
         {
             Color color;
             return ColorUtility.TryParseHtmlString(hexcolor, out color) ? new Color?(color) : null;
+        }
+
+        public static Color? PercentageToNullableColor(Leaf leaf)
+        {
+            if (leaf.Data == null || leaf.Data.Count == 0) return null;
+            var factor = 1 - leaf.Data[0].Value / 100;
+            return new Color(2.0f * factor, 2.0f * (1 - factor), 0);
         }
     }
 }

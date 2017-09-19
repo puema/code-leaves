@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,10 @@ namespace Core
 {
     public class ApplicationManager : Singleton<ApplicationManager>
     {
+        // ----==== Dependencies ====---- //
+        public SonarQubeService SonarQubeService;
+        // ------------------------------ //
+        
         public Forest Forest;
         public AppState AppState;
 
@@ -22,7 +27,7 @@ namespace Core
             AppData = null
         };
 
-        private const string TreeDataFile = "AirStructure.json";
+        private const string TreeDataFile = "AirStructure2.json";
 
         private readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
@@ -36,6 +41,8 @@ namespace Core
             var path = Path.Combine(Application.streamingAssetsPath, TreeDataFile);
 
             var softwareRoot = DesirializeData<Package>(path);
+
+//            var coroutine = StartCoroutine(SonarQubeService.AddMetrics(softwareRoot));
 
             var node = SoftwareArtefactToNodeMapper.Map(softwareRoot);
 

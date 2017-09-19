@@ -35,10 +35,9 @@ namespace Frontend
         /// <param name="parent"></param>
         private void GenerateBranches(UiNode node, Transform parent)
         {
-            if (node is UiInnerNode)
+            var innerNode = node as UiInnerNode;
+            if (innerNode != null)
             {
-                var innerNode = (UiInnerNode) node;
-
                 if (HasOnlyLeaves(innerNode))
                 {
                     DistributeSunflower(innerNode, parent);
@@ -55,9 +54,9 @@ namespace Frontend
                 return;
             }
 
-            if (node is UiLeaf)
+            var leaf = node as UiLeaf;
+            if (leaf != null)
             {
-                var leaf = (UiLeaf) node;
                 sceneManipulator.AddLeafObject(parent, leaf);
                 return;
             }

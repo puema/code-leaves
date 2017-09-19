@@ -1,5 +1,4 @@
 ﻿using HoloToolkit.Unity;
-using HUX.Focus;
 using UniRx;
 using UnityEngine;
 using Utilities;
