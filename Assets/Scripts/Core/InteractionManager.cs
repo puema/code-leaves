@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using Frontend;
 using HoloToolkit.Unity;
+using UniRx;
+using UnityEngine;
 using Utilities;
 
 namespace Core
@@ -8,7 +10,7 @@ namespace Core
     public class InteractionManager : Singleton<InteractionManager>
     {
         private AppState AppState;
-        private Forest Forest;
+        private ReactiveProperty<Forest> Forest;
 
         public void Start()
         {
@@ -49,7 +51,7 @@ namespace Core
 
         public void HandleEmptyClick()
         {
-            Forest.Root
+            Forest.Value.Root
                 .Traverse(x => (x as UiInnerNode)?.Children)
                 .ToList()
                 .ForEach(x => x.IsSelected.Value = false);
@@ -57,7 +59,7 @@ namespace Core
 
         private UiNode FindUiNode(string id)
         {
-            return Forest.Root
+            return Forest.Value.Root
                 .Traverse(x => (x as UiInnerNode)?.Children)
                 .FirstOrDefault(x => x.Id == id);
         }

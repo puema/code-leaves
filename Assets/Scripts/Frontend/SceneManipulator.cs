@@ -7,7 +7,7 @@ namespace Frontend
 {
     public class SceneManipulator : Singleton<SceneManipulator>
     {
-        // ----==== Meshes as public variables ====---- //
+        // ----==== Dependencies ====---- //
         public GameObject Forest;
         
         public GameObject Floor;

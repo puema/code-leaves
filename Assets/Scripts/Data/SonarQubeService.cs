@@ -8,6 +8,7 @@ using HoloToolkit.Unity;
 using Newtonsoft.Json;
 using UnityEngine;
 using Utilities;
+using Zenject;
 using Logger = Utilities.Logger;
 
 namespace Data
@@ -15,17 +16,38 @@ namespace Data
     public class SonarQubeService : Singleton<SonarQubeService>
     {
         public const string SonarQubeServerUrl = "https://www.qaware.de/sonarqube/";
-        public const string Token = "d507a619e0f8a2304e70fcd0776204236342b625";
+        private const string Token = "d507a619e0f8a2304e70fcd0776204236342b625";
 
         private const string keyWithErrorChild = "com.bmw.ispi.air.central:air-common-validation:" +
                                                  "src/test/java/com/bmw/ispi/air/central/common/validation/ast";
 
         private const int pageSize = 500;
-        private const string metricKeys = SonarQubeMetric.Coverage;
+
+        private static readonly string metricKeys =
+            string.Join(", ", SonarQubeMetric.Coverage, SonarQubeMetric.Complexity);
+
         private static readonly string sortFields = string.Join(", ", SonarQubeSortField.Path, SonarQubeSortField.Name);
 
         private static int successfullCalls;
         private static int totalCalls;
+
+        public IEnumerator GetSoftwareArtefact(string baseComponentKey, string fileName)
+        {
+            var structureCoroutine = this.StartCoroutine<SoftwareArtefact>(ComposeArtefacts(baseComponentKey));
+            yield return structureCoroutine.coroutine;
+            var artefact = structureCoroutine.value;
+            Debug.Log("Total calls: " + totalCalls);
+            Debug.Log("Successfull calls: " + successfullCalls);
+            // All requests are finished
+
+            var metricsCoroutine = this.StartCoroutine<SoftwareArtefact>(AddMetrics(artefact));
+            yield return metricsCoroutine.coroutine;
+            artefact = metricsCoroutine.value;
+            
+            WriteToFile(artefact, fileName);
+            
+            yield return artefact;
+        }
 
         public IEnumerator AddMetrics(SoftwareArtefact artefact)
         {
@@ -39,20 +61,20 @@ namespace Data
                 var coroutine =
                     this.StartCoroutine<SonarQubeTree>(GetSonarQubeMeasures(baseComponentKey, page.ToString()));
                 yield return coroutine.coroutine;
+                var sonarQubeTree = coroutine.value;
 
-                components.AddRange(coroutine.value.components);
+                if (sonarQubeTree == null) continue;
+                components.AddRange(sonarQubeTree.components);
 
                 page++;
 
-                if (page > Math.Ceiling((double) coroutine.value.paging.total / coroutine.value.paging.pageSize)) break;
+                if (page > Math.Ceiling((double) sonarQubeTree.paging.total / sonarQubeTree.paging.pageSize)) break;
             }
 
-            MapMetricToArtefact(ref artefact, components);
-
-            WriteToFile(artefact);
+            yield return MapMetricToArtefact(artefact, components);
         }
 
-        private static void MapMetricToArtefact(ref SoftwareArtefact artefact, List<SonarQubeComponent> components)
+        private static SoftwareArtefact MapMetricToArtefact(SoftwareArtefact artefact, List<SonarQubeComponent> components)
         {
             foreach (var a in artefact.Traverse(a => a.Children))
             {
@@ -72,21 +94,11 @@ namespace Data
                     };
                 }
             }
+
+            return artefact;
         }
 
-        public IEnumerator GetStructure(string baseComponentKey)
-        {
-            var coroutine = this.StartCoroutine<SoftwareArtefact>(ComposeElements(baseComponentKey));
-            yield return coroutine.coroutine;
-            Logger.Log(coroutine.value);
-            Debug.Log("Total calls: " + totalCalls);
-            Debug.Log("Successfull calls: " + successfullCalls);
-            // All requests are finished
-//            WriteToFile(coroutine.value);
-            yield return coroutine.value;
-        }
-
-        private IEnumerator ComposeElements(string sonarQubeComponentKey)
+        private IEnumerator ComposeArtefacts(string sonarQubeComponentKey)
         {
             totalCalls++;
             // Print key to see progress
@@ -105,7 +117,7 @@ namespace Data
 
             // Store child coroutines to be able to join them
             List<Coroutine<SoftwareArtefact>> childCoroutines = tree.components
-                .Select(component => this.StartCoroutine<SoftwareArtefact>(ComposeElements(component.key))).ToList();
+                .Select(component => this.StartCoroutine<SoftwareArtefact>(ComposeArtefacts(component.key))).ToList();
 
             yield return CoroutineUtils.WaitForAll(childCoroutines);
 
@@ -157,28 +169,6 @@ namespace Data
             }
         }
 
-        private static void HandleError(string sonarQubeComponentKey, WWW www)
-        {
-            Debug.LogWarning("SonarQube HTTP Error with Key: \"" + sonarQubeComponentKey + "\"\n" +
-                             "Error code: " + www.error + "\n" +
-                             "Text: " + www.text);
-        }
-
-        private static Dictionary<string, string> GetHeaders()
-        {
-            return new Dictionary<string, string>
-            {
-                {"Authorization", "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(Token + ":"))}
-            };
-        }
-
-        private static void WriteToFile(SoftwareArtefact element)
-        {
-            var json = JsonConvert.SerializeObject(element, Formatting.Indented);
-            Debug.Log("Writing to file...");
-            File.WriteAllText("Assets/StreamingAssets/AirStructure2.json", json);
-        }
-
         private static SoftwareArtefact MapSonarQubeComponentToSoftwareArtefact(SonarQubeComponent component)
         {
             if (component == null) return null;
@@ -200,6 +190,29 @@ namespace Data
                 Key = component.key,
                 Children = new List<SoftwareArtefact>()
             };
+        }
+
+        private static void HandleError(string sonarQubeComponentKey, WWW www)
+        {
+            Debug.LogWarning("SonarQube HTTP Error with Key: \"" + sonarQubeComponentKey + "\"\n" +
+                             "Error code: " + www.error + "\n" +
+                             "Text: " + www.text);
+        }
+
+        private static Dictionary<string, string> GetHeaders()
+        {
+            return new Dictionary<string, string>
+            {
+                {"Authorization", "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(Token + ":"))}
+            };
+        }
+
+        private static void WriteToFile(SoftwareArtefact element, string fileName)
+        {
+            var json = JsonConvert.SerializeObject(element, Formatting.Indented);
+            var path = Path.Combine(Application.streamingAssetsPath, fileName);
+            Debug.Log("Writing to file...");
+            File.WriteAllText(path, json);
         }
     }
 }
