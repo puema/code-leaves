@@ -7,7 +7,7 @@ namespace Frontend
     public static class TreeGeometry
     {
         public const float NodeDistanceFactor = 0.05f;
-        public const float IntersectTolerance = 1.0E-5f;
+        public const float IntersectTolerance = 1.0E-4f;
         public static readonly double GoldenRatio = (1 + Math.Sqrt(5)) / 2;
         public static readonly double GoldenAngle = RadianToDegree(2 * Math.PI / Math.Pow(GoldenRatio, 2));
 

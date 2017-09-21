@@ -2,9 +2,9 @@
 using HoloToolkit.Unity.InputModule;
 using UnityEngine;
 
-namespace Frontend
+namespace Frontend.InputHandler
 {
-    public class MenuInputHandler : MonoBehaviour, IInputClickHandler
+    public class FloorMenuButtonInputHandler : MonoBehaviour, IInputClickHandler
     {
         public FloorInteractionMode Mode;
 

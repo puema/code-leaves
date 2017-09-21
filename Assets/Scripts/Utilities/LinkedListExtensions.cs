@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
+using UnityEngine;
 
 namespace Utilities
 {
@@ -21,14 +23,16 @@ namespace Utilities
             var found = false;
             var next = node;
             var previous = node;
-            
+
             while (!found)
             {
                 next = next.Next();
                 previous = previous.Previous();
-                
+
                 if (next == previous || next.Next() == previous)
+                {
                     throw new InvalidOperationException("No match.");
+                }
 
                 if (next == find || previous == find)
                     found = true;

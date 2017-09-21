@@ -8,7 +8,7 @@ namespace Frontend
     public class DragToScale : MonoBehaviour, IManipulationHandler
     {
         public GameObject Target;
-        public float ScaleFactor = 0.5f;
+        public float ScaleFactor = 1;
         public float MinScale = 0.5f;
         public float MaxScale = 10;
 

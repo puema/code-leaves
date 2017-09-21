@@ -10,7 +10,7 @@ namespace Utilities
         Z
     }
 
-    public static class GameObjectUtils
+    public static class GameObjectExtensions
     {
         public static float GetSize(this GameObject obj, Axis axis)
         {
