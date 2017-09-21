@@ -10,12 +10,11 @@ namespace Frontend
     {
         public GameObject Menu;
 
-        private Vector3 yShift;
+        // Shifts the menu up, so it doesn't collide with the floor
+        private readonly Vector3 yShift = Vector3.up * 0.03f;
 
         private void Start()
         {
-            yShift = Vector3.up * Menu.GetComponent<BoxCollider>().bounds.extents.y;
-
             ApplicationManager.Instance.AppState.FloorInteractionMode.Subscribe(mode =>
             {
                 if (mode != FloorInteractionMode.TapToMenu)
@@ -31,6 +30,8 @@ namespace Frontend
             {
                 if (Vector3.Distance(GazeManager.Instance.HitPosition, GazeManager.Instance.GazeOrigin) < 2)
                 {
+                    Debug.Log(GazeManager.Instance.HitPosition);
+                    Debug.Log(yShift);
                     Menu.transform.position = GazeManager.Instance.HitPosition + yShift;
                 }
                 else
