@@ -30,8 +30,6 @@ namespace Frontend
             {
                 if (Vector3.Distance(GazeManager.Instance.HitPosition, GazeManager.Instance.GazeOrigin) < 2)
                 {
-                    Debug.Log(GazeManager.Instance.HitPosition);
-                    Debug.Log(yShift);
                     Menu.transform.position = GazeManager.Instance.HitPosition + yShift;
                 }
                 else

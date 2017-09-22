@@ -212,9 +212,18 @@ namespace Frontend
 
         public void AdjustFloorRadius(UiNode forest)
         {
+            Floor.SetActive(true);
             var xScale = Floor.SizeToScale(Axis.X, forest.Circle.Radius * 2);
             var zScale = Floor.SizeToScale(Axis.Z, forest.Circle.Radius * 2);
             Floor.transform.localScale = new Vector3(xScale, 1, zScale);
+        }
+
+        public void DestroyForest()
+        {
+            for (var i = 1; i < Forest.transform.childCount; i++)
+            {
+                Destroy(Forest.transform.GetChild(i).gameObject);
+            }
         }
     }
 }

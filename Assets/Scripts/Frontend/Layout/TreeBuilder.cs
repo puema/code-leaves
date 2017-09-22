@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using HoloToolkit.Unity;
+using UniRx;
 using UnityEngine;
 using Utilities;
 
@@ -25,6 +26,9 @@ namespace Frontend
             var nodeObject = sceneManipulator.AddEmptyNodeObject(node, trunkObject.transform,
                 new Vector3(0, sceneManipulator.DefaultEdgeHeight, 0), edgeObject);
             GenerateBranches(node, nodeObject.transform);
+
+            node.Circle.Position.Subscribe(v => { tree.transform.localPosition = new Vector3(v.x, 0, v.y); });
+
             return tree;
         }
 
@@ -134,7 +138,7 @@ namespace Frontend
                 // Proceed with current circle again, position is calculated according to updated front chain
                 i--;
             }
-            
+
             innerNode.Circle.Radius = GetEnclosingRadius(frontChain);
 
             return frontChain;
@@ -149,7 +153,7 @@ namespace Frontend
                         : current);
 
             return Vector2.Distance(maxDistanceCircle.Position.Value, Vector2.zero) +
-                                      maxDistanceCircle.Radius;
+                   maxDistanceCircle.Radius;
         }
 
         private static LinkedList<Circle> InitFrontchain(UiInnerNode node)
@@ -212,7 +216,8 @@ namespace Frontend
 
             var branchObject = sceneManipulator.AddEmptyBranchObject(parent);
             var edgeObject = sceneManipulator.AddEdgeObject(branchObject.transform,
-                TreeGeometry.SizeToScale(l, sceneManipulator.DefaultEdgeHeight, sceneManipulator.DefaultEdgeScale.y), theta,
+                TreeGeometry.SizeToScale(l, sceneManipulator.DefaultEdgeHeight, sceneManipulator.DefaultEdgeScale.y),
+                theta,
                 phi);
             var nodeObject =
                 sceneManipulator.AddEmptyNodeObject(node, branchObject.transform, nodePosition, edgeObject);

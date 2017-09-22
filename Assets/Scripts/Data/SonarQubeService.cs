@@ -15,7 +15,12 @@ namespace Data
 {
     public class SonarQubeService : Singleton<SonarQubeService>
     {
+        // ----==== Dependencies ====---- //
+        public StreamingAssetsService StreamingAssetsService;
+
         public const string SonarQubeServerUrl = "https://www.qaware.de/sonarqube/";
+        // ------------------------------ //
+
         private const string Token = "d507a619e0f8a2304e70fcd0776204236342b625";
 
         private const string keyWithErrorChild = "com.bmw.ispi.air.central:air-common-validation:" +
@@ -31,7 +36,7 @@ namespace Data
         private static int successfullCalls;
         private static int totalCalls;
 
-        public IEnumerator GetSoftwareArtefact(string baseComponentKey, string fileName)
+        public IEnumerator GetSoftwareArtefact(string baseComponentKey, string writeToFile = null)
         {
             var structureCoroutine = this.StartCoroutine<SoftwareArtefact>(ComposeArtefacts(baseComponentKey));
             yield return structureCoroutine.coroutine;
@@ -43,9 +48,12 @@ namespace Data
             var metricsCoroutine = this.StartCoroutine<SoftwareArtefact>(AddMetrics(artefact));
             yield return metricsCoroutine.coroutine;
             artefact = metricsCoroutine.value;
-            
-            WriteToFile(artefact, fileName);
-            
+
+            if (!string.IsNullOrEmpty(writeToFile))
+            {
+                StreamingAssetsService.Instance.SerializeData(artefact, writeToFile);
+            }
+
             yield return artefact;
         }
 
@@ -74,7 +82,8 @@ namespace Data
             yield return MapMetricToArtefact(artefact, components);
         }
 
-        private static SoftwareArtefact MapMetricToArtefact(SoftwareArtefact artefact, List<SonarQubeComponent> components)
+        private static SoftwareArtefact MapMetricToArtefact(SoftwareArtefact artefact,
+            List<SonarQubeComponent> components)
         {
             foreach (var a in artefact.Traverse(a => a.Children))
             {
@@ -205,14 +214,6 @@ namespace Data
             {
                 {"Authorization", "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(Token + ":"))}
             };
-        }
-
-        private static void WriteToFile(SoftwareArtefact element, string fileName)
-        {
-            var json = JsonConvert.SerializeObject(element, Formatting.Indented);
-            var path = Path.Combine(Application.streamingAssetsPath, fileName);
-            Debug.Log("Writing to file...");
-            File.WriteAllText(path, json);
         }
     }
 }

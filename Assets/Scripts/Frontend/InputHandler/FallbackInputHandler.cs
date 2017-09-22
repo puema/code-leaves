@@ -2,15 +2,18 @@
 using HoloToolkit.Unity.InputModule;
 using UnityEngine;
 
-public class FallbackInputHandler : MonoBehaviour, IInputClickHandler
+namespace Frontend.InputHandler
 {
-    private void Start()
+    public class FallbackInputHandler : MonoBehaviour, IInputClickHandler
     {
-        InputManager.Instance.PushFallbackInputHandler(gameObject);
-    }
+        private void Start()
+        {
+            InputManager.Instance.PushFallbackInputHandler(gameObject);
+        }
 
-    public void OnInputClicked(InputClickedEventData eventData)
-    {
-        InteractionManager.Instance.HandleEmptyClick();
+        public void OnInputClicked(InputClickedEventData eventData)
+        {
+            InteractionManager.Instance.HandleEmptyClick();
+        }
     }
 }

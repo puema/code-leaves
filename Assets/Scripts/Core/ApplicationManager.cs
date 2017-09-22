@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Data;
 using Frontend;
 using HoloToolkit.Unity;
-using Newtonsoft.Json;
 using UniRx;
 using UnityEngine;
 
@@ -26,50 +23,53 @@ namespace Core
 
         // ------------------------------ //
 
-        public ReactiveProperty<Forest> Forest = new ReactiveProperty<Forest>();
-
         public AppState AppState = new AppState
         {
             FloorInteractionMode = new ReactiveProperty<FloorInteractionMode>(FloorInteractionMode.TapToMenu),
-            AppData = null
+            AvailableExampleProjects = new[] {"Sunflower", "CirclePacking", "Air", "Dcom", "Fupo"},
+            Forest = new ReactiveProperty<Forest>(new Forest()),
+            AppData = new ReactiveProperty<AppData>(new AppData())
         };
 
-        private IEnumerator Start()
+        private void Start()
         {
-            SoftwareArtefact softwareRoot = null;
-
-            if (!GetDataFromSonarQube)
+            AppState.AppData.Subscribe(data =>
             {
-                var fileName = ProjectName + ".json";
-                var path = Path.Combine(Application.streamingAssetsPath, fileName);
-                softwareRoot = DesirializeData<Package>(path);
-            }
+                SceneManipulator.Instance.DestroyForest();
+                
+                AppState.Forest.Value = new Forest
+                {
+                    Root = AppToUiMapper.Map(data.Root)
+                };
 
-            if (GetDataFromSonarQube)
-            {
-                var sonarQubeCoroutine =
-                    this.StartCoroutine<SoftwareArtefact>(SonarQubeService.GetSoftwareArtefact(
-                        SonarQubeBaseComponent,
-                        ProjectName));
-                yield return sonarQubeCoroutine.coroutine;
-                softwareRoot = sonarQubeCoroutine.value;
-            }
-
-            var node = SoftwareArtefactToNodeMapper.Map(softwareRoot);
-
-            Forest.Value = new Forest
-            {
-                Root = AppToUiMapper.Map(node)
-            };
-
-            StartCoroutine(Render());
+                StartCoroutine(Render(AppState.Forest.Value.Root));
+            });
         }
 
-        private IEnumerator Render()
+        private IEnumerator GetAppDataFromSonarQube(string projectName, string sonarQubeBaseComponent)
         {
-            var forest = Forest.Value.Root as UiInnerNode;
-            forest?.SortChildren();
-            var trees = forest?.Children ?? new List<UiNode>();
+            var sonarQubeCoroutine =
+                this.StartCoroutine<SoftwareArtefact>(SonarQubeService.Instance.GetSoftwareArtefact(
+                    sonarQubeBaseComponent,
+                    projectName));
+            yield return sonarQubeCoroutine.coroutine;
+            yield return SoftwareArtefactToNodeMapper.Map(sonarQubeCoroutine.value);
+        }
+
+        private static IEnumerator GetAppDataFromFile(string projectName)
+        {
+            var softwareRoot = StreamingAssetsService.Instance.DesirializeData<Package>(projectName);
+            yield return SoftwareArtefactToNodeMapper.Map(softwareRoot);
+        }
+
+        private static IEnumerator Render(UiNode root)
+        {
+            var innerNode = root as UiInnerNode;
+            if (innerNode == null || innerNode.Children?.Count == 0) yield break;
+            innerNode.SortChildren();
+            var trees = innerNode.Children;
+            yield return null;
+            
             for (var i = 0; i < trees.Count; i++)
             {
                 var treeObject = TreeBuilder.Instance.GenerateTree(trees[i], CalcTreePosition(trees, i));
@@ -79,8 +79,9 @@ namespace Core
                 });
                 yield return null;
             }
-            TreeBuilder.Instance.CirclePacking(forest);
-            SceneManipulator.Instance.AdjustFloorRadius(forest);
+            
+            TreeBuilder.Instance.CirclePacking(innerNode);
+            SceneManipulator.Instance.AdjustFloorRadius(innerNode);
         }
 
         private static Vector2 CalcTreePosition(IReadOnlyCollection<UiNode> trees, int n)
@@ -90,22 +91,6 @@ namespace Core
             var x = (n % forestLength - forestLength / 2) * rowDistance;
             var y = (n / forestLength - forestLength / 2) * rowDistance;
             return new Vector2(x, y);
-        }
-
-        private void SerializeData(object obj, string path)
-        {
-            var json = JsonConvert.SerializeObject(obj, Formatting.Indented);
-            File.WriteAllText(path, json);
-        }
-
-        private static T DesirializeData<T>(string path)
-        {
-            if (!File.Exists(path))
-            {
-                Debug.LogError("Connot load tree data, for there is no such file.");
-            }
-            var json = File.ReadAllText(path);
-            return JsonConvert.DeserializeObject<T>(json);
         }
     }
 }

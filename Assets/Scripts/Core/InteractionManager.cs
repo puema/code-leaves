@@ -1,21 +1,20 @@
 ﻿using System.Linq;
+using Data;
 using Frontend;
 using HoloToolkit.Unity;
-using UniRx;
 using UnityEngine;
 using Utilities;
+using Logger = Utilities.Logger;
 
 namespace Core
 {
     public class InteractionManager : Singleton<InteractionManager>
     {
         private AppState AppState;
-        private ReactiveProperty<Forest> Forest;
 
         public void Start()
         {
             AppState = ApplicationManager.Instance.AppState;
-            Forest = ApplicationManager.Instance.Forest;
         }
 
         public void HandleFloorMenuInput(FloorInteractionMode mode)
@@ -51,7 +50,7 @@ namespace Core
 
         public void HandleEmptyClick()
         {
-            Forest.Value.Root
+            AppState.Forest.Value?.Root?
                 .Traverse(x => (x as UiInnerNode)?.Children)
                 .ToList()
                 .ForEach(x => x.IsSelected.Value = false);
@@ -59,9 +58,16 @@ namespace Core
 
         private UiNode FindUiNode(string id)
         {
-            return Forest.Value.Root
+            return AppState.Forest.Value?.Root?
                 .Traverse(x => (x as UiInnerNode)?.Children)
                 .FirstOrDefault(x => x.Id == id);
+        }
+
+        public void HandleProjectSelection(int index)
+        {
+            var fileName = AppState.AvailableExampleProjects[index];
+            var softwareRoot = StreamingAssetsService.Instance.DesirializeData<Package>(fileName);
+            AppState.AppData.Value = new AppData {Root = SoftwareArtefactToNodeMapper.Map(softwareRoot)};
         }
     }
 }

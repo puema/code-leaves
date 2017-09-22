@@ -1,4 +1,5 @@
 ﻿using System;
+using Core;
 using HoloToolkit.Unity.InputModule;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace Frontend.InputHandler
     {
         public void OnInputClicked(InputClickedEventData eventData)
         {
-            throw new System.NotImplementedException();
+            InteractionManager.Instance.HandleProjectSelection(transform.GetSiblingIndex());
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Frontend;
 using UniRx;
 
 namespace Core
@@ -11,7 +12,9 @@ namespace Core
     public class AppState
     {
         public ReactiveProperty<FloorInteractionMode> FloorInteractionMode { get; set; }
-        public AppData AppData { get; set; }
+        public ReactiveProperty<Forest> Forest { get; set; }
+        public string[] AvailableExampleProjects { get; set; }
+        public ReactiveProperty<AppData> AppData { get; set; }
     }
 
     public class AppData
