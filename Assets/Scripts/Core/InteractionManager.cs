@@ -18,7 +18,7 @@ namespace Core
             Forest = ApplicationManager.Instance.Forest;
         }
 
-        public void HandleMenuInput(FloorInteractionMode mode)
+        public void HandleFloorMenuInput(FloorInteractionMode mode)
         {
             AppState.FloorInteractionMode.Value = mode;
         }

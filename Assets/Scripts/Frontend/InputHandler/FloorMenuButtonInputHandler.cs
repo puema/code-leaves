@@ -10,7 +10,7 @@ namespace Frontend.InputHandler
 
         public void OnInputClicked(InputClickedEventData eventData)
         {
-            InteractionManager.Instance.HandleMenuInput(Mode);
+            InteractionManager.Instance.HandleFloorMenuInput(Mode);
         }
     }
 }

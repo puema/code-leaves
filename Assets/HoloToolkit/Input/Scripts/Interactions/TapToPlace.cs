@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using System.Collections.Generic;
+using Core;
 using UnityEngine;
 using HoloToolkit.Unity.SpatialMapping;
 
@@ -143,6 +144,7 @@ namespace HoloToolkit.Unity.InputModule
                 // Clear our cache in case we added or removed gameobjects between taps
                 defaultLayersCache.Clear();
                 InputManager.Instance.RemoveGlobalListener(gameObject);
+                InteractionManager.Instance.HandleFloorInteractionCompleted();
 
                 // If the user is not in placing mode, hide the spatial mapping mesh.
                 if (AllowMeshVisualizationControl)

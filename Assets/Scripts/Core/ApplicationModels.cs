@@ -4,14 +4,14 @@ using UniRx;
 
 namespace Core
 {
+    public enum FloorInteractionMode {
+        TapToMenu, TapToPlace, DragToScale, DragToRotate
+    }
+    
     public class AppState
     {
         public ReactiveProperty<FloorInteractionMode> FloorInteractionMode { get; set; }
         public AppData AppData { get; set; }
-    }
-    
-    public enum FloorInteractionMode {
-        TapToMenu, TapToPlace, DragToScale, DragToRotate
     }
 
     public class AppData
