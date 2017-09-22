@@ -2094,6 +2094,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
   ScaleFactor: 1
+  MinSize: 0.5
   MinScale: 0.5
   MaxScale: 10
 --- !u!114 &1046413526

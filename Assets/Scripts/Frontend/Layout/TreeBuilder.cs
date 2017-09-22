@@ -29,6 +29,7 @@ namespace Frontend
 
             node.Circle.Position.Subscribe(v =>
             {
+                //if tree was destroyed before, could be null
                 if (tree == null) return;
                 tree.transform.localPosition = new Vector3(v.x, 0, v.y);
             });
