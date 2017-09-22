@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Frontend.InputHandler
 {
-    public class ButtonBehaviour : MonoBehaviour, IFocusable, IInputHandler
+    public class ButtonBehaviour : MonoBehaviour, IFocusable, IInputHandler, ISourceStateHandler
     {
         public Material HighlightMaterial;
         public GameObject HighlightTarget;
@@ -14,23 +14,29 @@ namespace Frontend.InputHandler
         private Material[] OriginalMaterials;
         private float OriginalZ;
 
+        private void Start()
+        {
+            OriginalZ = transform.localPosition.z;
+            OriginalMaterials = HighlightTarget.GetComponent<MeshRenderer>().materials;
+        }
+
         public void OnFocusEnter()
         {
-            OriginalMaterials = HighlightTarget.GetComponent<MeshRenderer>().materials;
-            OriginalZ = transform.localPosition.z;
             HighlightTarget.GetComponent<MeshRenderer>().materials =
                 OriginalMaterials.Concat(new[] {HighlightMaterial}).ToArray();
         }
 
         public void OnFocusExit()
         {
-            HighlightTarget.GetComponent<MeshRenderer>().materials = OriginalMaterials;
+            ResetMaterials();
+            if (!AnimateClick) return;
+            ResetPosition();
         }
 
         public void OnInputUp(InputEventData eventData)
         {
             if (!AnimateClick) return;
-            transform.localPosition += Vector3.back * ClickOffset;
+            ResetPosition();
         }
 
         public void OnInputDown(InputEventData eventData)
@@ -38,6 +44,28 @@ namespace Frontend.InputHandler
             if (!AnimateClick) return;
             transform.localPosition += Vector3.forward * ClickOffset;
         }
-        
+
+        public void OnSourceDetected(SourceStateEventData eventData)
+        {
+        }
+
+        public void OnSourceLost(SourceStateEventData eventData)
+        {
+            ResetMaterials();
+            ResetPosition();
+        }
+
+        private void ResetPosition()
+        {
+            var x = transform.localPosition.x;
+            var y = transform.localPosition.y;
+            var z = OriginalZ;
+            transform.localPosition = new Vector3(x, y, z);
+        }
+
+        private void ResetMaterials()
+        {
+            HighlightTarget.GetComponent<MeshRenderer>().materials = OriginalMaterials;
+        }
     }
 }

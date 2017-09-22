@@ -27,7 +27,11 @@ namespace Frontend
                 new Vector3(0, sceneManipulator.DefaultEdgeHeight, 0), edgeObject);
             GenerateBranches(node, nodeObject.transform);
 
-            node.Circle.Position.Subscribe(v => { tree.transform.localPosition = new Vector3(v.x, 0, v.y); });
+            node.Circle.Position.Subscribe(v =>
+            {
+                if (tree == null) return;
+                tree.transform.localPosition = new Vector3(v.x, 0, v.y);
+            });
 
             return tree;
         }
