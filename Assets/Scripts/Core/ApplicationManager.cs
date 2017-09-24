@@ -13,19 +13,56 @@ namespace Core
     {
         // ----==== Dependencies ====---- //
 
-        public string ProjectName = "Dcom";
-
         public bool GetDataFromSonarQube;
 
         public SonarQubeService SonarQubeService;
 
         public string SonarQubeBaseComponent = "com.bmw.dcom:dcom";
 
+        public BoolReactiveProperty VisualizeCircles = new BoolReactiveProperty(false);
+
         // ------------------------------ //
 
         public AppState AppState = new AppState
         {
-            FloorInteractionMode = new ReactiveProperty<FloorInteractionMode>(FloorInteractionMode.TapToMenu),
+            ContexMenu = new ContextMenu
+            {
+                Buttons = new ReactiveProperty<ContextMenuButton[]>(new[]
+                {
+                    new ContextMenuButton
+                    {
+                        Text = "Place",
+                        Icon = "MoveIcon",
+                        Action = () => InteractionManager.Instance.HandleTapToPlace()
+                    },
+                    new ContextMenuButton
+                    {
+                        Text = "Scale",
+                        Icon = "ExpandIcon",
+                        Action = () => InteractionManager.Instance.HandleDragToScale()
+                    },
+                    new ContextMenuButton
+                    {
+                        Text = "Rotate",
+                        Icon = "RotateIcon",
+                        Action = () => InteractionManager.Instance.HandleDragToRotate()
+                    },
+                    new ContextMenuButton
+                    {
+                        Text = "Menu",
+                        Icon = "MenuIcon",
+                        Action = () => InteractionManager.Instance.HandleShowProjectMenu()
+                    }
+                }),
+                IsActive = new ReactiveProperty<bool>(false)
+            },
+            ProjectMenu = new ProjectMenu
+            {
+                IsActive = new BoolReactiveProperty(true),
+                IsTagalong = new ReactiveProperty<bool>(true)
+            },
+            ForestManipulationMode = new ReactiveProperty<ForestManipulationMode>(ForestManipulationMode.DragToScale),
+            IsPlacing = new ReactiveProperty<bool>(false),
             AvailableExampleProjects = new[] {"Sunflower", "CirclePacking", "Air", "Dcom", "Fupo"},
             Forest = new ReactiveProperty<Forest>(new Forest()),
             AppData = new ReactiveProperty<AppData>(new AppData())
@@ -36,7 +73,7 @@ namespace Core
             AppState.AppData.Subscribe(data =>
             {
                 SceneManipulator.Instance.DestroyForest();
-                
+
                 AppState.Forest.Value = new Forest
                 {
                     Root = AppToUiMapper.Map(data.Root)
@@ -69,7 +106,7 @@ namespace Core
             innerNode.SortChildren();
             var trees = innerNode.Children;
             yield return null;
-            
+
             for (var i = 0; i < trees.Count; i++)
             {
                 var treeObject = TreeBuilder.Instance.GenerateTree(trees[i], CalcTreePosition(trees, i));
@@ -79,7 +116,7 @@ namespace Core
                 });
                 yield return null;
             }
-            
+
             TreeBuilder.Instance.CirclePacking(innerNode);
             SceneManipulator.Instance.AdjustFloorRadius(innerNode);
         }

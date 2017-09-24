@@ -32,11 +32,11 @@ namespace Utilities
             switch (axis)
             {
                 case Axis.X:
-                    return obj.transform.localScale.x * size / obj.GetSize(Axis.X);
+                    return obj.transform.lossyScale.x * size / obj.GetSize(Axis.X);
                 case Axis.Y:
-                    return obj.transform.localScale.y * size / obj.GetSize(Axis.Y);
+                    return obj.transform.lossyScale.y * size / obj.GetSize(Axis.Y);
                 case Axis.Z:
-                    return obj.transform.localScale.z * size / obj.GetSize(Axis.Z);
+                    return obj.transform.lossyScale.z * size / obj.GetSize(Axis.Z);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
             }

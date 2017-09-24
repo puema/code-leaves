@@ -1,4 +1,5 @@
-﻿using HoloToolkit.Unity;
+﻿using Core;
+using HoloToolkit.Unity;
 using UniRx;
 using UnityEngine;
 using Utilities;
@@ -9,7 +10,7 @@ namespace Frontend
     {
         // ----==== Dependencies ====---- //
         public GameObject Forest;
-        
+
         public GameObject Floor;
 
         public GameObject Edge;
@@ -25,11 +26,10 @@ namespace Frontend
         public Shader StandardShader;
 
         public Shader FocusedShader;
-
-        public BoolReactiveProperty VisualizeCircles;
         // -------------------------------------------- //
 
         internal readonly Vector3 DefaultEdgeScale = new Vector3(1, 10, 1);
+        internal readonly Vector3 DefaultLeafScale = new Vector3(0.8f, 1, 0.09f);
         internal readonly Vector3 Default3DTextScale = new Vector3(0.005f, 0.005f, 0.005f);
 
         internal const string TreeName = "Tree";
@@ -83,7 +83,7 @@ namespace Frontend
 
         internal GameObject AddLeafObject(Transform parent, UiLeaf leaf)
         {
-            var leafObject = InstantiateObject(LeafName, Leaf, parent);
+            var leafObject = InstantiateObject(LeafName, Leaf, parent, localScale: DefaultLeafScale);
             var height = leafObject.GetSize(Axis.Y);
             leafObject.AddComponent<Billboard>();
             leafObject.AddComponent<NodeInputHandler>();
@@ -126,7 +126,11 @@ namespace Frontend
             var scale = TreeGeometry.SizeToScale(radius, DefaultCirclePlaneRadius, 1);
             var cirvleObject = InstantiateObject(CircleName, CirclePlane, parent,
                 localScale: new Vector3(scale, 1, scale));
-            VisualizeCircles.Subscribe(cirvleObject.SetActive);
+            ApplicationManager.Instance.VisualizeCircles.Subscribe(visualize =>
+            {
+                if (cirvleObject != null)
+                    cirvleObject.SetActive(visualize);
+            });
         }
 
         internal GameObject AddNodeLabel(Transform parent)
@@ -198,12 +202,13 @@ namespace Frontend
         {
             localPosition = localPosition ?? Vector3.zero;
             localEulerAngles = localEulerAngles ?? Vector3.zero;
+            localScale = localScale ?? Vector3.one;
 
             var gameObj = original == null ? new GameObject(objName) : Instantiate(original);
             gameObj.SetActive(isActive);
             if (parent != null) gameObj.transform.SetParent(parent);
             if (objName != null) gameObj.name = objName;
-            if (localScale != null) gameObj.transform.localScale = localScale.Value;
+            gameObj.transform.localScale = localScale.Value;
             gameObj.transform.localPosition = localPosition.Value;
             gameObj.transform.localEulerAngles = localEulerAngles.Value;
 

@@ -13,7 +13,7 @@ namespace Frontend.InputHandler
 
         public void OnInputClicked(InputClickedEventData eventData)
         {
-            InteractionManager.Instance.HandleEmptyClick();
+            InteractionManager.Instance.HandleEmptyClick(); 
         }
     }
 }

@@ -4,13 +4,11 @@ using UnityEngine;
 
 namespace Frontend.InputHandler
 {
-    public class FloorMenuButtonInputHandler : MonoBehaviour, IInputClickHandler
+    public class FloorInputHandler : MonoBehaviour, IInputClickHandler
     {
-        public FloorInteractionMode Mode;
-
         public void OnInputClicked(InputClickedEventData eventData)
         {
-            InteractionManager.Instance.HandleFloorMenuInput(Mode);
+            InteractionManager.Instance.HandleFloorInput();
         }
     }
 }

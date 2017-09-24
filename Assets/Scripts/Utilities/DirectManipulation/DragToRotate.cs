@@ -31,7 +31,6 @@ namespace Frontend
         public void OnManipulationCompleted(ManipulationEventData eventData)
         {
             InputManager.Instance.PopModalInputHandler();
-            InteractionManager.Instance.HandleFloorInteractionCompleted();
         }
 
         public void OnManipulationCanceled(ManipulationEventData eventData)

@@ -5,15 +5,37 @@ using UniRx;
 
 namespace Core
 {
-    public enum FloorInteractionMode {
-        TapToMenu, TapToPlace, DragToScale, DragToRotate
+    public enum ForestManipulationMode {
+        DragToScale, DragToRotate
     }
     
+    public class ContextMenu
+    {
+        public ReactiveProperty<bool> IsActive;
+        public ReactiveProperty<ContextMenuButton[]> Buttons { get; set; }
+    }
+    
+    public class ProjectMenu
+    {
+        public ReactiveProperty<bool> IsActive;
+        public ReactiveProperty<bool> IsTagalong;
+    }
+
+    public class ContextMenuButton
+    {
+        public string Icon { get; set; }
+        public string Text  { get; set; }
+        public Action Action { get; set; }
+    }
+
     public class AppState
     {
-        public ReactiveProperty<FloorInteractionMode> FloorInteractionMode { get; set; }
-        public ReactiveProperty<Forest> Forest { get; set; }
         public string[] AvailableExampleProjects { get; set; }
+        public ContextMenu ContexMenu { get; set; }
+        public ProjectMenu ProjectMenu { get; set; }
+        public ReactiveProperty<ForestManipulationMode> ForestManipulationMode { get; set; }
+        public ReactiveProperty<bool> IsPlacing { get; set; }
+        public ReactiveProperty<Forest> Forest { get; set; }
         public ReactiveProperty<AppData> AppData { get; set; }
     }
 

@@ -4,7 +4,6 @@ using Frontend;
 using HoloToolkit.Unity;
 using UnityEngine;
 using Utilities;
-using Logger = Utilities.Logger;
 
 namespace Core
 {
@@ -15,11 +14,6 @@ namespace Core
         public void Start()
         {
             AppState = ApplicationManager.Instance.AppState;
-        }
-
-        public void HandleFloorMenuInput(FloorInteractionMode mode)
-        {
-            AppState.FloorInteractionMode.Value = mode;
         }
 
         public void HandleNodeClick(string id)
@@ -43,11 +37,6 @@ namespace Core
             focused.IsFocused.Value = false;
         }
 
-        public void HandleFloorInteractionCompleted()
-        {
-            AppState.FloorInteractionMode.Value = FloorInteractionMode.TapToMenu;
-        }
-
         public void HandleEmptyClick()
         {
             AppState.Forest.Value?.Root?
@@ -68,6 +57,36 @@ namespace Core
             var fileName = AppState.AvailableExampleProjects[index];
             var softwareRoot = StreamingAssetsService.Instance.DesirializeData<Package>(fileName);
             AppState.AppData.Value = new AppData {Root = SoftwareArtefactToNodeMapper.Map(softwareRoot)};
+        }
+
+        public void HandleFloorInput()
+        {
+            AppState.ContexMenu.IsActive.Value ^= true;
+        }
+
+        public void HandleTapToPlace()
+        {
+            AppState.ContexMenu.IsActive.Value = false;
+            AppState.IsPlacing.Value ^= true;
+        }
+        
+        public void HandleDragToScale()
+        {
+            AppState.ContexMenu.IsActive.Value = false;
+            AppState.ForestManipulationMode.Value = ForestManipulationMode.DragToScale;
+        }
+        
+        public void HandleDragToRotate()
+        {
+            AppState.ContexMenu.IsActive.Value = false;
+            AppState.ForestManipulationMode.Value = ForestManipulationMode.DragToRotate;
+        }
+        
+        public void HandleShowProjectMenu()
+        {
+            AppState.ContexMenu.IsActive.Value = false;
+            AppState.ProjectMenu.IsActive.Value = true;
+            AppState.ProjectMenu.IsTagalong.Value = true;
         }
     }
 }
