@@ -1,11 +1,14 @@
-﻿using HoloToolkit.Unity;
+﻿using Core;
+using HoloToolkit.Unity;
 using HoloToolkit.Unity.InputModule;
 using UnityEngine;
+using UniRx;
 
 namespace Frontend
 {
     public class TagalongToggle : MonoBehaviour, IInputClickHandler
     {
+        public ApplicationManager AppManager;
         public GameObject Window;
         public GameObject Icon;
         public Sprite DisableIcon;
@@ -13,25 +16,20 @@ namespace Frontend
 
         private void Start()
         {
-            transform.parent.GetComponentInChildren<HandDraggable>().StartedDragging += DisableTagalong;
+            transform.parent.GetComponentInChildren<HandDraggable>().StartedDragging +=
+                InteractionManager.Instance.HandleProjectMenuHandDrag;
+            AppManager.AppState.ProjectMenu.IsTagalong.Subscribe(SetTagalong);
+        }
+
+        private void SetTagalong(bool active)
+        {
+            Window.GetComponent<Tagalong>().enabled = active;
+            Icon.GetComponent<SpriteRenderer>().sprite = active ? DisableIcon : EnableIcon;
         }
 
         public void OnInputClicked(InputClickedEventData eventData)
         {
-            ToggleTagalong();
-        }
-
-        private void ToggleTagalong()
-        {
-            Window.GetComponent<Tagalong>().enabled ^= true;
-            Icon.GetComponent<SpriteRenderer>().sprite =
-                Window.GetComponent<Tagalong>().enabled ? DisableIcon : EnableIcon;
-        }
-
-        private void DisableTagalong()
-        {
-            Window.GetComponent<Tagalong>().enabled = false;
-            Icon.GetComponent<SpriteRenderer>().sprite = EnableIcon;
+            InteractionManager.Instance.HandleProjectMenuTagalongToggle();
         }
     }
 }

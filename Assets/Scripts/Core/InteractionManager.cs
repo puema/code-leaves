@@ -39,10 +39,11 @@ namespace Core
 
         public void HandleEmptyClick()
         {
-            AppState.Forest.Value?.Root?
-                .Traverse(x => (x as UiInnerNode)?.Children)
-                .ToList()
-                .ForEach(x => x.IsSelected.Value = false);
+//            AppState.Forest.Value?.Root?
+//                .Traverse(x => (x as UiInnerNode)?.Children)
+//                .ToList()
+//                .ForEach(x => x.IsSelected.Value = false);
+            HandleFloorInput();
         }
 
         private UiNode FindUiNode(string id)
@@ -87,6 +88,16 @@ namespace Core
             AppState.ContexMenu.IsActive.Value = false;
             AppState.ProjectMenu.IsActive.Value = true;
             AppState.ProjectMenu.IsTagalong.Value = true;
+        }
+        
+        public void HandleProjectMenuTagalongToggle()
+        {
+            AppState.ProjectMenu.IsTagalong.Value ^= true;
+        }
+        
+        public void HandleProjectMenuHandDrag()
+        {
+            AppState.ProjectMenu.IsTagalong.Value = false;
         }
     }
 }

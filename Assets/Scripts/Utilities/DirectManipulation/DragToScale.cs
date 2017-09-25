@@ -1,7 +1,5 @@
-﻿using Core;
-using HoloToolkit.Unity.InputModule;
+﻿using HoloToolkit.Unity.InputModule;
 using UnityEngine;
-using Utilities;
 
 namespace Frontend
 {
