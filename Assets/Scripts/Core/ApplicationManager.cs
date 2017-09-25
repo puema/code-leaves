@@ -33,7 +33,7 @@ namespace Core
                     {
                         Text = "Place",
                         Icon = "MoveIcon",
-                        Action = () => InteractionManager.Instance.HandleTapToPlace()
+                        Action = () => InteractionManager.Instance.HandlePlaceToggle()
                     },
                     new ContextMenuButton
                     {

@@ -2,6 +2,8 @@
 using Data;
 using Frontend;
 using HoloToolkit.Unity;
+using HoloToolkit.Unity.InputModule;
+using HoloToolkit.Unity.SpatialMapping;
 using UnityEngine;
 using Utilities;
 
@@ -39,6 +41,8 @@ namespace Core
 
         public void HandleEmptyClick()
         {
+            if (GazeManager.Instance.HitObject != null &&
+                !GazeManager.Instance.HitObject.transform.IsChildOf(SpatialMappingManager.Instance.transform)) return;
 //            AppState.Forest.Value?.Root?
 //                .Traverse(x => (x as UiInnerNode)?.Children)
 //                .ToList()
@@ -65,36 +69,36 @@ namespace Core
             AppState.ContexMenu.IsActive.Value ^= true;
         }
 
-        public void HandleTapToPlace()
+        public void HandlePlaceToggle()
         {
             AppState.ContexMenu.IsActive.Value = false;
             AppState.IsPlacing.Value ^= true;
         }
-        
+
         public void HandleDragToScale()
         {
             AppState.ContexMenu.IsActive.Value = false;
             AppState.ForestManipulationMode.Value = ForestManipulationMode.DragToScale;
         }
-        
+
         public void HandleDragToRotate()
         {
             AppState.ContexMenu.IsActive.Value = false;
             AppState.ForestManipulationMode.Value = ForestManipulationMode.DragToRotate;
         }
-        
+
         public void HandleShowProjectMenu()
         {
             AppState.ContexMenu.IsActive.Value = false;
             AppState.ProjectMenu.IsActive.Value = true;
             AppState.ProjectMenu.IsTagalong.Value = true;
         }
-        
+
         public void HandleProjectMenuTagalongToggle()
         {
             AppState.ProjectMenu.IsTagalong.Value ^= true;
         }
-        
+
         public void HandleProjectMenuHandDrag()
         {
             AppState.ProjectMenu.IsTagalong.Value = false;
