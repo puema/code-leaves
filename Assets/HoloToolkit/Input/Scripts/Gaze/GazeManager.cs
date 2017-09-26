@@ -139,10 +139,9 @@ namespace HoloToolkit.Unity.InputModule
         private bool FindGazeTransform()
         {
             if (GazeTransform != null) { return true; }
-
-            if (Camera.main != null)
+            if (CameraCache.Main != null)
             {
-                GazeTransform = Camera.main.transform;
+                GazeTransform = CameraCache.Main.transform;
                 return true;
             }
 
@@ -218,8 +217,10 @@ namespace HoloToolkit.Unity.InputModule
                 UnityUIPointerEvent = new PointerEventData(EventSystem.current);
             }
 
+            Camera mainCamera = CameraCache.Main;
+
             // 2D cursor position
-            Vector2 cursorScreenPos = Camera.main.WorldToScreenPoint(HitPosition);
+            Vector2 cursorScreenPos = mainCamera.WorldToScreenPoint(HitPosition);
             UnityUIPointerEvent.delta = cursorScreenPos - UnityUIPointerEvent.position;
             UnityUIPointerEvent.position = cursorScreenPos;
 
@@ -267,11 +268,11 @@ namespace HoloToolkit.Unity.InputModule
                 if (!IsGazingAtObject || superseded3DObject)
                 {
                     IsGazingAtObject = true;
-                    Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(uiRaycastResult.screenPosition.x, uiRaycastResult.screenPosition.y, uiRaycastResult.distance));
+                    Vector3 worldPos = mainCamera.ScreenToWorldPoint(new Vector3(uiRaycastResult.screenPosition.x, uiRaycastResult.screenPosition.y, uiRaycastResult.distance));
                     hitInfo = new RaycastHit
                     {
                         distance = uiRaycastResult.distance,
-                        normal = -Camera.main.transform.forward,
+                        normal = -uiRaycastResult.gameObject.transform.forward,
                         point = worldPos
                     };
 

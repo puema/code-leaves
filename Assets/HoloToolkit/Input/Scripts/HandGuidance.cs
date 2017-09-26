@@ -2,8 +2,8 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 
-#if UNITY_WSA
 using UnityEngine;
+#if UNITY_WSA
 using UnityEngine.VR.WSA.Input;
 #endif
 
@@ -14,20 +14,21 @@ namespace HoloToolkit.Unity.InputModule
     /// </summary>
     public class HandGuidance : Singleton<HandGuidance>
     {
-#if UNITY_WSA
         [Tooltip("The Cursor object the HandGuidanceIndicator will be positioned around.")]
         public GameObject Cursor;
 
         [Tooltip("GameObject to display when your hand is about to lose tracking.")]
         public GameObject HandGuidanceIndicator;
-        private GameObject handGuidanceIndicatorGameObject = null;
+
 
         // Hand source loss risk to start showing a hand indicator.
         // As the source loss risk approaches 1, the hand is closer to being out of view.
         [Range(0.0f, 1.0f)]
         [Tooltip("When to start showing the Hand Guidance Indicator. 1 is out of view, 0 is centered in view.")]
         public float HandGuidanceThreshold = 0.5f;
-
+#if UNITY_WSA
+        private GameObject handGuidanceIndicatorGameObject = null;
+        
         private Quaternion defaultHandGuidanceRotation;
 
         private uint? currentlyTrackedHand = null;
@@ -105,7 +106,7 @@ namespace HoloToolkit.Unity.InputModule
 
             // Subtract direction from origin so that the indicator is between the hand and the origin.
             position = Cursor.transform.position - hand.properties.sourceLossMitigationDirection * distanceFromCenter;
-            rotation = Quaternion.LookRotation(Camera.main.transform.forward, hand.properties.sourceLossMitigationDirection);
+            rotation = Quaternion.LookRotation(CameraCache.Main.transform.forward, hand.properties.sourceLossMitigationDirection);
         }
 
         private void InteractionManager_SourceUpdated(InteractionSourceState hand)

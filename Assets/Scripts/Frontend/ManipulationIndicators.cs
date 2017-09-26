@@ -76,8 +76,6 @@ namespace Frontend
         {
             transform.Find(Hand).localPosition = position;
 
-            Debug.Log(DistanceBetweenIndicators / 2 + position.x);
-                
             if (position.x < 0)
                 transform.Find(LeftIndicator).localPosition =
                     new Vector3(-DistanceBetweenIndicators / 2 + position.x, 0, 0);

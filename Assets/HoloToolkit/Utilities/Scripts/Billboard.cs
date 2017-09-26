@@ -10,7 +10,7 @@ namespace HoloToolkit.Unity
         // Rotate about all axes.
         Free,
         // Rotate about an individual axis.
-        X, Y
+        Y
     }
 
     /// <summary>
@@ -31,7 +31,7 @@ namespace HoloToolkit.Unity
         {
             if (TargetTransform == null)
             {
-                TargetTransform = Camera.main.transform;
+                TargetTransform = CameraCache.Main.transform;
             }
 
             Update();
@@ -53,10 +53,6 @@ namespace HoloToolkit.Unity
             // Adjust for the pivot axis.
             switch (PivotAxis)
             {
-                case PivotAxis.X:
-                    directionToTarget.x = 0.0f;
-                    break;
-                    
                 case PivotAxis.Y:
                     directionToTarget.y = 0.0f;
                     break;

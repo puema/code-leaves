@@ -13,8 +13,16 @@ namespace Frontend
         {
             AppManager.AppState.IsPlacing.Subscribe(isPlacing =>
             {
-                GetComponent<TapToPlace>().enabled = isPlacing;
-                GetComponent<TapToPlace>().IsBeingPlaced = isPlacing;
+                var tapToPlace = GetComponent<TapToPlace>();
+                if (!isPlacing)
+                {
+                    tapToPlace.enabled = false;
+                }
+                else
+                {
+                    tapToPlace.enabled = true;
+                    tapToPlace.HandlePlacement();
+                }
             });
         }
     }
