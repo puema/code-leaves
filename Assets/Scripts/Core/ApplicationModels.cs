@@ -11,14 +11,26 @@ namespace Core
     
     public class ContextMenu
     {
-        public ReactiveProperty<bool> IsActive;
+        public ReactiveProperty<bool> IsActive { get; set; }
         public ReactiveProperty<ContextMenuButton[]> Buttons { get; set; }
     }
     
     public class ProjectMenu
     {
+        public ReactiveProperty<bool> IsActive { get; set; }
+        public ReactiveProperty<bool> IsTagalong { get; set; }
+    }
+    
+    public class ManipulationIndicators
+    {
         public ReactiveProperty<bool> IsActive;
-        public ReactiveProperty<bool> IsTagalong;
+        public ReactiveProperty<ManipulationIndicatorIcons> Icons;
+    }
+
+    public class ManipulationIndicatorIcons
+    {
+        public string Left;
+        public string Right;
     }
 
     public class ContextMenuButton
@@ -33,6 +45,7 @@ namespace Core
         public string[] AvailableExampleProjects { get; set; }
         public ContextMenu ContexMenu { get; set; }
         public ProjectMenu ProjectMenu { get; set; }
+        public ManipulationIndicators ManipulationIndicators { get; set; }
         public ReactiveProperty<ForestManipulationMode> ForestManipulationMode { get; set; }
         public ReactiveProperty<bool> IsPlacing { get; set; }
         public ReactiveProperty<Forest> Forest { get; set; }

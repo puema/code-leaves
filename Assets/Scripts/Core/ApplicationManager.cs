@@ -61,6 +61,11 @@ namespace Core
                 IsActive = new BoolReactiveProperty(true),
                 IsTagalong = new ReactiveProperty<bool>(true)
             },
+            ManipulationIndicators = new ManipulationIndicators
+            {
+                IsActive = new ReactiveProperty<bool>(false),
+                Icons = new ReactiveProperty<ManipulationIndicatorIcons>(new ManipulationIndicatorIcons())
+            },
             ForestManipulationMode = new ReactiveProperty<ForestManipulationMode>(ForestManipulationMode.DragToScale),
             IsPlacing = new ReactiveProperty<bool>(false),
             AvailableExampleProjects = new[] {"Sunflower", "CirclePacking", "Air", "Dcom", "Fupo"},
