@@ -4,7 +4,6 @@ using Frontend;
 using HoloToolkit.Unity;
 using HoloToolkit.Unity.InputModule;
 using HoloToolkit.Unity.SpatialMapping;
-using UnityEngine;
 using Utilities;
 
 namespace Core
@@ -47,7 +46,7 @@ namespace Core
 //                .Traverse(x => (x as UiInnerNode)?.Children)
 //                .ToList()
 //                .ForEach(x => x.IsSelected.Value = false);
-            HandleFloorInput();
+            HandleFloorClick();
         }
 
         private UiNode FindUiNode(string id)
@@ -64,27 +63,29 @@ namespace Core
             AppState.AppData.Value = new AppData {Root = SoftwareArtefactToNodeMapper.Map(softwareRoot)};
         }
 
-        public void HandleFloorInput()
+        public void HandleFloorClick()
         {
             AppState.ContexMenu.IsActive.Value ^= true;
         }
 
-        public void HandlePlaceToggle()
+        public void HandleIsPlacingToggle()
         {
             AppState.ContexMenu.IsActive.Value = false;
             AppState.IsPlacing.Value ^= true;
         }
 
-        public void HandleDragToScale()
+        public void HandleScaleMode()
         {
             AppState.ContexMenu.IsActive.Value = false;
-            AppState.ForestManipulationMode.Value = ForestManipulationMode.DragToScale;
+            AppState.ForestManipulationMode.Value = ManipulationMode.Scale;
+            AppState.ManipulationIndicators.Mode.Value = ManipulationMode.Scale;
         }
 
-        public void HandleDragToRotate()
+        public void HandleRotateMode()
         {
             AppState.ContexMenu.IsActive.Value = false;
-            AppState.ForestManipulationMode.Value = ForestManipulationMode.DragToRotate;
+            AppState.ForestManipulationMode.Value = ManipulationMode.Rotate;
+            AppState.ManipulationIndicators.Mode.Value = ManipulationMode.Rotate;
         }
 
         public void HandleShowProjectMenu()
@@ -102,6 +103,16 @@ namespace Core
         public void HandleProjectMenuHandDrag()
         {
             AppState.ProjectMenu.IsTagalong.Value = false;
+        }
+        
+        public void HandleManipulationStarted()
+        {
+            AppState.ManipulationIndicators.IsActive.Value = true;
+        }
+        
+        public void HandleManipulationCompleted()
+        {
+            AppState.ManipulationIndicators.IsActive.Value = false;
         }
     }
 }

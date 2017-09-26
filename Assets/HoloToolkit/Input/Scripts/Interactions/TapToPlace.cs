@@ -144,7 +144,7 @@ namespace HoloToolkit.Unity.InputModule
                 // Clear our cache in case we added or removed gameobjects between taps
                 defaultLayersCache.Clear();
                 InputManager.Instance.RemoveGlobalListener(gameObject);
-                InteractionManager.Instance.HandlePlaceToggle();
+                InteractionManager.Instance.HandleIsPlacingToggle();
 
                 // If the user is not in placing mode, hide the spatial mapping mesh.
                 if (AllowMeshVisualizationControl)

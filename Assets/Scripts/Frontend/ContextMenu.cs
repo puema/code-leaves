@@ -13,12 +13,11 @@ namespace Frontend
         public ApplicationManager AppManager;
         public GameObject Button;
         public string SpriteFolder = "Sprites";
-
+        public const float distanceToCamera = 1.5f;
+        
         private Core.ContextMenu Menu;
 
         // Shifts the menu up
-        private const float distanceToCamera = 1.5f;
-
         private readonly Vector3 yShift = Vector3.up * 0.03f;
 
         private void Start()

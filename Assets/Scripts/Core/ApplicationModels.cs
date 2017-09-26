@@ -5,8 +5,8 @@ using UniRx;
 
 namespace Core
 {
-    public enum ForestManipulationMode {
-        DragToScale, DragToRotate
+    public enum ManipulationMode {
+        Scale, Rotate, Move
     }
     
     public class ContextMenu
@@ -24,13 +24,7 @@ namespace Core
     public class ManipulationIndicators
     {
         public ReactiveProperty<bool> IsActive;
-        public ReactiveProperty<ManipulationIndicatorIcons> Icons;
-    }
-
-    public class ManipulationIndicatorIcons
-    {
-        public string Left;
-        public string Right;
+        public ReactiveProperty<ManipulationMode> Mode;
     }
 
     public class ContextMenuButton
@@ -46,7 +40,7 @@ namespace Core
         public ContextMenu ContexMenu { get; set; }
         public ProjectMenu ProjectMenu { get; set; }
         public ManipulationIndicators ManipulationIndicators { get; set; }
-        public ReactiveProperty<ForestManipulationMode> ForestManipulationMode { get; set; }
+        public ReactiveProperty<ManipulationMode> ForestManipulationMode { get; set; }
         public ReactiveProperty<bool> IsPlacing { get; set; }
         public ReactiveProperty<Forest> Forest { get; set; }
         public ReactiveProperty<AppData> AppData { get; set; }

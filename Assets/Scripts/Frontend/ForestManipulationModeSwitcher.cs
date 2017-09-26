@@ -14,10 +14,10 @@ namespace Frontend
                 
                 switch (mode)
                 {
-                    case ForestManipulationMode.DragToScale:
+                    case ManipulationMode.Scale:
                         GetComponent<DragToScale>().enabled = true;
                         break;
-                    case ForestManipulationMode.DragToRotate:
+                    case ManipulationMode.Rotate:
                         GetComponent<DragToRotate>().enabled = true;
                         break;
                         

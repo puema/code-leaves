@@ -32,25 +32,25 @@ namespace Core
                     new ContextMenuButton
                     {
                         Text = "Place",
-                        Icon = "MoveIcon",
-                        Action = () => InteractionManager.Instance.HandlePlaceToggle()
+                        Icon = "hand",
+                        Action = () => InteractionManager.Instance.HandleIsPlacingToggle()
                     },
                     new ContextMenuButton
                     {
                         Text = "Scale",
-                        Icon = "ExpandIcon",
-                        Action = () => InteractionManager.Instance.HandleDragToScale()
+                        Icon = "expand",
+                        Action = () => InteractionManager.Instance.HandleScaleMode()
                     },
                     new ContextMenuButton
                     {
                         Text = "Rotate",
-                        Icon = "RotateIcon",
-                        Action = () => InteractionManager.Instance.HandleDragToRotate()
+                        Icon = "rotate",
+                        Action = () => InteractionManager.Instance.HandleRotateMode()
                     },
                     new ContextMenuButton
                     {
                         Text = "Menu",
-                        Icon = "MenuIcon",
+                        Icon = "menu",
                         Action = () => InteractionManager.Instance.HandleShowProjectMenu()
                     }
                 }),
@@ -61,12 +61,12 @@ namespace Core
                 IsActive = new BoolReactiveProperty(true),
                 IsTagalong = new ReactiveProperty<bool>(true)
             },
-            ManipulationIndicators = new ManipulationIndicators
+            ManipulationIndicators = new ManipulationIndicators    
             {
                 IsActive = new ReactiveProperty<bool>(false),
-                Icons = new ReactiveProperty<ManipulationIndicatorIcons>(new ManipulationIndicatorIcons())
+                Mode = new ReactiveProperty<ManipulationMode>()
             },
-            ForestManipulationMode = new ReactiveProperty<ForestManipulationMode>(ForestManipulationMode.DragToScale),
+            ForestManipulationMode = new ReactiveProperty<ManipulationMode>(ManipulationMode.Scale),
             IsPlacing = new ReactiveProperty<bool>(false),
             AvailableExampleProjects = new[] {"Sunflower", "CirclePacking", "Air", "Dcom", "Fupo"},
             Forest = new ReactiveProperty<Forest>(new Forest()),

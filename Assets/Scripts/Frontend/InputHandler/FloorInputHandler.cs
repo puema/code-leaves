@@ -8,7 +8,7 @@ namespace Frontend.InputHandler
     {
         public void OnInputClicked(InputClickedEventData eventData)
         {
-            InteractionManager.Instance.HandleFloorInput();
+            InteractionManager.Instance.HandleFloorClick();
         }
     }
 }
