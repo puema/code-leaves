@@ -17,10 +17,12 @@ namespace Frontend
         public float MaxScale = 10;
 
         private float OriginalScale;
+        private Camera mainCamera;
 
         private void Start()
         {
             if (Target == null) Target = gameObject;
+            mainCamera = Camera.main;
         }
 
         private void SetMinMaxScale()
@@ -53,13 +55,14 @@ namespace Frontend
             ManipulationIndicators.ActivateIndicators();
             OriginalScale = Target.transform.localScale.x;
             InputManager.Instance.PushModalInputHandler(gameObject);
-            Scale(eventData.CumulativeDelta.x);
+            OnManipulationUpdated(eventData);
         }
 
         public void OnManipulationUpdated(ManipulationEventData eventData)
         {
-            ManipulationIndicators.UpdateHandPosition(eventData.CumulativeDelta);
-            Scale(eventData.CumulativeDelta.x);
+            var direction = mainCamera.transform.InverseTransformDirection(eventData.CumulativeDelta);
+            ManipulationIndicators.UpdateHandPosition(new Vector3(direction.x, 0, 0));
+            Scale(direction.x);
         }
 
         public void OnManipulationCompleted(ManipulationEventData eventData)

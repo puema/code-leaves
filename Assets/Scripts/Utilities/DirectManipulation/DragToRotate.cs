@@ -13,10 +13,12 @@ namespace Frontend
         public float RotateFactor = 10;
 
         private float OriginalRotation;
+        private Camera mainCamera;
 
         private void Start()
         {
             if (Target == null) Target = gameObject;
+            mainCamera = Camera.main;
         }
         
         public void OnHoldStarted(HoldEventData eventData)
@@ -42,13 +44,14 @@ namespace Frontend
             ManipulationIndicators.ActivateIndicators();
             OriginalRotation = Target.transform.localEulerAngles.y;
             InputManager.Instance.PushModalInputHandler(gameObject);
-            Rotate(eventData.CumulativeDelta.x);
+            OnManipulationUpdated(eventData);
         }
 
         public void OnManipulationUpdated(ManipulationEventData eventData)
         {
-            ManipulationIndicators.UpdateHandPosition(eventData.CumulativeDelta);
-            Rotate(eventData.CumulativeDelta.x);
+            var direction = mainCamera.transform.InverseTransformDirection(eventData.CumulativeDelta);
+            ManipulationIndicators.UpdateHandPosition(new Vector3(direction.x, 0, 0));
+            Rotate(direction.x);
         }
 
         public void OnManipulationCompleted(ManipulationEventData eventData)
