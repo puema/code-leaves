@@ -8,7 +8,7 @@ namespace Frontend
     {
         private void Start()
         {
-            ApplicationManager.Instance.AppState.ForestManipulationMode.Subscribe(mode =>
+            ApplicationManager.Instance.AppState.UiElements.ForestManipulationMode.Subscribe(mode =>
             {
                 ResetInteractionMode();
                 

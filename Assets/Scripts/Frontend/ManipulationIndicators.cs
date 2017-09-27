@@ -41,14 +41,12 @@ namespace Frontend
         private const string Hand = "Hand";
 
         private ManipulationMode mode;
-//        private bool isActive;
 
         private void Start()
         {
             Deactivate();
             ResetIndicators();
-//            AppManager.AppState.ManipulationIndicators.IsActive.Subscribe(SetActive);
-            AppManager.AppState.ManipulationIndicators.Mode.Subscribe(SetMode);
+            AppManager.AppState.UiElements.ManipulationIndicators.Mode.Subscribe(SetMode);
         }
 
         public void ResetIndicators()
@@ -112,32 +110,6 @@ namespace Frontend
 
         public void ActivateIndicators()
         {
-            switch (mode)
-            {
-                case ManipulationMode.Move:
-                    SetActiveHorizonal(true);
-                    SetActiveVertical(true);
-                    break;
-                case ManipulationMode.Scale:
-                case ManipulationMode.Rotate:
-                    SetActiveHorizonal(true);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
-            }
-        }
-
-        private void SetActive(bool isActive)
-        {
-//            this.isActive = isActive;
-
-            if (!isActive)
-            {
-                SetActiveHorizonal(false);
-                SetActiveVertical(false);
-                return;
-            }
-
             switch (mode)
             {
                 case ManipulationMode.Move:

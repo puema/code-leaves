@@ -25,50 +25,61 @@ namespace Core
 
         public AppState AppState = new AppState
         {
-            ContexMenu = new ContextMenu
+            UiElements = new UiElements
             {
-                Buttons = new ReactiveProperty<ContextMenuButton[]>(new[]
+                GazeText = new GazeText
                 {
-                    new ContextMenuButton
+                    IsActive = new BoolReactiveProperty(false),
+                    Text = new ReactiveProperty<string>()
+                },
+                ContexMenu = new ContextMenu
+                {
+                    Buttons = new ReactiveProperty<ContextMenuButton[]>(new[]
                     {
-                        Text = "Place",
-                        Icon = "hand",
-                        Action = () => InteractionManager.Instance.HandleIsPlacingToggle()
-                    },
-                    new ContextMenuButton
-                    {
-                        Text = "Scale",
-                        Icon = "expand",
-                        Action = () => InteractionManager.Instance.HandleScaleMode()
-                    },
-                    new ContextMenuButton
-                    {
-                        Text = "Rotate",
-                        Icon = "rotate",
-                        Action = () => InteractionManager.Instance.HandleRotateMode()
-                    },
-                    new ContextMenuButton
-                    {
-                        Text = "Menu",
-                        Icon = "menu",
-                        Action = () => InteractionManager.Instance.HandleShowProjectMenu()
-                    }
-                }),
-                IsActive = new ReactiveProperty<bool>(false)
+                        new ContextMenuButton
+                        {
+                            Text = "Place",
+                            Icon = "hand",
+                            Action = () => InteractionManager.Instance.HandleIsPlacingToggle()
+                        },
+                        new ContextMenuButton
+                        {
+                            Text = "Scale",
+                            Icon = "expand",
+                            Action = () => InteractionManager.Instance.HandleScaleMode()
+                        },
+                        new ContextMenuButton
+                        {
+                            Text = "Rotate",
+                            Icon = "rotate",
+                            Action = () => InteractionManager.Instance.HandleRotateMode()
+                        },
+                        new ContextMenuButton
+                        {
+                            Text = "Menu",
+                            Icon = "menu",
+                            Action = () => InteractionManager.Instance.HandleShowProjectMenu()
+                        }
+                    }),
+                    IsActive = new ReactiveProperty<bool>(false)
+                },
+                ProjectMenu = new ProjectMenu
+                {
+                    IsActive = new BoolReactiveProperty(true),
+                    IsTagalong = new ReactiveProperty<bool>(true)
+                },
+                ManipulationIndicators = new ManipulationIndicators
+                {
+                    IsActive = new ReactiveProperty<bool>(false),
+                    Mode = new ReactiveProperty<ManipulationMode>()
+                },
+                ForestManipulationMode = new ReactiveProperty<ManipulationMode>(ManipulationMode.Scale),
+                IsPlacing = new ReactiveProperty<bool>(false)
             },
-            ProjectMenu = new ProjectMenu
+            AvailableExampleProjects = new[]
             {
-                IsActive = new BoolReactiveProperty(true),
-                IsTagalong = new ReactiveProperty<bool>(true)
+                "AirExcerpt", "AirTools", "AirCps", "Air"
             },
-            ManipulationIndicators = new ManipulationIndicators    
-            {
-                IsActive = new ReactiveProperty<bool>(false),
-                Mode = new ReactiveProperty<ManipulationMode>()
-            },
-            ForestManipulationMode = new ReactiveProperty<ManipulationMode>(ManipulationMode.Scale),
-            IsPlacing = new ReactiveProperty<bool>(false),
-            AvailableExampleProjects = new[] {"AirExcerpt", "AirTools", "AirCps", "Air"},
             Forest = new ReactiveProperty<Forest>(new Forest()),
             AppData = new ReactiveProperty<AppData>(new AppData())
         };

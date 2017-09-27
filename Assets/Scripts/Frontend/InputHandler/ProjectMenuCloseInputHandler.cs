@@ -10,7 +10,7 @@ namespace Frontend.InputHandler
 		
 		public void OnInputClicked(InputClickedEventData eventData)
 		{
-			AppManager.AppState.ProjectMenu.IsActive.Value = false;
+			AppManager.AppState.UiElements.ProjectMenu.IsActive.Value = false;
 		}
 	}
 }

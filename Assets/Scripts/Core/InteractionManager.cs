@@ -11,11 +11,13 @@ namespace Core
 {
     public class InteractionManager : Singleton<InteractionManager>
     {
-        private AppState AppState;
+        private AppState appState;
+        private UiElements uiElements;
 
         public void Start()
         {
-            AppState = ApplicationManager.Instance.AppState;
+            appState = ApplicationManager.Instance.AppState;
+            uiElements = appState.UiElements;
         }
 
         public void HandleNodeClick(string id)
@@ -28,96 +30,98 @@ namespace Core
         public void HandleNodeFocusEnter(string id)
         {
             var focused = FindUiNode(id);
-            focused?
+            if (focused == null) return;
+            focused
                 .Traverse(x => (x as UiInnerNode)?.Children)
                 .ToList()
                 .ForEach(x => x.IsFocused.Value = true);
+            uiElements.GazeText.Text.Value = focused.Text.Value;
+            uiElements.GazeText.IsActive.Value = true;
         }
 
         public void HandleNodeFocusExit(string id)
         {
             var focused = FindUiNode(id);
-            focused?
+            if (focused == null) return;
+            focused
                 .Traverse(x => (x as UiInnerNode)?.Children)
                 .ToList()
                 .ForEach(x => x.IsFocused.Value = false);
+            uiElements.GazeText.IsActive.Value = false;
+            uiElements.GazeText.Text.Value = "";
         }
 
         public void HandleEmptyClick()
         {
             if (GazeManager.Instance.HitObject != null &&
                 !GazeManager.Instance.HitObject.transform.IsChildOf(SpatialMappingManager.Instance.transform)) return;
-//            AppState.Forest.Value?.Root?
-//                .Traverse(x => (x as UiInnerNode)?.Children)
-//                .ToList()
-//                .ForEach(x => x.IsSelected.Value = false);
             HandleFloorClick();
         }
 
         private UiNode FindUiNode(string id)
         {
-            return AppState.Forest.Value?.Root?
+            return appState.Forest.Value?.Root?
                 .Traverse(x => (x as UiInnerNode)?.Children)
                 .FirstOrDefault(x => x.Id == id);
         }
 
         public void HandleProjectSelection(int index)
         {
-            var fileName = AppState.AvailableExampleProjects[index];
+            var fileName = appState.AvailableExampleProjects[index];
             var softwareRoot = StreamingAssetsService.Instance.DesirializeData<Package>(fileName);
-            AppState.AppData.Value = new AppData {Root = SoftwareArtefactToNodeMapper.Map(softwareRoot)};
+            appState.AppData.Value = new AppData {Root = SoftwareArtefactToNodeMapper.Map(softwareRoot)};
         }
 
         public void HandleFloorClick()
         {
-            AppState.ContexMenu.IsActive.Value ^= true;
+            uiElements.ContexMenu.IsActive.Value ^= true;
         }
 
         public void HandleIsPlacingToggle()
         {
-            AppState.ContexMenu.IsActive.Value = false;
-            AppState.IsPlacing.Value ^= true;
+            uiElements.ContexMenu.IsActive.Value = false;
+            uiElements.IsPlacing.Value ^= true;
         }
 
         public void HandleScaleMode()
         {
-            AppState.ContexMenu.IsActive.Value = false;
-            AppState.ForestManipulationMode.Value = ManipulationMode.Scale;
-            AppState.ManipulationIndicators.Mode.Value = ManipulationMode.Scale;
+            uiElements.ContexMenu.IsActive.Value = false;
+            uiElements.ForestManipulationMode.Value = ManipulationMode.Scale;
+            uiElements.ManipulationIndicators.Mode.Value = ManipulationMode.Scale;
         }
 
         public void HandleRotateMode()
         {
-            AppState.ContexMenu.IsActive.Value = false;
-            AppState.ForestManipulationMode.Value = ManipulationMode.Rotate;
-            AppState.ManipulationIndicators.Mode.Value = ManipulationMode.Rotate;
+            uiElements.ContexMenu.IsActive.Value = false;
+            uiElements.ForestManipulationMode.Value = ManipulationMode.Rotate;
+            uiElements.ManipulationIndicators.Mode.Value = ManipulationMode.Rotate;
         }
 
         public void HandleShowProjectMenu()
         {
-            AppState.ContexMenu.IsActive.Value = false;
-            AppState.ProjectMenu.IsActive.Value = true;
-            AppState.ProjectMenu.IsTagalong.Value = true;
+            uiElements.ContexMenu.IsActive.Value = false;
+            uiElements.ProjectMenu.IsActive.Value = true;
+            uiElements.ProjectMenu.IsTagalong.Value = true;
         }
 
         public void HandleProjectMenuTagalongToggle()
         {
-            AppState.ProjectMenu.IsTagalong.Value ^= true;
+            uiElements.ProjectMenu.IsTagalong.Value ^= true;
         }
 
         public void HandleProjectMenuHandDrag()
         {
-            AppState.ProjectMenu.IsTagalong.Value = false;
+            uiElements.ProjectMenu.IsTagalong.Value = false;
         }
         
         public void HandleManipulationStarted()
         {
-            AppState.ManipulationIndicators.IsActive.Value = true;
+            uiElements.ManipulationIndicators.IsActive.Value = true;
         }
         
         public void HandleManipulationCompleted()
         {
-            AppState.ManipulationIndicators.IsActive.Value = false;
+            uiElements.ManipulationIndicators.IsActive.Value = false;
         }
     }
 }

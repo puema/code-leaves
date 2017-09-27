@@ -18,7 +18,7 @@ namespace Frontend
         {
             transform.parent.GetComponentInChildren<HandDraggable>().StartedDragging +=
                 InteractionManager.Instance.HandleProjectMenuHandDrag;
-            AppManager.AppState.ProjectMenu.IsTagalong.Subscribe(SetTagalong);
+            AppManager.AppState.UiElements.ProjectMenu.IsTagalong.Subscribe(SetTagalong);
         }
 
         private void SetTagalong(bool active)

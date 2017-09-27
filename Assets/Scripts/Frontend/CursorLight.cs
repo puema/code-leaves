@@ -1,7 +1,7 @@
 ﻿using HoloToolkit.Unity.InputModule;
 using UnityEngine;
 
-namespace Frontend.ProjectMenu
+namespace Frontend
 {
     public class CursorLight : MonoBehaviour
     {

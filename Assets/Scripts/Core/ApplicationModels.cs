@@ -5,8 +5,24 @@ using UniRx;
 
 namespace Core
 {
+    public class UiElements
+    {
+        public GazeText GazeText { get; set; }
+        public ContextMenu ContexMenu { get; set; }
+        public ProjectMenu ProjectMenu { get; set; }
+        public ReactiveProperty<bool> IsPlacing { get; set; }
+        public ManipulationIndicators ManipulationIndicators { get; set; }
+        public ReactiveProperty<ManipulationMode> ForestManipulationMode { get; set; }
+    } 
+    
     public enum ManipulationMode {
         Scale, Rotate, Move
+    }
+    
+    public class GazeText
+    {
+        public ReactiveProperty<bool> IsActive { get; set; }
+        public ReactiveProperty<string> Text { get; set; }
     }
     
     public class ContextMenu
@@ -37,11 +53,7 @@ namespace Core
     public class AppState
     {
         public string[] AvailableExampleProjects { get; set; }
-        public ContextMenu ContexMenu { get; set; }
-        public ProjectMenu ProjectMenu { get; set; }
-        public ManipulationIndicators ManipulationIndicators { get; set; }
-        public ReactiveProperty<ManipulationMode> ForestManipulationMode { get; set; }
-        public ReactiveProperty<bool> IsPlacing { get; set; }
+        public UiElements UiElements { get; set; }
         public ReactiveProperty<Forest> Forest { get; set; }
         public ReactiveProperty<AppData> AppData { get; set; }
     }

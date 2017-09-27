@@ -22,7 +22,7 @@ namespace Frontend
 
         private void Start()
         {
-            Menu = AppManager.AppState.ContexMenu;
+            Menu = AppManager.AppState.UiElements.ContexMenu;
             
             Menu.Buttons.Subscribe(SetButtons);
 

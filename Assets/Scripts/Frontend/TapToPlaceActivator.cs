@@ -11,7 +11,7 @@ namespace Frontend
 
         private void Start()
         {
-            AppManager.AppState.IsPlacing.Subscribe(isPlacing =>
+            AppManager.AppState.UiElements.IsPlacing.Subscribe(isPlacing =>
             {
                 var tapToPlace = GetComponent<TapToPlace>();
                 if (!isPlacing)
