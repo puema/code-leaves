@@ -129,7 +129,7 @@ namespace Frontend.Forest
             var cirvleObject = InstantiateObject(CircleName, CirclePlane, parent,
                 localScale: new Vector3(scale, 1, scale));
             cirvleObject.AddComponent<CircleInputHandler>();
-            ApplicationManager.Instance.VisualizeCircles.Subscribe(visualize =>
+            ApplicationManager.Instance.AppState.Forest.Value.VisualizeCircles.Subscribe(visualize =>
             {
                 if (cirvleObject != null)
                     cirvleObject.SetActive(visualize);

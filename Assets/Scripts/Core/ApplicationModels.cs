@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Frontend;
 using Frontend.Models;
 using UniRx;
 
@@ -10,7 +9,7 @@ namespace Core
     {
         public GazeText GazeText { get; set; }
         public ContextMenu ContexMenu { get; set; }
-        public ProjectMenu AppMenu { get; set; }
+        public AppMenu AppMenu { get; set; }
         public ReactiveProperty<bool> IsPlacing { get; set; }
         public ManipulationIndicators ManipulationIndicators { get; set; }
         public ReactiveProperty<ManipulationMode> ForestManipulationMode { get; set; }
@@ -32,10 +31,16 @@ namespace Core
         public ReactiveProperty<ContextMenuButton[]> Buttons { get; set; }
     }
     
-    public class ProjectMenu
+    public class AppMenu
     {
+        public ReactiveProperty<AppMenuPage> Page { get; set; }
         public ReactiveProperty<bool> IsActive { get; set; }
         public ReactiveProperty<bool> IsTagalong { get; set; }
+    }
+
+    public enum AppMenuPage
+    {
+        ProjectSelection, Settings
     }
     
     public class ManipulationIndicators

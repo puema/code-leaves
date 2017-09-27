@@ -52,6 +52,11 @@ namespace Core
             uiElements.GazeText.Text.Value = "";
         }
 
+        public void HandleCircleVisualizationToggle()
+        {
+            appState.Forest.Value.VisualizeCircles.Value ^= true;
+        }
+
         public void HandleEmptyClick()
         {
             if (GazeManager.Instance.HitObject != null &&

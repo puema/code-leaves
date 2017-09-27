@@ -22,8 +22,6 @@ namespace Core
 
         public string SonarQubeBaseComponent = "com.bmw.dcom:dcom";
 
-        public BoolReactiveProperty VisualizeCircles = new BoolReactiveProperty(false);
-
         // ------------------------------ //
 
         public AppState AppState = new AppState
@@ -66,7 +64,7 @@ namespace Core
                     }),
                     IsActive = new ReactiveProperty<bool>(false)
                 },
-                AppMenu = new ProjectMenu
+                AppMenu = new AppMenu
                 {
                     IsActive = new BoolReactiveProperty(true),
                     IsTagalong = new ReactiveProperty<bool>(true)
@@ -95,7 +93,8 @@ namespace Core
 
                 AppState.Forest.Value = new Forest
                 {
-                    Root = AppToUiMapper.Map(data.Root)
+                    Root = AppToUiMapper.Map(data.Root),
+                    VisualizeCircles = new BoolReactiveProperty(false)
                 };
 
                 StartCoroutine(Render(AppState.Forest.Value.Root));
