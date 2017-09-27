@@ -85,7 +85,7 @@ namespace Frontend
         {
             var leafObject = InstantiateObject(LeafName, Leaf, parent, localScale: DefaultLeafScale);
             var height = leafObject.GetSize(Axis.Y);
-            leafObject.AddComponent<Billboard>();
+            leafObject.AddComponent<HoloToolkit.Unity.Billboard>();
             leafObject.AddComponent<NodeInputHandler>();
             leafObject.AddComponent<ID>().Id = leaf.Id;
 
@@ -136,8 +136,10 @@ namespace Frontend
         internal GameObject AddNodeLabel(Transform parent)
         {
             var labelWrapper = InstantiateObject(LabelName, InnerNodeLabel, parent, Vector3.down * DistanceNodeToLabel);
-            labelWrapper.AddComponent<Billboard>();
             var labelObject = labelWrapper.transform.GetChild(0).gameObject;
+            var billboard = labelWrapper.AddComponent<HoloToolkit.Unity.Billboard>();
+            
+            billboard.PivotAxis = PivotAxis.Y;
             labelObject.GetComponent<TextMesh>().anchor = TextAnchor.UpperCenter;
             labelObject.SetActive(false);
             return labelObject;
