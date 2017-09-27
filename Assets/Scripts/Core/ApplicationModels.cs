@@ -9,7 +9,7 @@ namespace Core
     {
         public GazeText GazeText { get; set; }
         public ContextMenu ContexMenu { get; set; }
-        public ProjectMenu ProjectMenu { get; set; }
+        public ProjectMenu AppMenu { get; set; }
         public ReactiveProperty<bool> IsPlacing { get; set; }
         public ManipulationIndicators ManipulationIndicators { get; set; }
         public ReactiveProperty<ManipulationMode> ForestManipulationMode { get; set; }

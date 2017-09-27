@@ -100,18 +100,18 @@ namespace Core
         public void HandleShowProjectMenu()
         {
             uiElements.ContexMenu.IsActive.Value = false;
-            uiElements.ProjectMenu.IsActive.Value = true;
-            uiElements.ProjectMenu.IsTagalong.Value = true;
+            uiElements.AppMenu.IsActive.Value = true;
+            uiElements.AppMenu.IsTagalong.Value = true;
         }
 
         public void HandleProjectMenuTagalongToggle()
         {
-            uiElements.ProjectMenu.IsTagalong.Value ^= true;
+            uiElements.AppMenu.IsTagalong.Value ^= true;
         }
 
-        public void HandleProjectMenuHandDrag()
+        public void HandleAppMenuHandDrag()
         {
-            uiElements.ProjectMenu.IsTagalong.Value = false;
+            uiElements.AppMenu.IsTagalong.Value = false;
         }
         
         public void HandleManipulationStarted()

@@ -9,7 +9,7 @@ namespace Frontend
     public class TagalongToggle : MonoBehaviour, IInputClickHandler
     {
         public ApplicationManager AppManager;
-        public GameObject Window;
+        public GameObject AppMenu;
         public GameObject Icon;
         public Sprite DisableIcon;
         public Sprite EnableIcon;
@@ -17,13 +17,13 @@ namespace Frontend
         private void Start()
         {
             transform.parent.GetComponentInChildren<HandDraggable>().StartedDragging +=
-                InteractionManager.Instance.HandleProjectMenuHandDrag;
-            AppManager.AppState.UiElements.ProjectMenu.IsTagalong.Subscribe(SetTagalong);
+                InteractionManager.Instance.HandleAppMenuHandDrag;
+            AppManager.AppState.UiElements.AppMenu.IsTagalong.Subscribe(SetTagalong);
         }
 
         private void SetTagalong(bool active)
         {
-            Window.GetComponent<Tagalong>().enabled = active;
+            AppMenu.GetComponent<Tagalong>().enabled = active;
             Icon.GetComponent<SpriteRenderer>().sprite = active ? DisableIcon : EnableIcon;
         }
 

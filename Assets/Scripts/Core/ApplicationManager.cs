@@ -63,7 +63,7 @@ namespace Core
                     }),
                     IsActive = new ReactiveProperty<bool>(false)
                 },
-                ProjectMenu = new ProjectMenu
+                AppMenu = new ProjectMenu
                 {
                     IsActive = new BoolReactiveProperty(true),
                     IsTagalong = new ReactiveProperty<bool>(true)
