@@ -68,7 +68,7 @@ namespace Core
             },
             ForestManipulationMode = new ReactiveProperty<ManipulationMode>(ManipulationMode.Scale),
             IsPlacing = new ReactiveProperty<bool>(false),
-            AvailableExampleProjects = new[] {"Sunflower", "CirclePacking", "Air", "Dcom", "Fupo"},
+            AvailableExampleProjects = new[] {"AirExcerpt", "AirTools", "AirCps", "Air"},
             Forest = new ReactiveProperty<Forest>(new Forest()),
             AppData = new ReactiveProperty<AppData>(new AppData())
         };

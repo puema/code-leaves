@@ -28,15 +28,19 @@ namespace Core
         public void HandleNodeFocusEnter(string id)
         {
             var focused = FindUiNode(id);
-            if (focused == null) return;
-            focused.IsFocused.Value = true;
+            focused?
+                .Traverse(x => (x as UiInnerNode)?.Children)
+                .ToList()
+                .ForEach(x => x.IsFocused.Value = true);
         }
 
         public void HandleNodeFocusExit(string id)
         {
             var focused = FindUiNode(id);
-            if (focused == null) return;
-            focused.IsFocused.Value = false;
+            focused?
+                .Traverse(x => (x as UiInnerNode)?.Children)
+                .ToList()
+                .ForEach(x => x.IsFocused.Value = false);
         }
 
         public void HandleEmptyClick()
