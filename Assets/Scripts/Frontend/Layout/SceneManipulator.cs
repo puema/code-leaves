@@ -1,5 +1,6 @@
 ﻿using cakeslice;
 using Core;
+using Frontend.InputHandler;
 using HoloToolkit.Unity;
 using UniRx;
 using UnityEngine;
@@ -130,6 +131,7 @@ namespace Frontend
             var scale = TreeGeometry.SizeToScale(radius, DefaultCirclePlaneRadius, 1);
             var cirvleObject = InstantiateObject(CircleName, CirclePlane, parent,
                 localScale: new Vector3(scale, 1, scale));
+            cirvleObject.AddComponent<CircleInputHandler>();
             ApplicationManager.Instance.VisualizeCircles.Subscribe(visualize =>
             {
                 if (cirvleObject != null)

@@ -2,15 +2,10 @@
 using HoloToolkit.Unity.InputModule;
 using UnityEngine;
 
-namespace Frontend
+namespace Frontend.InputHandler
 {
-    public class NodeInputHandler : MonoBehaviour, IInputClickHandler, IFocusable
+    public class CircleInputHandler : MonoBehaviour, IFocusable
     {
-        public void OnInputClicked(InputClickedEventData eventData)
-        {
-            InteractionManager.Instance.HandleNodeClick(GetNodeId());
-        }
-
         public void OnFocusEnter()
         {
             InteractionManager.Instance.HandleNodeFocusEnter(GetNodeId());
@@ -23,8 +18,8 @@ namespace Frontend
     
         public string GetNodeId()
         {
-            var component = gameObject.GetComponent<ID>() ??
-                            gameObject.transform.parent.Find(SceneManipulator.NodeName).GetComponent<ID>();
+            // Up the hierarchy: circle -> node -> branch => node we are searching for
+            var component = transform.parent.parent.parent.GetComponent<ID>();
             if (component != null) return component.Id;
             Debug.Log("Node ID not found!");
             return null;
