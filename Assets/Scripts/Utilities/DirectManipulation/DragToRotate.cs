@@ -10,7 +10,7 @@ namespace Frontend
         public GameObject Target;
         public ManipulationIndicators ManipulationIndicators;
 
-        public float RotateFactor = 10;
+        public float RotateFactor = 100;
 
         private float OriginalRotation;
         private Camera mainCamera;

@@ -138,7 +138,6 @@ namespace HoloToolkit.Unity.InputModule
         {
             var layerCacheTarget = PlaceParentOnTap ? ParentGameObjectToPlace : gameObject;
             layerCacheTarget.SetLayerRecursively(IgnoreRaycastLayer, out layerCache);
-            Debug.Log(1);
             InputManager.Instance.PushModalInputHandler(gameObject);
 
             ToggleSpatialMesh();
@@ -149,7 +148,6 @@ namespace HoloToolkit.Unity.InputModule
         {
             var layerCacheTarget = PlaceParentOnTap ? ParentGameObjectToPlace : gameObject;
             layerCacheTarget.ApplyLayerCacheRecursively(layerCache);
-            Debug.Log(2);
             InputManager.Instance.PopModalInputHandler();
 
             ToggleSpatialMesh();

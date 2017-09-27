@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using cakeslice;
+using Core;
 using HoloToolkit.Unity;
 using UniRx;
 using UnityEngine;
@@ -76,6 +77,7 @@ namespace Frontend
                 localScale: new Vector3(diameter.Value, length, diameter.Value)
             );
             edgeObject.AddComponent<NodeInputHandler>();
+            edgeObject.AddComponent<Outline>();
 
             return edgeObject;
         }
@@ -88,6 +90,8 @@ namespace Frontend
             leafObject.AddComponent<HoloToolkit.Unity.Billboard>();
             leafObject.AddComponent<NodeInputHandler>();
             leafObject.AddComponent<ID>().Id = leaf.Id;
+            leafObject.AddComponent<Outline>();
+
 
             if (leaf.Color.Value != null)
                 leafObject.GetComponent<MeshRenderer>().material.color = leaf.Color.Value.Value;
@@ -162,10 +166,7 @@ namespace Frontend
             node.IsFocused = node.IsFocused ?? new ReactiveProperty<bool>(false);
             node.Text = node.Text ?? new ReactiveProperty<string>("No text available.");
 
-            node.IsFocused.Subscribe(isFocused =>
-                obj.GetComponent<MeshRenderer>().material.shader = isFocused
-                    ? FocusedShader
-                    : StandardShader);
+            node.IsFocused.Subscribe(isFocused => obj.GetComponent<Outline>().enabled = isFocused);
             if (label == null) return;
 
             node.IsSelected.Subscribe(label.SetActive);
