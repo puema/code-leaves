@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Frontend;
+using Frontend.Models;
 using UniRx;
 
 namespace Core

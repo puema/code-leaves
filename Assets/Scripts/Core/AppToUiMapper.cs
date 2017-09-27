@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Frontend;
+using Frontend.Models;
 using UniRx;
 using UnityEngine;
 

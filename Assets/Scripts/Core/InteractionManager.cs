@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Data;
 using Frontend;
+using Frontend.Models;
 using HoloToolkit.Unity;
 using HoloToolkit.Unity.InputModule;
 using HoloToolkit.Unity.SpatialMapping;
@@ -104,7 +105,7 @@ namespace Core
             uiElements.AppMenu.IsTagalong.Value = true;
         }
 
-        public void HandleProjectMenuTagalongToggle()
+        public void HandleAppMenuTagalongToggle()
         {
             uiElements.AppMenu.IsTagalong.Value ^= true;
         }

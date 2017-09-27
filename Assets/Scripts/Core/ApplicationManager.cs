@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Data;
 using Frontend;
+using Frontend.Forest;
+using Frontend.Models;
+using Frontend.Tree;
 using HoloToolkit.Unity;
 using UniRx;
 using UnityEngine;
@@ -88,7 +91,7 @@ namespace Core
         {
             AppState.AppData.Subscribe(data =>
             {
-                SceneManipulator.Instance.DestroyForest();
+                ForestManipulator.Instance.DestroyForest();
 
                 AppState.Forest.Value = new Forest
                 {
@@ -134,7 +137,7 @@ namespace Core
             }
 
             TreeBuilder.Instance.CirclePacking(innerNode);
-            SceneManipulator.Instance.AdjustFloorRadius(innerNode);
+            ForestManipulator.Instance.AdjustFloorRadius(innerNode);
         }
 
         private static Vector2 CalcTreePosition(IReadOnlyCollection<UiNode> trees, int n)
