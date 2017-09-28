@@ -560,7 +560,7 @@ Transform:
   m_PrefabParentObject: {fileID: 4000011656901714, guid: 3eddd1c29199313478dd3f912bfab2ab,
     type: 2}
   m_PrefabInternal: {fileID: 102169092}
---- !u!84 &199112581
+--- !u!84 &171684563
 RenderTexture:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -2128,9 +2128,9 @@ Transform:
   m_GameObject: {fileID: 977499162}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.08, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.080000006, z: 1}
   m_Children: []
-  m_Father: {fileID: 1258557665}
+  m_Father: {fileID: 1837514098}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &977499164
@@ -2278,6 +2278,33 @@ MonoBehaviour:
   PositionLerpSpeed: 0.2
   RotationLerpSpeed: 0.2
   IsDraggingEnabled: 1
+--- !u!84 &1079211779
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_Width: 1199
+  m_Height: 694
+  m_AntiAliasing: 1
+  m_DepthFormat: 1
+  m_ColorFormat: 0
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1120717071
 GameObject:
   m_ObjectHideFlags: 0
@@ -2749,6 +2776,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1258557665}
   - component: {fileID: 1258557666}
+  - component: {fileID: 1258557667}
+  - component: {fileID: 1258557668}
   m_Layer: 0
   m_Name: Back
   m_TagString: Untagged
@@ -2766,8 +2795,7 @@ Transform:
   m_LocalPosition: {x: -0.3001, y: 0, z: -0.01000009}
   m_LocalScale: {x: 1.0000058, y: 1.0000056, z: 1.0000056}
   m_Children:
-  - {fileID: 1766752550}
-  - {fileID: 977499163}
+  - {fileID: 1837514098}
   m_Father: {fileID: 1421489073}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2786,6 +2814,29 @@ MonoBehaviour:
   HighlightTarget: {fileID: 977499162}
   AnimateClick: 1
   ClickOffset: 0.009
+--- !u!114 &1258557667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1258557664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96171ee1b2584edca3ae88c926593b55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1258557668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1258557664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ad3b06329fe44158222e50e35dcb10b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AppManager: {fileID: 922824435}
 --- !u!1 &1312349966
 GameObject:
   m_ObjectHideFlags: 0
@@ -3342,33 +3393,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1477348211}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!84 &1531620141
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_Width: 1199
-  m_Height: 694
-  m_AntiAliasing: 1
-  m_DepthFormat: 1
-  m_ColorFormat: 0
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1577709951
 GameObject:
   m_ObjectHideFlags: 0
@@ -3620,7 +3644,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 0
   m_RenderingPath: 1
-  m_TargetTexture: {fileID: 199112581}
+  m_TargetTexture: {fileID: 171684563}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
@@ -3931,7 +3955,7 @@ GameObject:
   - component: {fileID: 1766752550}
   - component: {fileID: 1766752551}
   m_Layer: 0
-  m_Name: ToggleIcon
+  m_Name: BackIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3944,10 +3968,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1766752549}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.005}
+  m_LocalPosition: {x: 0, y: 0, z: -0.004999917}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
-  m_Father: {fileID: 1258557665}
+  m_Father: {fileID: 1837514098}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1766752551
@@ -4106,6 +4130,36 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!1 &1837514097
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1837514098}
+  m_Layer: 0
+  m_Name: Activator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1837514098
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1837514097}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1766752550}
+  - {fileID: 977499163}
+  m_Father: {fileID: 1258557665}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1870660147 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1000011021619270, guid: d379ed0a5618c9f479f58bd83a2d0ad3,
@@ -4138,8 +4192,8 @@ MonoBehaviour:
   sourceCamera: {fileID: 1870660153}
   outlineCamera: {fileID: 1687317851}
   outlineShaderMaterial: {fileID: 0}
-  renderTexture: {fileID: 199112581}
-  extraRenderTexture: {fileID: 1531620141}
+  renderTexture: {fileID: 171684563}
+  extraRenderTexture: {fileID: 1079211779}
 --- !u!20 &1870660153 stripped
 Camera:
   m_PrefabParentObject: {fileID: 20000013304850028, guid: d379ed0a5618c9f479f58bd83a2d0ad3,
@@ -4512,6 +4566,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AppManager: {fileID: 922824435}
+  ProjectSelection: {fileID: 662531427}
+  Settings: {fileID: 1361211464}
 --- !u!114 &2046189058
 MonoBehaviour:
   m_ObjectHideFlags: 0

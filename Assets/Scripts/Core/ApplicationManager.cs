@@ -67,7 +67,9 @@ namespace Core
                 AppMenu = new AppMenu
                 {
                     IsActive = new BoolReactiveProperty(true),
-                    IsTagalong = new ReactiveProperty<bool>(true)
+                    IsTagalong = new ReactiveProperty<bool>(true),
+                    Page = new ReactiveProperty<AppMenuPage>(AppMenuPage.ProjectSelection),
+                    BackAvailable = new ReactiveProperty<bool>(false)
                 },
                 ManipulationIndicators = new ManipulationIndicators
                 {

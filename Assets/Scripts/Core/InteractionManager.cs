@@ -76,6 +76,8 @@ namespace Core
             var fileName = appState.AvailableExampleProjects[index];
             var softwareRoot = StreamingAssetsService.Instance.DesirializeData<Package>(fileName);
             appState.AppData.Value = new AppData {Root = SoftwareArtefactToNodeMapper.Map(softwareRoot)};
+            appState.UiElements.AppMenu.Page.Value = AppMenuPage.Settings;
+            uiElements.AppMenu.BackAvailable.Value = true;
         }
 
         public void HandleFloorClick()
@@ -128,6 +130,15 @@ namespace Core
         public void HandleManipulationCompleted()
         {
             uiElements.ManipulationIndicators.IsActive.Value = false;
+        }
+
+        public void HandleAppMenuBack()
+        {
+            if (uiElements.AppMenu.Page.Value == AppMenuPage.Settings)
+            {
+                uiElements.AppMenu.Page.Value = AppMenuPage.ProjectSelection;
+                uiElements.AppMenu.BackAvailable.Value = false;
+            }
         }
     }
 }

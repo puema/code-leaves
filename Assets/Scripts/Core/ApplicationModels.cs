@@ -36,6 +36,7 @@ namespace Core
         public ReactiveProperty<AppMenuPage> Page { get; set; }
         public ReactiveProperty<bool> IsActive { get; set; }
         public ReactiveProperty<bool> IsTagalong { get; set; }
+        public ReactiveProperty<bool> BackAvailable { get; set; }
     }
 
     public enum AppMenuPage
