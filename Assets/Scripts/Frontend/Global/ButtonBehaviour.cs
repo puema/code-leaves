@@ -8,6 +8,7 @@ namespace Frontend.Global
     {
         public Material HighlightMaterial;
         public GameObject HighlightTarget;
+        public bool BackgroundOnFocusOnly;
         public bool AnimateClick;
         public float ClickOffset;
 
@@ -18,31 +19,56 @@ namespace Frontend.Global
         {
             OriginalZ = transform.localPosition.z;
             OriginalMaterials = HighlightTarget.GetComponent<MeshRenderer>().materials;
+
+            if (BackgroundOnFocusOnly)
+            {
+                SetBackgroundActive(false);
+            }
+        }
+
+        private void SetBackgroundActive(bool isActive)
+        {
+            HighlightTarget.GetComponent<MeshRenderer>().enabled = isActive;
         }
 
         public void OnFocusEnter()
         {
+            if (BackgroundOnFocusOnly)
+            {
+                SetBackgroundActive(true);
+            }
+            
             HighlightTarget.GetComponent<MeshRenderer>().materials =
                 OriginalMaterials.Concat(new[] {HighlightMaterial}).ToArray();
+            
+            if (!AnimateClick) return;
+            transform.localPosition += Vector3.back * ClickOffset;
         }
 
         public void OnFocusExit()
         {
+            if (BackgroundOnFocusOnly)
+            {
+                SetBackgroundActive(false);
+            }
+            
             ResetMaterials();
+            
             if (!AnimateClick) return;
+            
             ResetPosition();
         }
 
         public void OnInputUp(InputEventData eventData)
         {
             if (!AnimateClick) return;
-            ResetPosition();
+            transform.localPosition += Vector3.back * ClickOffset;
         }
 
         public void OnInputDown(InputEventData eventData)
         {
             if (!AnimateClick) return;
-            transform.localPosition += Vector3.forward * ClickOffset;
+            ResetPosition();
         }
 
         public void OnSourceDetected(SourceStateEventData eventData)

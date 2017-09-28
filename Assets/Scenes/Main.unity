@@ -132,7 +132,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1282240}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.19979998, y: 0, z: -0.01}
+  m_LocalPosition: {x: 0.19979998, y: 0, z: -0.001}
   m_LocalScale: {x: 1.0000058, y: 1.0000056, z: 1.0000056}
   m_Children:
   - {fileID: 1577709952}
@@ -169,6 +169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightMaterial: {fileID: 2100000, guid: 6f4e98b24d8d24e4588dcef75abc6cca, type: 2}
   HighlightTarget: {fileID: 2108801188}
+  BackgroundOnFocusOnly: 1
   AnimateClick: 1
   ClickOffset: 0.009
 --- !u!1 &19896281
@@ -560,33 +561,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4000011656901714, guid: 3eddd1c29199313478dd3f912bfab2ab,
     type: 2}
   m_PrefabInternal: {fileID: 102169092}
---- !u!84 &171684563
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_Width: 1199
-  m_Height: 694
-  m_AntiAliasing: 1
-  m_DepthFormat: 1
-  m_ColorFormat: 0
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 0
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &219721124
 GameObject:
   m_ObjectHideFlags: 0
@@ -1525,7 +1499,7 @@ MeshRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 749860184}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_MotionVectors: 1
@@ -1785,6 +1759,7 @@ GameObject:
   - component: {fileID: 830151911}
   - component: {fileID: 830151912}
   - component: {fileID: 830151913}
+  - component: {fileID: 830151914}
   m_Layer: 0
   m_Name: Checkbox
   m_TagString: Untagged
@@ -1799,7 +1774,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 830151910}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.093, y: 0.11, z: -0.02}
+  m_LocalPosition: {x: -0.093, y: 0.11, z: -0.001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 19896282}
@@ -1831,6 +1806,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13b51c49da24455ba11193a52bbd81b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &830151914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 830151910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 106b040afc8f243f8bb603d73030ac8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightMaterial: {fileID: 2100000, guid: 6f4e98b24d8d24e4588dcef75abc6cca, type: 2}
+  HighlightTarget: {fileID: 19896281}
+  BackgroundOnFocusOnly: 0
+  AnimateClick: 1
+  ClickOffset: 0.019
 --- !u!1 &889994796
 GameObject:
   m_ObjectHideFlags: 0
@@ -1855,7 +1846,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 889994796}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3002, y: 0, z: -0.01}
+  m_LocalPosition: {x: 0.3002, y: 0, z: -0.001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1798745681}
@@ -1888,6 +1879,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightMaterial: {fileID: 2100000, guid: 6f4e98b24d8d24e4588dcef75abc6cca, type: 2}
   HighlightTarget: {fileID: 749860184}
+  BackgroundOnFocusOnly: 1
   AnimateClick: 1
   ClickOffset: 0.009
 --- !u!1 &910098514
@@ -1914,7 +1906,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 910098514}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.16, y: -0.13, z: -0.019999979}
+  m_LocalPosition: {x: 0.16, y: -0.13, z: -0.001}
   m_LocalScale: {x: 1.0000058, y: 1.0000056, z: 1.0000056}
   m_Children:
   - {fileID: 2056938895}
@@ -1946,6 +1938,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightMaterial: {fileID: 2100000, guid: 028735bbea47d48cabac58883e8ef585, type: 2}
   HighlightTarget: {fileID: 1477348211}
+  BackgroundOnFocusOnly: 0
   AnimateClick: 1
   ClickOffset: 0.019
 --- !u!1 &922824432
@@ -2139,7 +2132,7 @@ MeshRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 977499162}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_MotionVectors: 1
@@ -2278,33 +2271,6 @@ MonoBehaviour:
   PositionLerpSpeed: 0.2
   RotationLerpSpeed: 0.2
   IsDraggingEnabled: 1
---- !u!84 &1079211779
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_Width: 1199
-  m_Height: 694
-  m_AntiAliasing: 1
-  m_DepthFormat: 1
-  m_ColorFormat: 0
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1120717071
 GameObject:
   m_ObjectHideFlags: 0
@@ -2792,7 +2758,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1258557664}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.3001, y: 0, z: -0.01000009}
+  m_LocalPosition: {x: -0.3001, y: 0, z: -0.001}
   m_LocalScale: {x: 1.0000058, y: 1.0000056, z: 1.0000056}
   m_Children:
   - {fileID: 1837514098}
@@ -2812,6 +2778,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightMaterial: {fileID: 2100000, guid: 6f4e98b24d8d24e4588dcef75abc6cca, type: 2}
   HighlightTarget: {fileID: 977499162}
+  BackgroundOnFocusOnly: 1
   AnimateClick: 1
   ClickOffset: 0.009
 --- !u!114 &1258557667
@@ -3275,7 +3242,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1471417140}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.16, y: 0, z: -0.02}
+  m_LocalPosition: {x: 0.16, y: 0, z: -0.001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1964124265}
@@ -3307,6 +3274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightMaterial: {fileID: 2100000, guid: 028735bbea47d48cabac58883e8ef585, type: 2}
   HighlightTarget: {fileID: 828545597}
+  BackgroundOnFocusOnly: 0
   AnimateClick: 1
   ClickOffset: 0.019
 --- !u!1 &1477348211
@@ -3488,7 +3456,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1622178930}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.16, y: 0, z: -0.02}
+  m_LocalPosition: {x: -0.16, y: 0, z: -0.001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 75847139}
@@ -3520,6 +3488,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightMaterial: {fileID: 2100000, guid: 028735bbea47d48cabac58883e8ef585, type: 2}
   HighlightTarget: {fileID: 554926223}
+  BackgroundOnFocusOnly: 0
   AnimateClick: 1
   ClickOffset: 0.019
 --- !u!1001 &1645451383
@@ -3602,6 +3571,33 @@ Transform:
   m_PrefabParentObject: {fileID: 4127036534132352, guid: 299f718b107d6be4b8642f4568c39404,
     type: 2}
   m_PrefabInternal: {fileID: 1645451383}
+--- !u!84 &1646982534
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_Width: 1199
+  m_Height: 694
+  m_AntiAliasing: 1
+  m_DepthFormat: 1
+  m_ColorFormat: 0
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1687317850
 GameObject:
   m_ObjectHideFlags: 0
@@ -3644,7 +3640,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 0
   m_RenderingPath: 1
-  m_TargetTexture: {fileID: 171684563}
+  m_TargetTexture: {fileID: 1797198438}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
@@ -4059,6 +4055,33 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!84 &1797198438
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_Width: 1199
+  m_Height: 694
+  m_AntiAliasing: 1
+  m_DepthFormat: 1
+  m_ColorFormat: 0
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 0
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1798745680
 GameObject:
   m_ObjectHideFlags: 0
@@ -4192,8 +4215,8 @@ MonoBehaviour:
   sourceCamera: {fileID: 1870660153}
   outlineCamera: {fileID: 1687317851}
   outlineShaderMaterial: {fileID: 0}
-  renderTexture: {fileID: 171684563}
-  extraRenderTexture: {fileID: 1079211779}
+  renderTexture: {fileID: 1797198438}
+  extraRenderTexture: {fileID: 1646982534}
 --- !u!20 &1870660153 stripped
 Camera:
   m_PrefabParentObject: {fileID: 20000013304850028, guid: d379ed0a5618c9f479f58bd83a2d0ad3,
@@ -4860,7 +4883,7 @@ MeshRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2108801188}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_MotionVectors: 1
@@ -5073,7 +5096,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2140219405}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.16, y: -0.13, z: -0.019999979}
+  m_LocalPosition: {x: -0.16, y: -0.13, z: -0.001}
   m_LocalScale: {x: 1.0000058, y: 1.0000056, z: 1.0000056}
   m_Children:
   - {fileID: 1452179784}
@@ -5105,5 +5128,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightMaterial: {fileID: 2100000, guid: 028735bbea47d48cabac58883e8ef585, type: 2}
   HighlightTarget: {fileID: 2063059065}
+  BackgroundOnFocusOnly: 0
   AnimateClick: 1
   ClickOffset: 0.019
