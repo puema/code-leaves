@@ -3,16 +3,13 @@ using UnityEngine;
 
 namespace Frontend.AppMenu
 {
-    public class Checkbox : MonoBehaviour, IInputClickHandler
+    public class Checkbox : MonoBehaviour
     {
         public Sprite Unchecked;
         public Sprite Checked;
 
-        private bool isChecked;
-        
-        public void OnInputClicked(InputClickedEventData eventData)
+        public void SetChecked(bool isChecked)
         {
-            isChecked ^= true;
             GetComponentInChildren<SpriteRenderer>().sprite = isChecked ? Checked : Unchecked;
         }
     }

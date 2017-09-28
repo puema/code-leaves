@@ -54,7 +54,7 @@ namespace Core
 
         public void HandleCircleVisualizationToggle()
         {
-            appState.Forest.Value.VisualizeCircles.Value ^= true;
+            appState.Settings.VisualizeCircles.Value ^= true;
         }
 
         public void HandleEmptyClick()

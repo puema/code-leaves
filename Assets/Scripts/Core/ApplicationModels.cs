@@ -39,6 +39,11 @@ namespace Core
         public ReactiveProperty<bool> BackAvailable { get; set; }
     }
 
+    public class Settings
+    {
+        public ReactiveProperty<bool> VisualizeCircles { get; set; }
+    }
+
     public enum AppMenuPage
     {
         ProjectSelection, Settings
@@ -63,6 +68,7 @@ namespace Core
         public UiElements UiElements { get; set; }
         public ReactiveProperty<Forest> Forest { get; set; }
         public ReactiveProperty<AppData> AppData { get; set; }
+        public Settings Settings { get; set; }
     }
 
     public class AppData

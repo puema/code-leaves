@@ -490,6 +490,33 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!84 &97936666
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_Width: 1199
+  m_Height: 694
+  m_AntiAliasing: 1
+  m_DepthFormat: 1
+  m_ColorFormat: 0
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1001 &102169092
 Prefab:
   m_ObjectHideFlags: 0
@@ -2809,33 +2836,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AppManager: {fileID: 922824435}
---- !u!84 &1282814587
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_Width: 1199
-  m_Height: 694
-  m_AntiAliasing: 1
-  m_DepthFormat: 1
-  m_ColorFormat: 0
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1312349966
 GameObject:
   m_ObjectHideFlags: 0
@@ -3061,6 +3061,10 @@ Prefab:
     - target: {fileID: 4000011792100794, guid: a611e772ef8ddf64d8106a9cbb70f31c, type: 2}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000014090385390, guid: a611e772ef8ddf64d8106a9cbb70f31c, type: 2}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a611e772ef8ddf64d8106a9cbb70f31c, type: 2}
@@ -3645,7 +3649,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 0
   m_RenderingPath: 1
-  m_TargetTexture: {fileID: 1821459510}
+  m_TargetTexture: {fileID: 1824932220}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
@@ -3826,8 +3830,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1754826865}
   - component: {fileID: 1754826866}
-  - component: {fileID: 1754826867}
   - component: {fileID: 1754826868}
+  - component: {fileID: 1754826867}
   m_Layer: 0
   m_Name: GazeText
   m_TagString: Untagged
@@ -3861,6 +3865,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AppManager: {fileID: 922824435}
+  Offset: 0.02
 --- !u!114 &1754826867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3869,15 +3874,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1754826864}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 456eda422e1dc4c4cb4fd6c25cbc2fbd, type: 3}
+  m_Script: {fileID: 11500000, guid: 8238048e62b3fb047bc5dd12384f280a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SphereRadius: 0.01
-  MoveSpeed: 2
-  useUnscaledTime: 1
-  hideOnStart: 0
-  debugDisplaySphere: 0
-  debugDisplayTargetPosition: 0
+  SizeRatio: 0
 --- !u!114 &1754826868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4163,7 +4163,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
---- !u!84 &1821459510
+--- !u!84 &1824932220
 RenderTexture:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -4252,8 +4252,8 @@ MonoBehaviour:
   sourceCamera: {fileID: 1870660153}
   outlineCamera: {fileID: 1687317851}
   outlineShaderMaterial: {fileID: 0}
-  renderTexture: {fileID: 1821459510}
-  extraRenderTexture: {fileID: 1282814587}
+  renderTexture: {fileID: 1824932220}
+  extraRenderTexture: {fileID: 97936666}
 --- !u!20 &1870660153 stripped
 Camera:
   m_PrefabParentObject: {fileID: 20000013304850028, guid: d379ed0a5618c9f479f58bd83a2d0ad3,

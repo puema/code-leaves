@@ -79,6 +79,10 @@ namespace Core
                 ForestManipulationMode = new ReactiveProperty<ManipulationMode>(ManipulationMode.Scale),
                 IsPlacing = new ReactiveProperty<bool>(false)
             },
+            Settings = new Settings
+            {
+                VisualizeCircles = new ReactiveProperty<bool>(false)
+            },
             AvailableExampleProjects = new[]
             {
                 "AirExcerpt", "AirTools", "AirCps", "Air"
@@ -95,8 +99,7 @@ namespace Core
 
                 AppState.Forest.Value = new Forest
                 {
-                    Root = AppToUiMapper.Map(data.Root),
-                    VisualizeCircles = new BoolReactiveProperty(false)
+                    Root = AppToUiMapper.Map(data.Root)
                 };
 
                 StartCoroutine(Render(AppState.Forest.Value.Root));

@@ -85,7 +85,7 @@ namespace Frontend.Forest
         {
             var leafObject = InstantiateObject(LeafName, Leaf, parent, localScale: DefaultLeafScale);
             var height = leafObject.GetSize(Axis.Y);
-            leafObject.AddComponent<HoloToolkit.Unity.Billboard>();
+            leafObject.AddComponent<Billboard>();
             leafObject.AddComponent<NodeInputHandler>();
             leafObject.AddComponent<ID>().Id = leaf.Id;
             leafObject.AddComponent<Outline>();
@@ -129,7 +129,7 @@ namespace Frontend.Forest
             var cirvleObject = InstantiateObject(CircleName, CirclePlane, parent,
                 localScale: new Vector3(scale, 1, scale));
             cirvleObject.AddComponent<CircleInputHandler>();
-            ApplicationManager.Instance.AppState.Forest.Value.VisualizeCircles.Subscribe(visualize =>
+            ApplicationManager.Instance.AppState.Settings.VisualizeCircles.Subscribe(visualize =>
             {
                 if (cirvleObject != null)
                     cirvleObject.SetActive(visualize);

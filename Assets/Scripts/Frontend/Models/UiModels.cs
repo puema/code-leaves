@@ -10,7 +10,6 @@ namespace Frontend.Models
     {
         public Floor Floor { get; set; }
         public UiNode Root { get; set; }
-        public ReactiveProperty<bool> VisualizeCircles { get; set; }
     }
 
     public class Floor
