@@ -1,4 +1,5 @@
 ﻿using Frontend.Global;
+using HoloToolkit.Unity;
 using HoloToolkit.Unity.InputModule;
 using UnityEngine;
 
@@ -11,13 +12,14 @@ namespace Utilities
 
         public float RotateFactor = 100;
 
-        private float OriginalRotation;
+        private float originalRotation;
         private Camera mainCamera;
+        private bool manipulationStartedOnThisGameObject;
 
         private void Start()
         {
             if (Target == null) Target = gameObject;
-            mainCamera = Camera.main;
+            mainCamera = CameraCache.Main;
         }
         
         public void OnHoldStarted(HoldEventData eventData)
@@ -38,16 +40,19 @@ namespace Utilities
 
         public void OnManipulationStarted(ManipulationEventData eventData)
         {
+            manipulationStartedOnThisGameObject = true;
+            originalRotation = Target.transform.localEulerAngles.y;
+
             ManipulationIndicators.Position();
             ManipulationIndicators.ActivateHand();
             ManipulationIndicators.ActivateIndicators();
-            OriginalRotation = Target.transform.localEulerAngles.y;
+
             InputManager.Instance.PushModalInputHandler(gameObject);
-            OnManipulationUpdated(eventData);
         }
 
         public void OnManipulationUpdated(ManipulationEventData eventData)
         {
+            if (!manipulationStartedOnThisGameObject) return;
             var direction = mainCamera.transform.InverseTransformDirection(eventData.CumulativeDelta);
             ManipulationIndicators.UpdateHandPosition(new Vector3(direction.x, 0, 0));
             Rotate(direction.x);
@@ -55,19 +60,26 @@ namespace Utilities
 
         public void OnManipulationCompleted(ManipulationEventData eventData)
         {
+            if (!manipulationStartedOnThisGameObject) return;
             ManipulationIndicators.Deactivate();
+            manipulationStartedOnThisGameObject = false;
             InputManager.Instance.PopModalInputHandler();
         }
 
         public void OnManipulationCanceled(ManipulationEventData eventData)
         {
+            if (!manipulationStartedOnThisGameObject) return;
+            Debug.Log("Manipulation canceled");
             ManipulationIndicators.Deactivate();
-            ApplyRotation(OriginalRotation);
+            manipulationStartedOnThisGameObject = false;
+            InputManager.Instance.PopModalInputHandler();
+            
+            ApplyRotation(originalRotation);
         }
 
         private void Rotate(float delta)
         {
-            var rotation = OriginalRotation - delta * RotateFactor;
+            var rotation = originalRotation - delta * RotateFactor;
             ApplyRotation(rotation);
         }
 

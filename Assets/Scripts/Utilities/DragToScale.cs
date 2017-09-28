@@ -1,4 +1,5 @@
 ﻿using Frontend.Tree;
+using HoloToolkit.Unity;
 using HoloToolkit.Unity.InputModule;
 using UnityEngine;
 using ManipulationIndicators = Frontend.Global.ManipulationIndicators;
@@ -15,19 +16,19 @@ namespace Utilities
         public float MinScale = 0.01f;
         public float MaxScale = 10;
 
-        private float OriginalScale;
+        private float originalScale;
         private Camera mainCamera;
+        private bool manipulationStartedOnThisGameObject;
 
         private void Start()
         {
             if (Target == null) Target = gameObject;
-            mainCamera = Camera.main;
+            mainCamera = CameraCache.Main;
         }
 
         private void SetMinMaxScale()
         {
-            MinScale = TreeGeometry.SizeToScale(MinSize, GetComponentInChildren<Renderer>().bounds.size.x,
-                gameObject.transform.localScale.x);
+            MinScale = gameObject.SizeToScale(Axis.X, MinScale);
         }
         
         public void OnHoldStarted(HoldEventData eventData)
@@ -48,17 +49,21 @@ namespace Utilities
 
         public void OnManipulationStarted(ManipulationEventData eventData)
         {
+            manipulationStartedOnThisGameObject = true;
+            originalScale = Target.transform.localScale.x;
+
             SetMinMaxScale();
+
             ManipulationIndicators.Position();
             ManipulationIndicators.ActivateHand();
             ManipulationIndicators.ActivateIndicators();
-            OriginalScale = Target.transform.localScale.x;
+
             InputManager.Instance.PushModalInputHandler(gameObject);
-            OnManipulationUpdated(eventData);
         }
 
         public void OnManipulationUpdated(ManipulationEventData eventData)
         {
+            if (!manipulationStartedOnThisGameObject) return;
             var direction = mainCamera.transform.InverseTransformDirection(eventData.CumulativeDelta);
             ManipulationIndicators.UpdateHandPosition(new Vector3(direction.x, 0, 0));
             Scale(direction.x);
@@ -66,19 +71,25 @@ namespace Utilities
 
         public void OnManipulationCompleted(ManipulationEventData eventData)
         {
+            if (!manipulationStartedOnThisGameObject) return;
             ManipulationIndicators.Deactivate();
+            manipulationStartedOnThisGameObject = false;
             InputManager.Instance.PopModalInputHandler();
         }
 
         public void OnManipulationCanceled(ManipulationEventData eventData)
         {
+            if (!manipulationStartedOnThisGameObject) return;
             ManipulationIndicators.Deactivate();
-            ApplyScale(OriginalScale);
+            manipulationStartedOnThisGameObject = false;
+            InputManager.Instance.PopModalInputHandler();
+            
+            ApplyScale(originalScale);
         }
 
         private void Scale(float delta)
         {
-            var scale = Mathf.Clamp(OriginalScale + delta * ScaleFactor, MinScale, MaxScale);
+            var scale = Mathf.Clamp(originalScale + delta * ScaleFactor, MinScale, MaxScale);
             ApplyScale(scale);
         }
 

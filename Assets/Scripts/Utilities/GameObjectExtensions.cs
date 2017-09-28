@@ -41,13 +41,5 @@ namespace Utilities
                     throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
             }
         }
-
-//        public static void SizeToScale(this GameObject obj, float x = 0, float y = 0, float z = 0)
-//        {
-//            var xScale = obj.transform.localScale.x * x / obj.GetSize(Axis.X);
-//            var yScale = obj.transform.localScale.y * y / obj.GetSize(Axis.Y);
-//            var zScale = obj.transform.localScale.z * z / obj.GetSize(Axis.Z);
-//            obj.transform.localScale = new Vector3(xScale, yScale, zScale);
-//        }
     }
 }

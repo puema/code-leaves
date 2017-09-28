@@ -175,6 +175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HighlightMaterial: {fileID: 2100000, guid: 3dadf792da1b2409583ea6fda9e661b4, type: 2}
   HighlightTarget: {fileID: 1066017874418078}
+  BackgroundOnFocusOnly: 0
   AnimateClick: 1
   ClickOffset: 0.02
 --- !u!136 &136701181597837798

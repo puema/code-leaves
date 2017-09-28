@@ -103,22 +103,6 @@ namespace Core
             });
         }
 
-        private IEnumerator GetAppDataFromSonarQube(string projectName, string sonarQubeBaseComponent)
-        {
-            var sonarQubeCoroutine =
-                this.StartCoroutine<SoftwareArtefact>(SonarQubeService.Instance.GetSoftwareArtefact(
-                    sonarQubeBaseComponent,
-                    projectName));
-            yield return sonarQubeCoroutine.coroutine;
-            yield return SoftwareArtefactToNodeMapper.Map(sonarQubeCoroutine.value);
-        }
-
-        private static IEnumerator GetAppDataFromFile(string projectName)
-        {
-            var softwareRoot = StreamingAssetsService.Instance.DesirializeData<Package>(projectName);
-            yield return SoftwareArtefactToNodeMapper.Map(softwareRoot);
-        }
-
         private static IEnumerator Render(UiNode root)
         {
             var innerNode = root as UiInnerNode;
@@ -127,10 +111,10 @@ namespace Core
             var trees = innerNode.Children;
             yield return null;
 
-            for (var i = 0; i < trees.Count; i++)
+            foreach (var tree in trees)
             {
-                var treeObject = TreeBuilder.Instance.GenerateTree(trees[i], CalcTreePosition(trees, i));
-                trees[i].Circle.Position.Subscribe(v =>
+                var treeObject = TreeBuilder.Instance.GenerateTree(tree, Vector2.zero);
+                tree.Circle.Position.Subscribe(v =>
                 {
                     treeObject.transform.localPosition = new Vector3(v.x, 0, v.y);
                 });
@@ -139,15 +123,6 @@ namespace Core
 
             TreeBuilder.Instance.CirclePacking(innerNode);
             ForestManipulator.Instance.AdjustFloorRadius(innerNode);
-        }
-
-        private static Vector2 CalcTreePosition(IReadOnlyCollection<UiNode> trees, int n)
-        {
-            const float rowDistance = 1.3f;
-            var forestLength = (int) Math.Floor(Math.Sqrt(trees.Count));
-            var x = (n % forestLength - forestLength / 2) * rowDistance;
-            var y = (n / forestLength - forestLength / 2) * rowDistance;
-            return new Vector2(x, y);
         }
     }
 }

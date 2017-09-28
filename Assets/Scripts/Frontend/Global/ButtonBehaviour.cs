@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Frontend.Global
 {
-    public class ButtonBehaviour : MonoBehaviour, IFocusable, IInputHandler, ISourceStateHandler
+    public class ButtonBehaviour : MonoBehaviour, IFocusable, IInputHandler, ISourceStateHandler, IInputClickHandler
     {
         public Material HighlightMaterial;
         public GameObject HighlightTarget;
@@ -92,6 +92,12 @@ namespace Frontend.Global
         private void ResetMaterials()
         {
             HighlightTarget.GetComponent<MeshRenderer>().materials = OriginalMaterials;
+        }
+
+        public void OnInputClicked(InputClickedEventData eventData)
+        {
+            ResetMaterials();
+            ResetMaterials();
         }
     }
 }
