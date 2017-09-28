@@ -42,6 +42,7 @@ namespace Core
     public class Settings
     {
         public ReactiveProperty<bool> VisualizeCircles { get; set; }
+        public ReactiveProperty<bool> HighlightFocused { get; set; }
     }
 
     public enum AppMenuPage

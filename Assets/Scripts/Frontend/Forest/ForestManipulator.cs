@@ -166,7 +166,11 @@ namespace Frontend.Forest
             node.IsFocused = node.IsFocused ?? new ReactiveProperty<bool>(false);
             node.Text = node.Text ?? new ReactiveProperty<string>("No text available.");
 
-            node.IsFocused.Subscribe(isFocused => obj.GetComponent<Outline>().enabled = isFocused);
+            node.IsFocused.Subscribe(isFocused =>
+            {
+                if (!ApplicationManager.Instance.AppState.Settings.HighlightFocused.Value) return;
+                obj.GetComponent<Outline>().enabled = isFocused;
+            });
             if (label == null) return;
 
             node.IsSelected.Subscribe(label.SetActive);

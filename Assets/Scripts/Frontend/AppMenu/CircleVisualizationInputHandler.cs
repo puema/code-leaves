@@ -14,7 +14,7 @@ namespace Frontend.AppMenu
         private void Start()
         {
             visualizeCircles = AppManager.AppState.Settings.VisualizeCircles;
-            visualizeCircles.Subscribe(GetComponent<Checkbox>().SetChecked);
+            visualizeCircles.Subscribe(GetComponentInChildren<Checkbox>().SetChecked);
         }
 
         public void OnInputClicked(InputClickedEventData eventData)

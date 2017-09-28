@@ -81,7 +81,8 @@ namespace Core
             },
             Settings = new Settings
             {
-                VisualizeCircles = new ReactiveProperty<bool>(false)
+                VisualizeCircles = new ReactiveProperty<bool>(false),
+                HighlightFocused = new ReactiveProperty<bool>(true)
             },
             AvailableExampleProjects = new[]
             {

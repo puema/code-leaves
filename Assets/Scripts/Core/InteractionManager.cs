@@ -140,5 +140,10 @@ namespace Core
                 uiElements.AppMenu.BackAvailable.Value = false;
             }
         }
+
+        public void HandleHighlightFocusToggle()
+        {
+            appState.Settings.HighlightFocused.Value ^= true;
+        }
     }
 }
