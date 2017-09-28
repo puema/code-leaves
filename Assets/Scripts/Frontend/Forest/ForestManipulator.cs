@@ -4,6 +4,7 @@ using Frontend.Models;
 using Frontend.Tree;
 using HoloToolkit.Unity;
 using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 using Utilities;
 
@@ -129,19 +130,19 @@ namespace Frontend.Forest
             var cirvleObject = InstantiateObject(CircleName, CirclePlane, parent,
                 localScale: new Vector3(scale, 1, scale));
             cirvleObject.AddComponent<CircleInputHandler>();
-            ApplicationManager.Instance.AppState.Settings.VisualizeCircles.Subscribe(visualize =>
+            var disposable = ApplicationManager.Instance.AppState.Settings.VisualizeCircles.Subscribe(visualize =>
             {
-                if (cirvleObject != null)
-                    cirvleObject.SetActive(visualize);
+                cirvleObject.SetActive(visualize);
             });
+            cirvleObject.OnDestroyAsObservable().Subscribe(_ => disposable.Dispose());
         }
 
         internal GameObject AddNodeLabel(Transform parent)
         {
             var labelWrapper = InstantiateObject(LabelName, InnerNodeLabel, parent, Vector3.down * DistanceNodeToLabel);
             var labelObject = labelWrapper.transform.GetChild(0).gameObject;
-            var billboard = labelWrapper.AddComponent<HoloToolkit.Unity.Billboard>();
-            
+            var billboard = labelWrapper.AddComponent<Billboard>();
+
             billboard.PivotAxis = PivotAxis.Y;
             labelObject.GetComponent<TextMesh>().anchor = TextAnchor.UpperCenter;
             labelObject.SetActive(false);
