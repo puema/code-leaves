@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using HoloToolkit.Unity;
 using HoloToolkit.Unity.InputModule;
 using UnityEngine;
 
@@ -11,6 +13,8 @@ namespace Frontend.Global
         public bool BackgroundOnFocusOnly;
         public bool AnimateClick;
         public float ClickOffset;
+
+        public event Action Clicked;
 
         private Material[] OriginalMaterials;
         private float OriginalZ;
@@ -96,6 +100,7 @@ namespace Frontend.Global
 
         public void OnInputClicked(InputClickedEventData eventData)
         {
+            Clicked.RaiseEvent();
             ResetMaterials();
             ResetMaterials();
         }
