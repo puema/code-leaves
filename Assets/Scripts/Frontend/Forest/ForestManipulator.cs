@@ -28,7 +28,7 @@ namespace Frontend.Forest
         public GameObject CirclePlane;
         // -------------------------------------------- //
 
-        internal readonly Vector3 DefaultEdgeScale = new Vector3(1, 10, 1);
+        internal readonly Vector3 DefaultEdgeScale = new Vector3(0.8f, 10, 0.8f);
         internal readonly Vector3 DefaultLeafScale = new Vector3(0.8f, 1, 0.09f);
         internal readonly Vector3 Default3DTextScale = new Vector3(0.005f, 0.005f, 0.005f);
 

@@ -18,16 +18,10 @@ namespace Frontend.Tree
         public ForestManipulator manipulator;
 
         /// <summary>
-        /// Increases the length for lower edges, in percentage of default height
+        /// The part of the default edge length and thickness, that is added per node height
         /// </summary>
-        private const float edgeFactor = 0.2f;
-
-        private float additionalEdgeHeightPerNodeHeight;
-
-        private void Start()
-        {
-            additionalEdgeHeightPerNodeHeight = manipulator.DefaultEdgeHeight * edgeFactor;
-        }
+        private const float edgeYScaleFactor = 0.2f;
+        private const float edgeXScaleFactor = 0.4f;
 
         /// <summary>
         /// Generates the unity tree according to the given data structure of the node
@@ -36,15 +30,15 @@ namespace Frontend.Tree
         /// <param name="position"></param>
         public GameObject GenerateTree(UiNode node, Vector2 position)
         {
-            var trunkHeight = manipulator.DefaultEdgeHeight +
-                              (node.GetHeight() + 1) * additionalEdgeHeightPerNodeHeight;
-            var trunkYScale = TreeGeometry.SizeToScale(trunkHeight, manipulator.DefaultEdgeHeight,
-                manipulator.DefaultEdgeScale.y);
+            var treeHeight = node.GetHeight() + 1;
+            var trunkHeight = manipulator.DefaultEdgeHeight * GetYScalingFactor(treeHeight);
+            var trunkYScale = manipulator.DefaultEdgeScale.y * GetYScalingFactor(treeHeight);
+            var trunkThickness = manipulator.DefaultEdgeScale.x * GetXScalingFactor(treeHeight);
             var nodePosition = new Vector3(0, trunkHeight, 0);
 
             var treeObject = manipulator.AddTreeObject(position);
             var trunkObject = manipulator.AddEmptyBranchObject(treeObject.transform);
-            var edgeObject = manipulator.AddEdgeObject(trunkObject.transform, trunkYScale, 0, 0);
+            var edgeObject = manipulator.AddEdgeObject(trunkObject.transform, trunkYScale, 0, 0, trunkThickness);
             var nodeObject = manipulator.AddEmptyNodeObject(node, trunkObject.transform, nodePosition, edgeObject);
 
             GenerateBranches(node, nodeObject.transform);
@@ -217,14 +211,15 @@ namespace Frontend.Tree
 
         private void GenerateUnsdistributedBranches(UiInnerNode innerNode, Transform parent)
         {
-            var centralEdgeHeight =
-                manipulator.DefaultEdgeHeight + innerNode.GetHeight() * additionalEdgeHeightPerNodeHeight;
+            var nodeHeight = innerNode.GetHeight();
+            var centralEdgeHeight = manipulator.DefaultEdgeHeight * GetYScalingFactor(nodeHeight);
+            var edgeThickness = manipulator.DefaultEdgeScale.x * GetXScalingFactor(nodeHeight);
 
             foreach (var child in innerNode.Children)
             {
                 var branchObject = manipulator.AddEmptyBranchObject(parent);
                 // Edge length doesn't matter at this point. It is set properly at subscription of node position.
-                var edgeObject = manipulator.AddEdgeObject(branchObject.transform, 1, 0, 0);
+                var edgeObject = manipulator.AddEdgeObject(branchObject.transform, 1, 0, 0, edgeThickness);
                 var nodeObject = manipulator.AddEmptyNodeObject(child, branchObject.transform,
                     Vector3.up * centralEdgeHeight, edgeObject);
 
@@ -276,6 +271,16 @@ namespace Frontend.Tree
         private static bool HasOnlyLeaves(UiInnerNode node)
         {
             return node.Children.TrueForAll(n => n is UiLeaf);
+        }
+
+        private static float GetXScalingFactor(int nodeHeight)
+        {
+            return 1 + (nodeHeight - 1) * edgeXScaleFactor;
+        }
+
+        private static float GetYScalingFactor(int nodeHeight)
+        {
+            return 1 + (nodeHeight - 1) * edgeYScaleFactor;
         }
     }
 }
