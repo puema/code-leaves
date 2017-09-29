@@ -184,7 +184,8 @@ namespace Frontend.Forest
         /// <param name="circle"></param>
         /// <param name="node"></param>
         /// <param name="edge"></param>
-        internal void SubscribeNodePosition(Circle circle, GameObject node, GameObject edge)
+        /// <param name="centralLength"></param>
+        internal void SubscribeNodePosition(Circle circle, GameObject node, GameObject edge, float centralLength)
         {
             circle.Position.Subscribe(v =>
             {
@@ -192,11 +193,11 @@ namespace Frontend.Forest
                 node.transform.localPosition = new Vector3(v.x, y, v.y);
 
                 var phi = TreeGeometry.CalcAlpha(v.x, v.y);
-                var theta = TreeGeometry.CalcTheta(DefaultEdgeHeight, v.magnitude);
+                var theta = TreeGeometry.CalcTheta(centralLength, v.magnitude);
                 edge.transform.localEulerAngles = new Vector3(theta, phi, 0);
 
                 var diameter = edge.transform.localScale.x;
-                var l = TreeGeometry.CalcEdgeLength(DefaultEdgeHeight, theta);
+                var l = TreeGeometry.CalcEdgeLength(centralLength, theta);
                 edge.transform.localScale = new Vector3(diameter,
                     TreeGeometry.SizeToScale(l, DefaultEdgeHeight, DefaultEdgeScale.y),
                     diameter);

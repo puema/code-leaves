@@ -86,7 +86,7 @@ namespace Core
             },
             AvailableExampleProjects = new[]
             {
-                "AirExcerpt", "AirTools", "AirCps", "Air"
+                "AirExcerpt", "AirCbs", "AirTools", "Air"
             },
             Forest = new ReactiveProperty<Forest>(new Forest()),
             AppData = new ReactiveProperty<AppData>(new AppData())

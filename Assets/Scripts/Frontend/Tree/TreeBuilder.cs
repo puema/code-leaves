@@ -6,12 +6,28 @@ using UnityEngine;
 using Utilities;
 using Frontend.Forest;
 using Frontend.Models;
+using UniRx.Triggers;
 
 namespace Frontend.Tree
 {
     public class TreeBuilder : Singleton<TreeBuilder>
     {
-        private ForestManipulator forestManipulator;
+        /// <summary>
+        /// Holds all the necessary game objects, offers their instantiation and manipulation
+        /// </summary>
+        public ForestManipulator manipulator;
+
+        /// <summary>
+        /// Increases the length for lower edges, in percentage of default height
+        /// </summary>
+        private const float edgeFactor = 0.2f;
+
+        private float additionalEdgeHeightPerNodeHeight;
+
+        private void Start()
+        {
+            additionalEdgeHeightPerNodeHeight = manipulator.DefaultEdgeHeight * edgeFactor;
+        }
 
         /// <summary>
         /// Generates the unity tree according to the given data structure of the node
@@ -20,23 +36,26 @@ namespace Frontend.Tree
         /// <param name="position"></param>
         public GameObject GenerateTree(UiNode node, Vector2 position)
         {
-            forestManipulator = ForestManipulator.Instance;
-            var tree = forestManipulator.AddTreeObject(position);
-            var trunkObject = forestManipulator.AddEmptyBranchObject(tree.transform);
-            var edgeObject =
-                forestManipulator.AddEdgeObject(trunkObject.transform, forestManipulator.DefaultEdgeScale.y, 0, 0);
-            var nodeObject = forestManipulator.AddEmptyNodeObject(node, trunkObject.transform,
-                new Vector3(0, forestManipulator.DefaultEdgeHeight, 0), edgeObject);
+            var trunkHeight = manipulator.DefaultEdgeHeight +
+                              (node.GetHeight() + 1) * additionalEdgeHeightPerNodeHeight;
+            var trunkYScale = TreeGeometry.SizeToScale(trunkHeight, manipulator.DefaultEdgeHeight,
+                manipulator.DefaultEdgeScale.y);
+            var nodePosition = new Vector3(0, trunkHeight, 0);
+
+            var treeObject = manipulator.AddTreeObject(position);
+            var trunkObject = manipulator.AddEmptyBranchObject(treeObject.transform);
+            var edgeObject = manipulator.AddEdgeObject(trunkObject.transform, trunkYScale, 0, 0);
+            var nodeObject = manipulator.AddEmptyNodeObject(node, trunkObject.transform, nodePosition, edgeObject);
+
             GenerateBranches(node, nodeObject.transform);
 
-            node.Circle.Position.Subscribe(v =>
+            var disposable = node.Circle.Position.Subscribe(v =>
             {
-                //if tree was destroyed before, could be null
-                if (tree == null) return;
-                tree.transform.localPosition = new Vector3(v.x, 0, v.y);
+                treeObject.transform.localPosition = new Vector3(v.x, 0, v.y);
             });
+            treeObject.OnDestroyAsObservable().Subscribe(_ => disposable.Dispose());
 
-            return tree;
+            return treeObject;
         }
 
         /// <summary>
@@ -58,7 +77,7 @@ namespace Frontend.Tree
                     DistributeCirclePacking(innerNode, parent);
                 }
 
-                forestManipulator.AddCircleVisualization(
+                manipulator.AddCircleVisualization(
                     parent.Find(ForestManipulator.BranchName).Find(ForestManipulator.NodeName),
                     innerNode.Circle.Radius);
 
@@ -68,7 +87,7 @@ namespace Frontend.Tree
             var leaf = node as UiLeaf;
             if (leaf != null)
             {
-                forestManipulator.AddLeafObject(parent, leaf);
+                manipulator.AddLeafObject(parent, leaf);
                 return;
             }
 
@@ -198,16 +217,19 @@ namespace Frontend.Tree
 
         private void GenerateUnsdistributedBranches(UiInnerNode innerNode, Transform parent)
         {
+            var centralEdgeHeight =
+                manipulator.DefaultEdgeHeight + innerNode.GetHeight() * additionalEdgeHeightPerNodeHeight;
+
             foreach (var child in innerNode.Children)
             {
-                var branchObject = forestManipulator.AddEmptyBranchObject(parent);
-                var edgeObject =
-                    forestManipulator.AddEdgeObject(branchObject.transform, forestManipulator.DefaultEdgeScale.y, 0, 0);
-                var nodeObject =
-                    forestManipulator.AddEmptyNodeObject(child, branchObject.transform,
-                        Vector3.up * forestManipulator.DefaultEdgeHeight, edgeObject);
+                var branchObject = manipulator.AddEmptyBranchObject(parent);
+                // Edge length doesn't matter at this point. It is set properly at subscription of node position.
+                var edgeObject = manipulator.AddEdgeObject(branchObject.transform, 1, 0, 0);
+                var nodeObject = manipulator.AddEmptyNodeObject(child, branchObject.transform,
+                    Vector3.up * centralEdgeHeight, edgeObject);
 
-                forestManipulator.SubscribeNodePosition(child.Circle, nodeObject, edgeObject);
+                // Rotate and stretch edge according to corresponding node.
+                manipulator.SubscribeNodePosition(child.Circle, nodeObject, edgeObject, centralEdgeHeight);
 
                 GenerateBranches(child, nodeObject.transform);
             }
@@ -215,19 +237,38 @@ namespace Frontend.Tree
 
         private GameObject AddChildContainer(UiNode node, Transform parent, int n, float initialPhi = 0)
         {
+            //////////////////////////////////
+            //                              //
+            //         y                    //
+            //         ∧                    //           
+            //         | .  r               //
+            //         |   ˙ .              //   
+            //         |       ˙ . node     //
+            //         |__˛   ‚´ .          //
+            //         | θ \‚´   .          //
+            //         |  ‚´ l   .          //
+            //         |‚´       .          //
+            //         ˚-. ------.--> x     //
+            //        / φ  ˙ .   .          //
+            //       /————´    ˙ .          //
+            //      ⩗                       //
+            //    - z                       //
+            //                              //
+            //////////////////////////////////
+
             var r = TreeGeometry.CalcSunflowerRadius(n);
             var phi = TreeGeometry.CalcPhi(n, initialPhi);
-            var theta = TreeGeometry.CalcTheta(forestManipulator.DefaultEdgeHeight, r);
-            var l = TreeGeometry.CalcEdgeLength(forestManipulator.DefaultEdgeHeight, theta);
+            var theta = TreeGeometry.CalcTheta(manipulator.DefaultEdgeHeight, r);
+            var l = TreeGeometry.CalcEdgeLength(manipulator.DefaultEdgeHeight, theta);
             var nodePosition = TreeGeometry.CalcNodePosition(l, theta, phi);
 
-            var branchObject = forestManipulator.AddEmptyBranchObject(parent);
-            var edgeObject = forestManipulator.AddEdgeObject(branchObject.transform,
-                TreeGeometry.SizeToScale(l, forestManipulator.DefaultEdgeHeight, forestManipulator.DefaultEdgeScale.y),
+            var branchObject = manipulator.AddEmptyBranchObject(parent);
+            var edgeObject = manipulator.AddEdgeObject(branchObject.transform,
+                TreeGeometry.SizeToScale(l, manipulator.DefaultEdgeHeight, manipulator.DefaultEdgeScale.y),
                 theta,
                 phi);
             var nodeObject =
-                forestManipulator.AddEmptyNodeObject(node, branchObject.transform, nodePosition, edgeObject);
+                manipulator.AddEmptyNodeObject(node, branchObject.transform, nodePosition, edgeObject);
 
             return nodeObject;
         }

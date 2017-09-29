@@ -4,6 +4,27 @@ using Random = System.Random;
 
 namespace Frontend.Tree
 {
+    /// <summary>
+    /// Naming:
+    //////////////////////////////////
+    //                              //
+    //         y                    //
+    //         ∧                    //           
+    //         | .  r               //
+    //         |   ˙ .              //   
+    //         |       ˙ . node     //
+    //         |__˛   ‚´ .          //
+    //         | θ \‚´   .          //
+    //         |  ‚´ l   .          //
+    //         |‚´       .          //
+    //         ˚-. ------.--> x     //
+    //        / φ  ˙ .   .          //
+    //       /————´    ˙ .          //
+    //      ⩗                       //
+    //    - z                       //
+    //                              //
+    //////////////////////////////////
+    /// </summary>
     public static class TreeGeometry
     {
         public const float NodeDistanceFactor = 0.05f;
