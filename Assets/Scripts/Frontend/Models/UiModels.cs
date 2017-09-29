@@ -3,6 +3,7 @@ using System.Linq;
 using Frontend.Tree;
 using UniRx;
 using UnityEngine;
+using Utilities;
 
 namespace Frontend.Models
 {
@@ -34,6 +35,13 @@ namespace Frontend.Models
         public abstract int GetWidth();
 
         public abstract void SortChildren();
+        
+        public UiNode Find(string id)
+        {
+            return this
+                .Traverse(x => (x as UiInnerNode)?.Children)
+                .FirstOrDefault(x => x.Id == id);
+        }
     }
 
     public class UiInnerNode : UiNode
@@ -73,7 +81,7 @@ namespace Frontend.Models
 
     public class Circle
     {
-        public float Radius { get; set; } = 0;
+        public float Radius { get; set; }
         public ReactiveProperty<Vector2> Position { get; set; } = new ReactiveProperty<Vector2>(new Vector2(0, 0));
     }
 

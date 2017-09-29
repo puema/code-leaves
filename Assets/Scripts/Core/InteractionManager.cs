@@ -1,12 +1,7 @@
-﻿using System.Linq;
-using Data;
-using Frontend;
-using Frontend.Models;
+﻿using Data;
 using HoloToolkit.Unity;
 using HoloToolkit.Unity.InputModule;
 using HoloToolkit.Unity.SpatialMapping;
-using UnityEngine;
-using Utilities;
 
 namespace Core
 {
@@ -23,33 +18,19 @@ namespace Core
 
         public void HandleNodeClick(string id)
         {
-            var selected = FindUiNode(id);
+            var selected = appState.Forest.Value.Root.Find(id);
             if (selected == null) return;
             selected.IsSelected.Value ^= true;
         }
 
         public void HandleNodeFocusEnter(string id)
         {
-            var focused = FindUiNode(id);
-            if (focused == null) return;
-            focused
-                .Traverse(x => (x as UiInnerNode)?.Children)
-                .ToList()
-                .ForEach(x => x.IsFocused.Value = true);
-            uiElements.GazeText.Text.Value = focused.Text.Value;
-            uiElements.GazeText.IsActive.Value = true;
+            NodeFocusManager.Instance.HandleFocusEnter(id);
         }
 
         public void HandleNodeFocusExit(string id)
         {
-            var focused = FindUiNode(id);
-            if (focused == null) return;
-            focused
-                .Traverse(x => (x as UiInnerNode)?.Children)
-                .ToList()
-                .ForEach(x => x.IsFocused.Value = false);
-            uiElements.GazeText.IsActive.Value = false;
-            uiElements.GazeText.Text.Value = "";
+            NodeFocusManager.Instance.HandleFocusExit(id);
         }
 
         public void HandleCircleVisualizationToggle()
@@ -62,13 +43,6 @@ namespace Core
             if (GazeManager.Instance.HitObject != null &&
                 !GazeManager.Instance.HitObject.transform.IsChildOf(SpatialMappingManager.Instance.transform)) return;
             HandleFloorClick();
-        }
-
-        private UiNode FindUiNode(string id)
-        {
-            return appState.Forest.Value?.Root?
-                .Traverse(x => (x as UiInnerNode)?.Children)
-                .FirstOrDefault(x => x.Id == id);
         }
 
         public void HandleProjectSelection(int index)
@@ -134,11 +108,10 @@ namespace Core
 
         public void HandleAppMenuBack()
         {
-            if (uiElements.AppMenu.Page.Value == AppMenuPage.Settings)
-            {
-                uiElements.AppMenu.Page.Value = AppMenuPage.ProjectSelection;
-                uiElements.AppMenu.BackAvailable.Value = false;
-            }
+            if (uiElements.AppMenu.Page.Value != AppMenuPage.Settings) return;
+            
+            uiElements.AppMenu.Page.Value = AppMenuPage.ProjectSelection;
+            uiElements.AppMenu.BackAvailable.Value = false;
         }
 
         public void HandleHighlightFocusToggle()
