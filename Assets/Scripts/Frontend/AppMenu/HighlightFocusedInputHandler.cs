@@ -1,4 +1,5 @@
 ﻿using Core;
+using Frontend.Global;
 using HoloToolkit.Unity.InputModule;
 using UnityEngine;
 using UniRx;
@@ -15,6 +16,8 @@ namespace Frontend.AppMenu
         {
             highlightFocused = AppManager.AppState.Settings.HighlightFocused;
             highlightFocused.Subscribe(GetComponentInChildren<Checkbox>().SetChecked);
+            GetComponentInChildren<ButtonBehaviour>().Clicked +=
+                InteractionManager.Instance.HandleHighlightFocusToggle;
         }
 
         public void OnInputClicked(InputClickedEventData eventData)
