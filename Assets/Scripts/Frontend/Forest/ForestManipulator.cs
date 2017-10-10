@@ -17,6 +17,10 @@ namespace Frontend.Forest
 
         public GameObject Floor;
 
+        public GameObject Trees;
+        
+        public GameObject Roots;
+
         public GameObject Edge;
 
         public GameObject Leaf;
@@ -32,6 +36,7 @@ namespace Frontend.Forest
         internal readonly Vector3 DefaultLeafScale = new Vector3(0.8f, 1, 0.09f);
         internal readonly Vector3 Default3DTextScale = new Vector3(0.005f, 0.005f, 0.005f);
 
+        internal const string TreesName = "Trees";
         internal const string TreeName = "Tree";
         internal const string BranchName = "Branch";
         internal const string NodeName = "Node";
@@ -56,7 +61,7 @@ namespace Frontend.Forest
 
         internal GameObject AddTreeObject(Vector2 position)
         {
-            return InstantiateObject(TreeName, parent: Forest.transform,
+            return InstantiateObject(TreeName, parent: Trees.transform,
                 localPosition: new Vector3(position.x, 0f, position.y));
         }
 
@@ -233,9 +238,14 @@ namespace Frontend.Forest
 
         public void DestroyForest()
         {
-            for (var i = 1; i < Forest.transform.childCount; i++)
+            for (var i = 0; i < Trees.transform.childCount; i++)
             {
                 Destroy(Forest.transform.GetChild(i).gameObject);
+            }
+            
+            for (var i = 0; i < Trees.transform.childCount; i++)
+            {
+                Destroy(Roots.transform.GetChild(i).gameObject);
             }
         }
     }

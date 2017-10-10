@@ -18,7 +18,7 @@ namespace Frontend.Tree
         public ForestManipulator manipulator;
 
         /// <summary>
-        /// The part of the default edge length and thickness, that is added per node height
+        /// The part of the default edge length and thickness that is added per node height
         /// </summary>
         private const float edgeYScaleFactor = 0.2f;
         private const float edgeXScaleFactor = 0.4f;

@@ -8,12 +8,6 @@ using Utilities;
 
 namespace Core
 {
-    public class NodeStabilizationListEntry
-    {
-        public string nodeId { get; set; }
-        public float focusedTime { get; set; }
-    }
-
     public class NodeFocusManager : Singleton<NodeFocusManager>
     {
         public ApplicationManager AppManager;

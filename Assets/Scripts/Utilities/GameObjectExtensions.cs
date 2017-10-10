@@ -41,5 +41,20 @@ namespace Utilities
                     throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
             }
         }
+        
+        public static float SizeToLocalScale(this GameObject obj, Axis axis, float size)
+        {
+            switch (axis)
+            {
+                case Axis.X:
+                    return obj.transform.localScale.x * size / obj.GetSize(Axis.X);
+                case Axis.Y:
+                    return obj.transform.localScale.y * size / obj.GetSize(Axis.Y);
+                case Axis.Z:
+                    return obj.transform.localScale.z * size / obj.GetSize(Axis.Z);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(axis), axis, null);
+            }
+        }
     }
 }

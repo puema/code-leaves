@@ -19,6 +19,10 @@ namespace Core
 
         public string SonarQubeBaseComponent = "com.bmw.dcom:dcom";
 
+        public ForestManipulator ForestManipulator;
+
+        public TreeBuilder TreeBuilder;
+
         // ------------------------------ //
 
         public AppState AppState = new AppState
@@ -93,7 +97,7 @@ namespace Core
         {
             AppState.AppData.Subscribe(data =>
             {
-                ForestManipulator.Instance.DestroyForest();
+                ForestManipulator.DestroyForest();
 
                 AppState.Forest.Value = new Forest
                 {
@@ -104,7 +108,7 @@ namespace Core
             });
         }
 
-        private static IEnumerator Render(UiNode root)
+        private IEnumerator Render(UiNode root)
         {
             var innerNode = root as UiInnerNode;
             if (innerNode == null || innerNode.Children?.Count == 0) yield break;
@@ -114,7 +118,7 @@ namespace Core
 
             foreach (var tree in trees)
             {
-                var treeObject = TreeBuilder.Instance.GenerateTree(tree, Vector2.zero);
+                var treeObject = TreeBuilder.GenerateTree(tree, Vector2.zero);
                 tree.Circle.Position.Subscribe(v =>
                 {
                     treeObject.transform.localPosition = new Vector3(v.x, 0, v.y);
@@ -122,8 +126,8 @@ namespace Core
                 yield return null;
             }
 
-            TreeBuilder.Instance.CirclePacking(innerNode);
-            ForestManipulator.Instance.AdjustFloorRadius(innerNode);
+            TreeBuilder.CirclePacking(innerNode);
+            ForestManipulator.AdjustFloorRadius(innerNode);
         }
     }
 }
