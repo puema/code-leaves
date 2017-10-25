@@ -38,6 +38,8 @@ namespace Frontend.Global
         private const string TopIndicator = "TopIndicator";
         private const string RightIndicator = "RightIndicator";
         private const string BottomIndicator = "BottomIndicator";
+        private const string NorthWestIndicator = "RightIndicator";
+        private const string SouthEastIndicator = "BottomIndicator";
         private const string Hand = "Hand";
 
         private ManipulationMode mode;
