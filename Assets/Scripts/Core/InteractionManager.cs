@@ -1,4 +1,5 @@
 ﻿using Data;
+using Frontend.Models;
 using HoloToolkit.Unity;
 using HoloToolkit.Unity.InputModule;
 using HoloToolkit.Unity.SpatialMapping;
@@ -18,7 +19,7 @@ namespace Core
 
         public void HandleNodeClick(string id)
         {
-            var selected = appState.Forest.Value.Root.Find(id);
+            var selected = appState.Forest.Value.Root.Find(id) as UiLeaf;
             if (selected == null) return;
             selected.IsSelected.Value ^= true;
         }
