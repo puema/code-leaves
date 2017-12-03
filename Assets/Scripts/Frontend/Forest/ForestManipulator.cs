@@ -238,12 +238,14 @@ namespace Frontend.Forest
 
         public void DestroyForest()
         {
+            // Trees
             for (var i = 0; i < Trees.transform.childCount; i++)
             {
-                Destroy(Forest.transform.GetChild(i).gameObject);
+                Destroy(Trees.transform.GetChild(i).gameObject);
             }
             
-            for (var i = 0; i < Trees.transform.childCount; i++)
+            // Roots
+            for (var i = 0; i < Roots.transform.childCount; i++)
             {
                 Destroy(Roots.transform.GetChild(i).gameObject);
             }
