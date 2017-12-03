@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Frontend;
 using Frontend.Models;
 using UniRx;
 using UnityEngine;
@@ -31,7 +30,9 @@ namespace Core
                     Id = leaf.Key,
                     IsFocused = new ReactiveProperty<bool>(false),
                     IsSelected = new ReactiveProperty<bool>(false),
-                    Text = new ReactiveProperty<string>(leaf.Name),
+                    Text = new ReactiveProperty<string>(leaf.Data == null
+                        ? "Metric not available"
+                        : leaf.Data[0].Value + "%"),
                     Color = new ReactiveProperty<Color?>(PercentageToNullableColor(leaf))
                 };
             }

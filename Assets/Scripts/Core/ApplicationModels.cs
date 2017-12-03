@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Frontend.Models;
 using UniRx;
+using Utilities;
 
 namespace Core
 {
@@ -86,6 +88,13 @@ namespace Core
         public string Name { get; set; }
         public string Key { get; set; }
         public Edge Edge { get; set; }
+        
+        public Node Find(string key)
+        {
+            return this
+                .Traverse(x => (x as InnerNode)?.Children)
+                .FirstOrDefault(x => x.Key == key);
+        }
     }
 
     public class InnerNode : Node

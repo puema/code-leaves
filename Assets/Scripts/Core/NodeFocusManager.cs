@@ -65,13 +65,14 @@ namespace Core
 
         private void EnableFocus(string id)
         {
-            var focused = AppManager.AppState.Forest.Value.Root.Find(id);
-            if (focused == null) return;
-            focused
+            var focusedNode = AppManager.AppState.AppData.Value.Root.Find(id);
+            var focusedUiNode = AppManager.AppState.Forest.Value.Root.Find(id);
+            if (focusedNode == null || focusedUiNode == null) return;
+            focusedUiNode
                 .Traverse(x => (x as UiInnerNode)?.Children)
                 .ToList()
                 .ForEach(x => x.IsFocused.Value = true);
-            AppManager.AppState.UiElements.GazeText.Text.Value = focused.Text.Value;
+            AppManager.AppState.UiElements.GazeText.Text.Value = focusedNode.Name;
             AppManager.AppState.UiElements.GazeText.IsActive.Value = true;
         }
 

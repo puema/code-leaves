@@ -20,8 +20,8 @@ namespace Frontend.Tree
         /// <summary>
         /// The part of the default edge length and thickness that is added per node height
         /// </summary>
-        private const float edgeYScaleFactor = 0.2f;
-        private const float edgeXScaleFactor = 0.4f;
+        private const float edgeYScaleFactor = .2f;
+        private const float edgeXScaleFactor = .8f;
 
         /// <summary>
         /// Generates the unity tree according to the given data structure of the node
