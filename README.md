@@ -15,23 +15,23 @@ CodeLeaves as a 3d software visualization tool for the HoloLens
 
 ### Demo (Prototype)
 
-Open a project
+Open a project from the menu
 
-![Start](Demo/start.mp4)
+![Start](Demo/menu.png)
 
 Scale
 
-![Scale](Demo/scale.mp4)
+![Scale](Demo/scale.png)
 
 Place using spacial mapping
 
-![Place](Demo/place.mp4)
+![Place](Demo/place.png)
 
 Hover to inspect elements
 
-![Hover](Demo/hover.mp4)
+![Hover](Demo/hover.png)
 
 Activate circles for hovering from a birds view
 
-![Circles](Demo/circles.mp4)
+![Circles](Demo/circles.png)
 
